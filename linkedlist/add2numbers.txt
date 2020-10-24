@@ -8,7 +8,7 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
- ///following is the approach to add two numbers in the linked list
+ ///following is the approach to add two numbers given in the form of linked lists
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
