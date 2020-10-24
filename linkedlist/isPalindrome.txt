@@ -1,0 +1,64 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverse(ListNode* head)
+    {
+        ListNode* curr=head;ListNode*prev=NULL;
+        //ListNode* temp=head;
+        while(head!=NULL)
+        {
+            curr=head->next;
+            head->next=prev;
+            prev=head;
+            head=curr;
+         }
+        return prev;
+    }
+    bool isPalindrome(ListNode* head) {
+        /*stack<int>st;
+        ListNode* temp=head;//this is the stack method to check for palindrome but it uses O(n) space
+        while(temp!=NULL)
+        {
+            st.push(temp->val);
+            temp=temp->next;
+        }
+        temp=head;
+        while(!st.empty())
+        {
+            int value=st.top();
+            st.pop();
+            if(value!=temp->val)
+                return false;
+            temp=temp->next;
+        }
+        return true;*///below is a better method as it uses O(1) space 
+        if(head==NULL || head->next==NULL)
+            return true; 
+        ListNode* fast=head;ListNode* slow=head;
+        while(fast!=NULL && fast->next!=NULL)
+        {
+            fast=fast->next->next;
+            slow=slow->next;   
+        }
+        slow=reverse(slow);cout<<slow->val;
+        ListNode* temp=head;ListNode* tempp=slow;
+        while(tempp!=NULL)
+        {
+            if(temp->val!=tempp->val)
+                return false;
+            tempp=tempp->next;
+            temp=temp->next;
+        }
+        return true;
+        
+    }
+};
