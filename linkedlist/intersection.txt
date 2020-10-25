@@ -1,0 +1,87 @@
+------------------/////////////////
+///time complexity is O(n*m) and space complexity is O(1)/////////
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+     ListNode* temp1=headA;
+        ListNode* temp2=headB;
+        while(temp1!=NULL)
+        {
+            temp2=headB;
+            while(temp2!=NULL)
+            {
+            if(temp1==temp2)
+                return temp1;
+            temp2=temp2->next;
+            }
+            temp1=temp1->next;
+        }
+        return NULL;
+    }
+};//////////----------------------------------////////////////////////////////////////////////////////
+/**//////time complexity is O(n+m) and space complexity is O(n)
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+     ListNode* temp1=headA;
+        ListNode* temp2=headB;
+        set<ListNode*>s;
+        while(temp1!=NULL)
+        {
+            s.insert(temp1);
+            temp1=temp1->next;
+        }
+        while(temp2!=NULL)
+        {
+            if(s.find(temp2)!=s.end())
+                return temp2;
+            s.insert(temp2);
+            temp2=temp2->next;
+        }
+        return NULL;
+    }
+};////////////////////////////////-----------------------------------///////////////////////////////////////////
+//time complexity is O(n+m) and space complexity is O(1)
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+     ListNode* cur1=headA;
+        ListNode* cur2=headB;int c=0;
+        while(cur1!=cur2)
+        {
+            if(cur1!=NULL)
+                cur1=cur1->next;
+            else
+                cur1=headB;
+            if(cur2!=NULL)
+                cur2=cur2->next;
+            else
+                cur2=headA;
+    }
+    
+            return cur1;
+    }
+};
