@@ -85,3 +85,53 @@ public:
             return cur1;
     }
 };
+//////////--------------------------------------------------///////////////////////////
+/** another optimal approach by counting the lengths of both lists 
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int length(ListNode* head)
+    {
+     ListNode* temp=head;int c=0;
+    while(temp!=NULL)
+    {
+        c++;
+        temp=temp->next;
+        
+    }
+    return c;
+    }
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+     ListNode* cur1=headA;
+        ListNode* cur2=headB;
+        ListNode* bigger=NULL;ListNode* smaller=NULL;
+        int c=0;
+        int l1=length(headA);int l2=length(headB);
+        if(l1>l2)
+        {bigger=cur1; smaller=cur2;
+        }
+        else
+        { bigger=cur2; smaller=cur1;
+        }
+        int d=abs(l1-l2);
+        for(int i=0;i<d;i++)
+        {
+            bigger=bigger->next;
+        }
+        while(smaller!=NULL)
+        {
+         if(bigger==smaller)
+             return smaller;
+            smaller=smaller->next;
+            bigger=bigger->next;
+        }
+        return NULL;
+        
+    }
+};
