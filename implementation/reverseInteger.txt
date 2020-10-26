@@ -1,0 +1,21 @@
+Given a 32-bit signed integer, reverse digits of an integer.
+eg: -123
+    -321
+
+class Solution {
+public:
+    int reverse(int x) {
+        int temp=abs(x);
+        long long  rev=0;
+        while(temp>0)
+        {
+            int rem=temp%10;
+         rev=rev*10+rem;
+            temp=temp/10;
+        }
+        if(x<0)
+        rev=rev*-1;
+         return (rev<INT_MIN || rev>INT_MAX) ? 0 : rev;
+       
+    }
+};
