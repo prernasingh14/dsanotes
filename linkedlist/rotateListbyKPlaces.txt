@@ -1,0 +1,71 @@
+//BRUTE FORCE APPROACH FOR ROTATING A LINKED LIST O(K*N) WHERE K IS THE NUMBER OF NODES IN LINKEDLIST BUT DEFINITELY WILL LEAD TO TLE
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        ListNode* first=head;
+        if(head==NULL || head->next==NULL )
+            return head;
+        for(int i=0;i<k;i++)
+        {
+            ListNode* temp=head;
+            while(temp->next->next!=NULL)
+            {
+             temp=temp->next;   
+            }
+            ListNode* last=temp->next;
+            temp->next=NULL;
+            last->next=head;
+            head=last;
+            
+         }
+        return head;
+    }
+};
+/////////////OPTIMIZED APPROACH BY SEEING A PATTERN WHICH REPEATS WITH TIME  O(nodes) time complexity
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+         if(head==NULL || head->next==NULL)
+            return head;
+        ListNode* temp=head;
+        int nodes=1;
+        while(temp->next!=NULL)
+        {
+            nodes++;temp=temp->next;
+        }
+         if( k%nodes==0 )
+            return head;
+        ListNode* p=head;
+    for(int i=1;i<nodes-k%nodes;i++)
+    {
+        p=p->next;  
+    }
+        ListNode* pp=p;
+        temp->next=head;
+        head=pp->next;
+        p->next=NULL;
+        
+        
+        return head;
+    }
+};
