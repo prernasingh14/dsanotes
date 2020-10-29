@@ -1,0 +1,50 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* prev;
+    Node* next;
+    Node* child;
+};
+*/
+////////////////////FLATTEN A MULTI LEVEL LINKED LIST DEPTH WISE//////////////////////////////////////
+input:1---2---3---4---5---6--NULL
+              |
+              7---8---9---10--NULL
+                  |
+                 11--12--NULL
+output: 1--2--3--7--8--11--12--9--10--3--4--5--6--NULL , so we are basically traversing every node but bringing child nodes up in between if encountered
+
+1) recursive approach 
+class Solution {
+public:
+    Node* flatten(Node* head) {
+         if(head==NULL)
+            return NULL;
+        Node* temp=head;
+        while(temp)
+        {
+            if(temp->child)
+            {
+                Node* tempNext=temp->next;
+                Node* child=flatten(temp->child);
+                child->prev=temp;
+                temp->next=child;
+                temp->child=NULL;
+                Node* childLastNode=child;
+                while(childLastNode->next!=NULL)
+                    childLastNode=childLastNode->next;
+                childLastNode->next=tempNext;
+                if(tempNext!=NULL)
+                {
+                  tempNext->prev=childLastNode;  
+                }
+            }
+            temp=temp->next;
+                
+        }
+        return head;
+    }
+};
+2) 
