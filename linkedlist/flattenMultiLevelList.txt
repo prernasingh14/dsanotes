@@ -47,4 +47,43 @@ public:
         return head;
     }
 };
-2) 
+2) without using recursion 
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* prev;
+    Node* next;
+    Node* child;
+};
+*/
+
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        if(head==NULL)
+            return NULL;
+        Node* root=head;Node*pre=head;
+        while(head)
+        {
+            if(head->child)
+            {
+                Node* next=head->next;
+                head->next=head->child;
+                head->child=NULL;
+                head->next->prev=head;
+                Node* p=head;
+                while(head->next!=NULL)
+                    head=head->next;
+                head->next=next;
+                if(next!=NULL)
+                    next->prev=head;
+                head=p;
+            }
+            head=head->next;
+                
+        }
+        return root;
+    }
+};
