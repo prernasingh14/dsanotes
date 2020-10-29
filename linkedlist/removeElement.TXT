@@ -32,3 +32,19 @@ public:
        
     }
 };
+///////////////////////////CLASSICAL SOLUTION USING A DUMMY NODE//////////////////////
+  Node* deleteAllOccurances(Node *head,int x)
+{
+    //Your code here
+    Node* dummy=new Node(0);
+    dummy->next=head;
+    Node* temp=dummy;
+    while(temp->next!=NULL)
+    {
+        if(temp->next->data==x)
+        temp->next=temp->next->next;
+        else
+        temp=temp->next;
+    }
+    return dummy->next;
+}
