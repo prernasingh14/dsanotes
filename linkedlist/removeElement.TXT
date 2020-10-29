@@ -1,0 +1,34 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ *///////////////////////////////DELETE ALL THE OCCURENCES OF THE NODE WHOSE VALUE MATCHES WITH THE THE VALUE GIVEN 
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        //ListNode* temp=head;ListNode* prev=head;
+        if(head==NULL)
+            return NULL;
+        ListNode* temp=head;ListNode* prev=head;
+        while(temp!=NULL)
+        {
+            if(temp->val==val)
+            {
+                prev->next=temp->next;
+            }
+            else
+            {prev=temp;
+            }
+            temp=temp->next;
+        }
+        if(head->val==val)//to remove the first  element if it also matches because the prev will never get checked else
+            head=head->next;
+        return head;
+       
+    }
+};
