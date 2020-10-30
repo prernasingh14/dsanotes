@@ -1,0 +1,34 @@
+class Solution {
+public:
+    //we use bfs to keep on shrinking the islands once visited 
+    void bfs(vector<vector<char>>&grid,int i,int j)
+    {
+        if(i<0 || j<0 || i>=grid.size() || j>=grid[0].size() || grid[i][j]=='0')
+            return;
+        grid[i][j]='0';
+        bfs(grid,i+1,j);
+        bfs(grid,i-1,j);
+        bfs(grid,i,j+1);
+        bfs(grid,i,j-1);
+    }
+    int numIslands(vector<vector<char>>& grid) {
+        int c=0;
+        int m=grid.size();
+        if(m==0)
+            return 0;
+        int n=grid[0].size();
+        for(int i=0;i<m;i++)
+        {
+        for(int j=0;j<n;j++)
+        {
+            if(grid[i][j]=='1')
+            {
+                c++;
+                bfs(grid,i,j);
+               
+            }
+         }
+        }
+        return c;
+    }
+};
