@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {////          O(1)
+         if(n==0)
+              return false;
+        long double x=log2(n);
+        if(ceil(x)==floor(x))
+            return true;
+        else
+            return false;
+          if(n==0)
+              return false;
+    }
+};
+///////////////////////////////----------------------------//////////////////////////////////////////
+    METHOD 2 IS BASED ON THE FACT THAT ANY NUMBER WHICH IS A POWER OF TWO CONTAINS ONLY ONE '1'
+    bool isPowerOfTwo(int n)
+        {if (n<=0)  return false;
+    return (n & (n-1)) == 0; O(1)
+        }
