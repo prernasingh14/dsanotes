@@ -1,0 +1,19 @@
+Intuition:
+If min(A) + K < max(A) - K, then return max(A) - min(A) - 2 * K
+If min(A) + K >= max(A) - K, then return 0
+
+class Solution {
+public:
+    int smallestRangeI(vector<int>& A, int K) {
+        //sort(A.begin(),A.end());
+        
+        int maxA=*max_element(A.begin(),A.end());
+        int minA=*min_element(A.begin(),A.end());
+        int maxB=maxA-K;
+        int minB=minA+K;
+        if(minB>=maxB)
+            return 0;
+        else
+            return maxB-minB;
+    }
+};
