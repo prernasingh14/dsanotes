@@ -1,0 +1,29 @@
+We have n chips, where the position of the ith chip is position[i].
+
+We need to move all the chips to the same position. In one step, we can change the position of the ith chip from position[i] to:
+
+position[i] + 2 or position[i] - 2 with cost = 0.
+position[i] + 1 or position[i] - 1 with cost = 1.
+Return the minimum cost needed to move all the chips to the same position.
+
+position = [2,2,2,3,3]
+Output: 2
+Explanation: We can move the two chips at position  3 to position 2. Each move has cost = 1. The total cost = 2.
+////-//////////
+Its simple either move all to even position or move all to odd positions depending on waht will give the minimum
+class Solution {
+public:
+    int minCostToMoveChips(vector<int>& position) {
+        int c=0;
+        for(int i=0;i<position.size();i++)
+        {
+            if(position[i]%2==0)
+                c++;
+        }
+       if(c<position.size()-c)
+           return c;
+        else
+            return position.size()-c;
+        
+    }
+};
