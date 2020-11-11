@@ -23,3 +23,70 @@ public:
         return nodes;
     }
 };
+//////////////////////-----------------------////////////////////
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+      stack<TreeNode*>tree1;stack<TreeNode*>tree2;
+        //we need two stacks 
+        //we'll follow as in preorder traversal but with root-right-left
+        //then pop out elements from the pushed in stack
+        while(root || !tree1.empty())
+        {
+           while(root)
+           {
+               tree1.push(root);
+               tree2.push(root);
+               root=root->right; 
+           }
+            root=tree1.top();tree1.pop();
+            root=root->left;
+            
+        }
+        while(!tree2.empty())
+        {
+            nodes.push_back(tree2.top()->val);
+            tree2.pop();
+         }
+        return nodes;
+    }
+};
+Simply check if the right and left nodes have been processed, 
+for this while pushing the left and right nodes onto the stack,
+ make a corresponding variable as true indicating that the left and right nodes have been processed. 
+ So for anode if the corresponding boolean is already true, just print and pop it.
+ class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+      stack<pair<TreeNode*,bool> >tree1;
+        tree1.push({root,false});
+        while(!tree1.empty())
+        {
+          pair<TreeNode*,bool> temp=tree1.top();
+            if((temp.second)==true)//if both of its children have been visited
+            {
+              nodes.push_back(temp.first->val); 
+                tree1.pop();
+            }
+            else //if it children have not been visited
+            {
+                tree1.top().second=true;
+              if((temp.first)->right)
+              {
+               tree1.push({(temp.first)->right,false});
+              }
+                if((temp.first)->left)
+              {
+               tree1.push({(temp.first)->left,false});  
+              }
+            }
+         }
+        return nodes;
+    }
+};
