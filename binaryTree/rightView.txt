@@ -1,0 +1,55 @@
+Given a binary tree, imagine yourself standing on the right side of it, 
+return the values of the nodes you can see ordered from top to bottom.
+Input: [1,2,3,null,5,null,4]
+Output: [1, 3, 4]
+Explanation:
+
+   1            <---
+ /   \
+2     3         <---
+ \     \
+  5     4       <---
+
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        //har level ka last node will be our answer
+        queue<TreeNode*>q;vector<int>v;
+        if(root==NULL)
+            return v;
+        q.push(root);
+        while(!q.empty())
+        {
+            int n=q.size();
+            for(int i=1;i<=n;i++)
+            {
+                TreeNode* p=q.front();
+                q.pop();
+                if(i==n)
+                    v.push_back(p->val);
+                if(p->left)
+                    q.push(p->left);
+                if(p->right)
+                    q.push(p->right);
+            }
+         }
+        return v;
+    }
+};
+
+////////////////////------///////////////////////////////////////
+class Solution {
+public:
+    void dfs(TreeNode* root, int lv, vector<int> &res){
+        if(!root)   return;
+        if(lv>=res.size()) res.push_back(root->val);
+        dfs(root->right,lv+1,res);
+        dfs(root->left,lv+1,res);
+    }
+
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
+        dfs(root, 0, res);
+        return res;
+    }
+};
