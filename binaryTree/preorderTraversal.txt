@@ -1,0 +1,47 @@
+Given the root of a binary tree, return the preorder traversal of its nodes' values.
+Input: root = [1,null,2,3]
+Output: [1,2,3]
+Input: root = [1,null,2]
+Output: [1,2]
+In Preroder traversal , we visit the root first , then left subtree then the right subtree
+root,left,right
+Method 1:Using recursion TC:O(n)   extra space :O(n)
+class Solution {
+public:
+    void preorder(TreeNode* root,vector<int>&nodes)
+    {
+        if(root==NULL)
+            return ;
+        nodes.push_back(root->val);
+        preorder(root->left,nodes);
+       preorder(root->right,nodes);
+     }
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        preorder(root,nodes);
+        return nodes;
+    }
+};
+/////////////////--------------------------////////////////////
+Iterative Approach 
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+        stack<TreeNode*>tree;
+        tree.push(root);
+        while(!tree.empty())
+        {
+            TreeNode* root=tree.top();
+            nodes.push_back(root->val);
+            tree.pop();
+            if(root->right)
+                tree.push(root->right);
+            if(root->left)
+                tree.push(root->left);
+        }
+        return nodes;
+    }
+};
