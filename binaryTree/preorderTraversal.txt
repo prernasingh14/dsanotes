@@ -45,3 +45,27 @@ public:
         return nodes;
     }
 };
+
+///////////----------///////////////////////
+class Solution {
+public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+        stack<TreeNode*>tree;
+        while(root || !tree.empty())
+        {
+           while(root)                            //It is also an iterative appraoch but its similar to inorder waala stack
+           {
+               nodes.push_back(root->val);
+               tree.push(root);
+               root=root->left;
+            }
+            
+            root=tree.top();tree.pop();
+            root=root->right;
+        }
+        return nodes;
+    }
+};
