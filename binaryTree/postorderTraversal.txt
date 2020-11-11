@@ -90,3 +90,37 @@ public:
         return nodes;
     }
 };
+
+
+
+//////////////////--------------------//////////////////////
+Another approach using ony one stack and just reversing the vector 
+which is storing the reverse preorder "root->root-right->root-left"
+
+class Solution {
+public:
+   
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+      stack<TreeNode*>tree;
+        //reverse preorder :root->root-right->root-left
+        tree.push(root);
+        while(!tree.empty())
+        {
+            TreeNode* temp=tree.top();
+           nodes.push_back(temp->val);tree.pop();
+            if(temp->left)
+            {
+                tree.push(temp->left);
+            }
+            if(temp->right)
+            {
+                tree.push(temp->right);
+            }
+         }
+        reverse(nodes.begin(),nodes.end());
+        return nodes;
+    }
+};
