@@ -1,0 +1,47 @@
+Given the root of a binary tree, return the inorder traversal of its nodes' values.
+Input: root = [1,null,2,3]
+Output: [1,3,2]
+following are the two approaches to do it so:
+  
+Approach 1:
+Recursive TC:O(n)   extra space:O(n)
+class Solution {
+public:
+    void inorder(TreeNode* root,vector<int> &node)
+    {
+        if(root==NULL)
+            return ;
+        inorder(root->left,node);
+        node.push_back(root->val);
+        inorder(root->right,node);
+    }
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>node;
+        inorder(root,node);
+        return node;
+    }
+};
+
+Approach 2: using stack : O(n) time and space
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        stack<TreeNode*> tree;
+        while(root || !tree.empty())
+        {
+            while(root)
+            {
+                tree.push(root);
+                root=root->left;
+            }
+            root=tree.top();
+            nodes.push_back(root->val);
+            tree.pop();
+            root=root->right;
+            
+         }
+        return nodes;
+      
+    }
+};
