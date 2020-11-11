@@ -1,0 +1,25 @@
+Given the root of a binary tree, return the postorder traversal of its nodes' values.
+
+Input: root = [1,null,2,3]
+Output: [3,2,1]
+
+Method 1:Recursive approach TC:O(n) SC:O(n)stack space
+class Solution {
+public:
+    void postorder(TreeNode* root,vector<int>&nodes)
+    {
+        if(root==NULL)
+            return ;
+        postorder(root->left,nodes);
+        postorder(root->right,nodes);
+        nodes.push_back(root->val);
+        
+    }
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return nodes;
+       postorder(root,nodes);
+        return nodes;
+    }
+};
