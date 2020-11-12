@@ -9,7 +9,12 @@ Output: 4 2 1 5 3 6
 //what we have to do in here is just bfs of the tree using queue 
 and maintain a hashmap to store the nodes having the different distances
 
-
+values stored in the map as are follows
+             -2:4
+             -1:2
+              0:1,5,6
+              1:3
+              2:6
 vector<int> verticalOrder(Node *root)
 {
     //Your code here
