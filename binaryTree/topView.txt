@@ -69,3 +69,24 @@ void topView(struct Node *root)
     }
     
 }
+/////////////////////////top View using stack//////////////////////////////////
+void top_view(Node root)
+{
+    Node curr = root;
+    Stack<Node> stack = new Stack<Node>();
+    while(curr != null) {
+        stack.push(curr);
+        curr = curr.left;
+    }
+    
+    while(!stack.isEmpty()){
+        Node node = stack.pop();
+        System.out.print(node.data + " ");//all left nodes starting from bottom
+    }
+    
+    curr = root.right;
+    while(curr != null){
+        System.out.print(curr.data + " "); //then all right nodes
+        curr = curr.right;
+    }
+}
