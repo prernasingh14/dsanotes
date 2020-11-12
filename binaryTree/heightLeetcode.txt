@@ -10,6 +10,7 @@ Given a binary tree, find its height
 Output: 3   
  height of an empty node is 1 ;
  height of any node is : max(height of left subtree,height of right subtree)+1
+ method1 :using dfs
 int height(Node* root)
 {
    // Your code here
@@ -20,4 +21,31 @@ int height(Node* root)
    return max(lefth,righth)+1;
 }
 TC:O(n)   //because 
-auxillary space:O(n) as stack space is being used 
+auxillary space:O(height) as stack space is being used 
+////////////////////////--------------------////////////////////////
+method 2 :using bfs
+int maxDepth(TreeNode *root)
+{
+    if(root == NULL)
+        return 0;
+    
+    int res = 0;
+    queue<TreeNode *> q;
+    q.push(root);
+    while(!q.empty())
+    {
+        ++ res;
+        for(int i = 0, n = q.size(); i < n; ++ i)
+        {
+            TreeNode *p = q.front();
+            q.pop();
+            
+            if(p -> left != NULL)
+                q.push(p -> left);
+            if(p -> right != NULL)
+                q.push(p -> right);
+        }
+    }
+    
+    return res;
+}
