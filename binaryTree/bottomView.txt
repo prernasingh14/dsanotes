@@ -1,0 +1,50 @@
+Given a Binary Tree, we need to print the bottom view from left to right.
+ A node x is there in output if x is the bottommost node at its horizontal distance.
+  Horizontal distance of left child of a node x is equal to horizontal distance of x minus 1, 
+  and that of right child is horizontal distance of x plus 1.
+
+                      20
+                    /    \
+                  8       22
+                /   \    /   \
+              5      3 4     25
+                    / \      
+                  10    14 
+
+                  For the above tree the output should be 5, 10, 4, 14, 25.
+
+
+// Method that returns the bottom view.
+
+//we have to print the last nodes in every new horizontal distance 
+//present in the hash table
+//we'll do bfs using a queue and use a hashtable to store distance
+vector <int> bottomView(Node *root)
+{ 
+    vector<int>nodes;
+    if(root==NULL)
+    return nodes;
+    queue<pair<Node*,int> >q;
+    q.push({root,0});int hd=0;
+    map<int,int>m;
+    while(!q.empty())
+    {
+       pair<Node*,int>node=q.front();q.pop();
+       Node* temp=node.first;
+       int hd=node.second;
+       if(temp->left)
+       q.push({temp->left,hd-1});
+       if(temp->right)
+       q.push({temp->right,hd+1});
+       m[hd]=temp->data;//stores the last node as unique key is only there
+    }
+    for(auto i:m)
+    {
+      nodes.push_back(i.second);
+    }
+    
+   
+   return nodes;
+}
+
+
