@@ -1,0 +1,23 @@
+
+
+
+Given a binary tree, find its height
+ 2
+   \
+    1
+   /
+ 3
+Output: 3   
+ height of an empty node is 1 ;
+ height of any node is : max(height of left subtree,height of right subtree)+1
+int height(Node* root)
+{
+   // Your code here
+   if(root==NULL)
+   return 0;
+   int lefth=height(root->left);
+   int righth=height(root->right);
+   return max(lefth,righth)+1;
+}
+TC:O(n)   //because 
+auxillary space:O(n) as stack space is being used 
