@@ -1,0 +1,53 @@
+void topView(struct Node *root)
+{
+    //Your code here
+    if(root==NULL)
+    return ;
+    map<int,vector<int> >m;
+    queue<pair<Node*,int> >q;
+    q.push({root,0});
+    while(!q.empty())
+    {
+      pair<Node*,int>p=q.front();q.pop();
+       int hd=p.second;Node* temp=p.first;
+      if(temp->left)
+      q.push({temp->left,hd-1});
+      if(temp->right)
+      q.push({temp->right,hd+1});
+    m[hd].push_back(temp->data);
+    }
+    for(auto i:m)
+    {
+        vector<int>v=i.second;
+    cout<<v[0]<<" ";
+    }
+    
+}
+////////////////----------//////////////////////////
+void topView(struct Node *root)
+{
+    //Your code here
+    if(root==NULL)
+    return ;
+    map<int,int >m;
+    queue<pair<Node*,int> >q;
+    q.push({root,0});
+    while(!q.empty())
+    {
+      pair<Node*,int>p=q.front();q.pop();
+       int hd=p.second;Node* temp=p.first;
+       if(m.find(hd)==m.end())   //that is to check whether  being inserted for the first time 
+     m[hd]=temp->data;
+      if(temp->left)
+      q.push({temp->left,hd-1});
+      if(temp->right)
+      q.push({temp->right,hd+1});
+    
+    }
+    for(auto i:m)
+    {
+        //auto j=i.second;
+    cout<<i.second<<" ";
+    }
+    
+}
