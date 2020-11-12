@@ -1,0 +1,52 @@
+Given a binary tree, find the leftmost value in the last row of the tree.
+
+Input:
+
+        1
+       / \
+      2   3
+     /   / \
+    4   5   6
+       /
+      7
+
+Output:
+7
+
+
+//as we can clearly see that we need to just recah the last level 
+and print the first node at that level 
+so we have to do level order traversal
+class Solution {
+public:
+    int height(TreeNode* root)
+    {
+        if(root==NULL)
+            return 0;
+        int leftHeight=height(root->left);
+        int rightHeight=height(root->right);
+        return max(leftHeight,rightHeight)+1;
+    }
+    int findBottomLeftValue(TreeNode* root) {
+        queue<TreeNode*>q;q.push(root);
+        int heightt=height(root);int k=1;int value=0;
+        while(!q.empty())
+        {
+          if(k==heightt)
+          {value=q.front()->val;
+           break;
+          }
+            int len=q.size();
+            for(int i=0;i<len;i++)
+            {
+                TreeNode* temp=q.front();q.pop();
+                if(temp->left)
+                    q.push(temp->left);
+                if(temp->right)
+                    q.push(temp->right);
+            }
+            k++;
+        }
+        return value;
+    }
+};
