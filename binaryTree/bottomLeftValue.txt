@@ -50,3 +50,28 @@ public:
         return value;
     }
 };
+//////////////////////--------------//////////////////////////////////////
+DFS BASED RECURSIVE APPROACH
+class Solution {
+public:
+    //idea using recursive approach of dfs
+    //we'll visit the left subtree first 
+    //thus for every new level update the leftvalue as the value of first node 
+    //on that level
+    void dfs(TreeNode* root,int  &maxLevel,int  &leftValue,int level)
+    {
+        if(root==NULL)
+            return ;
+        if(maxLevel<level)
+        {
+            maxLevel=level;leftValue=root->val;
+         }
+        dfs(root->left,maxLevel,leftValue,level+1);
+        dfs(root->right,maxLevel,leftValue,level+1);
+    }
+    int findBottomLeftValue(TreeNode* root) {
+        int maxLevel=-1;int leftValue=0;int level=0;
+        dfs(root,maxLevel,leftValue,level);
+        return leftValue;
+    }
+};
