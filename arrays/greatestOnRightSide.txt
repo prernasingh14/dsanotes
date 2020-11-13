@@ -6,8 +6,13 @@ N = 6
 Arr[] = {16, 17, 4, 3, 5, 2}
 Output:
 17 5 5 5 2 -1
+Method 1:TC: O(n*n) 
+A naive method is to run two loops. The outer loop will one by one pick array elements from left to right. 
+The inner loop will find the greatest element present after the picked element. Finally the outer loop will replace the picked element with the greatest element found by inner loop.
+ The time complexity of this method will be O(n*n) as two loops are being run
 
-
+ ////////////----------------------//////////////////////
+ Method 2: TC:O(n) in a single loop by starting from the end
 void nextGreatest(int arr[], int n) {
 	    // code here
 	   int maxx=arr[n-1];arr[n-1]=-1;
