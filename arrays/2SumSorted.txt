@@ -29,7 +29,7 @@ public:
         return v;
     }
 };
-Method 3: O(log n) solution based on two pointer search 
+Method 3: O(n) solution based on two pointer search 
 class Solution {
 public:
     vector<int> twoSum(vector<int>& numbers, int target) {
