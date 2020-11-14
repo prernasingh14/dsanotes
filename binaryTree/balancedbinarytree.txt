@@ -23,5 +23,5 @@ public:
       if(abs(height(root->left)-height(root->right))<=1 && isBalanced(root->left) && isBalanced(root->right))
           return true;
     return false;
-}
-};
+}  
+};////worst case tc:O(n*n) in case of skewed tree

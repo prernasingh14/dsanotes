@@ -1,0 +1,54 @@
+Given an array of integers that is already sorted in ascending order, 
+find two numbers such that they add up to a specific target number.
+
+The function twoSum should return indices of the two numbers such that they add up to the target, 
+where index1 must be less than index2.
+
+Input: numbers = [2,7,11,15], target = 9
+Output: [1,2]
+Explanation: The sum of 2 and 7 is 9.
+ Therefore index1 = 1, index2 = 2.
+Method 1:Brute force solution is that run two nested loops. arr[i]+arr[j]==target check .O(n*n) time complexity 
+Method 2:unordered map based solution O(n) 
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        vector<int>v;int index1=0;int index2=0;int n=numbers.size();
+        unordered_map<int,int>m;
+        for(int i=0;i<n;i++)
+        {
+        if(m.find(target-numbers[i])==m.end())
+           {
+              m[numbers[i]]=i+1;
+           }
+            else
+            {
+               v.push_back(m[target-numbers[i]]); v.push_back(i+1);
+            }
+        }
+        return v;
+    }
+};
+Method 3: O(log n) solution based on two pointer search 
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+      vector<int>v;
+        int n=numbers.size();
+        int start=0;int endd=n-1;
+        while(start<n && endd>=0)
+        {
+            if(numbers[start]+numbers[endd]>target)
+            {
+                endd--;
+            }
+            else if(numbers[start]+numbers[endd]<target)
+                start++;
+            else
+                break;
+        }
+        v.push_back(start+1);v.push_back(endd+1);
+        return v;
+    }
+};
+
