@@ -1,0 +1,64 @@
+Given two binary trees, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical and the nodes have the same value.
+
+Example 1:
+
+Input:     1         1
+          / \       / \
+         2   3     2   3
+
+        [1,2,3],   [1,2,3]
+
+Output: true
+
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p==NULL &&  q==NULL)
+            return true;
+        if(p==NULL || q==NULL)
+            return false;
+        if(p->val==q->val &&  isSameTree(p->left,q->left) && isSameTree(p->right,q->right))
+           return true;
+        return false;
+    }     
+};
+Iterative version of the problem is to just do level order traversal and check nodes one by one 
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if(p==NULL &&  q==NULL)
+         return true;
+        if(p==NULL || q==NULL)
+            return false;
+        //we can also have iteratuve approach
+        queue<TreeNode*>q1,q2;q1.push(p);q2.push(q);
+        while(!q1.empty() && !q2.empty())
+        {
+           TreeNode* temp1=q1.front();TreeNode* temp2=q2.front();
+            q1.pop();q2.pop();
+            if(temp1->val!=temp2->val)
+                return false;
+            if(temp1->left && temp2->left)
+            {
+                q1.push(temp1->left);
+                q2.push(temp2->left);
+            }
+            else if(temp1->left || temp2->left)
+            {
+               return false;
+            }
+            if(temp1->right && temp2->right)
+            {
+                q1.push(temp1->right);
+                q2.push(temp2->right);
+            }
+            else if(temp1->right ||  temp2->right)
+            {
+               return false;
+            }
+         }
+        return true;
+    }
+};
