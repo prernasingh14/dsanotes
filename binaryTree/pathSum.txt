@@ -1,0 +1,73 @@
+Given a binary tree and a sum, determine if the tree has a root-to-leaf path such that adding up all the values along the path equals the given sum.
+
+Note: A leaf is a node with no children.
+
+Example:
+
+Given the below binary tree and sum = 22,
+
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \      \
+7    2      1
+return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
+
+Method 1: DFS based approach by beginning currentsum as 0
+
+MEthod 2: Recursive approach by reducing the sum by node's value everytime we visit it
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if(root==NULL )
+            return false;
+        sum=sum-root->val;
+        if(root->left==NULL && root->right==NULL) //we reach leaf nodes
+        {
+            if(sum==0)
+                return true;
+            else
+                return false;
+        }
+        
+        bool lef=hasPathSum(root->left,sum);
+        if(lef) return true;
+        bool righ=hasPathSum(root->right,sum);
+       if(righ)
+        return true;
+        return false;
+        
+        
+    }
+};
+Method 3:Iterative approach
+/we need to take two stacks st-to store the nodes while traversing and 
+stval-in order to store value upto that node
+bool hasPathSum(TreeNode* root,int sum)
+{
+    if(root==NULL)
+    return false;
+    stack<TreeNode*>st;stack<int>stval;
+    TreeNode* temp=root;int val=0;
+    while(!st.empty() || temp!=NULL)
+{
+    if(temp!=NULL)
+    {
+        val+=temp->data;
+        st.push(temp);
+        stval.push(val);
+        temp=temp->left;
+    }
+    else
+    {
+        temp=st.top();st.pop();
+        val=stval.top();stval.pop();
+        if(temp->left==NULL && temp->right==NULL && val==sum)
+        return true;
+        temp=temp->right;
+    }
+}
+return false;
+}
