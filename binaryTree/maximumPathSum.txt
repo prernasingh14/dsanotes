@@ -1,0 +1,27 @@
+Given a non-empty binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any node sequence from some starting node to any node in the tree along the parent-child connections.
+ The path must contain at least one node and does not need to go through the root.
+ Input: root = [-10,9,20,null,null,15,7]
+Output: 42
+I first set my ans to INT_MIN.
+I can do either either of the options presented:
+1.I can choose to take up the left subtree or drop it.
+2.I can either choose to take up the right subtree or drop it.
+3.I check for a possibility whether if i were to take both left subtree and right subtree would that beat my current max_sum?
+class Solution {
+public:
+   int ans = INT_MIN;
+    int dfs(TreeNode* root) {
+        if(!root) return 0;
+        int fromleft = max(dfs(root->left),0);//as might be negative values
+        int fromright = max(dfs(root->right),0);//might be negative values
+      int temp=root->val +max(fromleft,fromright);
+        ans = max(ans,max((root->val+fromleft+fromright),temp));
+       return temp;
+    }
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return ans;
+    }
+};
