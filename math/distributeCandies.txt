@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> distributeCandies(int candies, int num_people) {
+       int num=num_people;
+        vector<int>v(num,0);int i=0;int k=1;
+        while(candies>0)
+        {
+            v[i%num]+=i+1;
+            candies-=i+1;
+            i=i+1;
+        }
+        v[(i-1) % num_people] += candies;//for the last round if extra candies got added 
+                
+        return v;
+    }
+};
+    
