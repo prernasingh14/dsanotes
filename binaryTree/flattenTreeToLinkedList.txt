@@ -1,0 +1,49 @@
+Given a binary tree, flatten it to a linked list in-place.
+
+For example, given the following tree:
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6   PreOrder :1 2 3 4 5 6 
+The flattened tree should look like:
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+Method 1:Iterative Solution but its using extra stack data structure O(n)   
+           In pre-order traversal, keep track of previous node. Make current node as right child of previous and left of previous node as NULL.
+            This solution requires queue, but question asks to solve without additional data structure.
+class Solution {
+public:
+    void flatten(TreeNode* root) {
+        if(root==NULL)
+            return ;
+        stack<TreeNode*>st;
+        TreeNode* prev=new TreeNode(0);
+        st.push(root);
+        while(!st.empty())
+        {
+            TreeNode* temp=st.top();
+            st.pop();
+            if(temp->right)
+                st.push(temp->right);
+            if(temp->left)
+                st.push(temp->left);
+            prev->right=temp;
+            prev->left=NULL;
+            prev=temp;
+        }
+        
+    }
+};
+Method 2:Recursive approach 
