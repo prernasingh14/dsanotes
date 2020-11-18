@@ -16,6 +16,7 @@ But the following [1,2,2,null,3,null,3] is not:
   2   2
    \   \
    3    3
+   Method 1:Recursive Solution TC:O(n)
    class Solution {
 public:
     bool isSymmetric(TreeNode* root) {
@@ -35,4 +36,32 @@ public:
         else
             return false;
      }
+};
+Method 2:Iterative approach using queue
+the nodes at every level are palindromic 
+so we just need to check
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL)
+            return true;
+        queue<TreeNode*>q;
+        q.push(root->left);q.push(root->right);
+        while(!q.empty())
+        {
+            TreeNode* left=q.front();q.pop();
+            TreeNode* right=q.front();q.pop();
+            if(left==NULL  && right==NULL)
+              continue;
+             if( left==NULL || right==NULL || left->val!=right->val)
+                return false;
+                q.push(left->left);
+                q.push(right->right);
+                q.push(left->right);
+                q.push(right->left);
+         
+        }
+        return true;
+    }
+  
 };
