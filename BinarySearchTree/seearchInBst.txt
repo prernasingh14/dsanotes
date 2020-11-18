@@ -1,0 +1,31 @@
+Given the root node of a binary search tree (BST) and a value.
+ You need to find the node in the BST that the node's value equals the given value. 
+ Method 1:Recursive approach 
+ class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        if(root==NULL)
+            return NULL;
+        if(val==root->val)
+            return root;
+        if(val<root->val)
+            return searchBST(root->left, val) ;
+        else 
+            return searchBST(root->right, val);
+            
+    }
+};
+Method 2:Iterative approach
+class Solution {
+public:
+    TreeNode* searchBST(TreeNode* root, int val) {
+        while(root!=NULL && root->val!=val)
+        {
+            if(root->val>val)
+                root=root->left;
+            else
+                root=root->right;
+        }
+        return root;
+    }
+};
