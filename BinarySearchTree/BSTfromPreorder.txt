@@ -1,0 +1,46 @@
+Return the root node of a binary search tree that matches the given preorder traversal.
+Input: [8,5,1,7,10,12]
+Output: [8,5,10,1,7,null,12]
+Method 1:Iterative solution based on basic BST property TC:O(n*h) where h is the height of the tree
+class Solution {
+public:
+     TreeNode* bstFromPreorder(vector<int>& preorder) {
+        TreeNode* root=new TreeNode(preorder[0]);
+        for(int i=1;i<preorder.size();i++){
+            root=constructBST(root,preorder[i]);
+        }
+        //cout<<root->val;
+        return root;
+    }
+    TreeNode* constructBST(TreeNode* root,int val){
+        if(root==NULL){
+            
+            return new TreeNode(val);
+        }
+        if(val<root->val)
+            root->left=constructBST(root->left,val); 
+        if(val>root->val)
+            root->right=constructBST(root->right,val);
+        return root;
+    }
+};
+Method 2:recursive solution TC:O(n)
+
+class Solution {
+public:
+    //recursive approach 
+    int i=0;
+     TreeNode* bstFromPreorder(vector<int>& preorder) {
+      return constructBST(preorder,INT_MAX);//it is the bound for the right subtree
+    }
+    TreeNode* constructBST(vector<int>& preorder,int bound){
+          if(i>=preorder.size() || preorder[i]>bound)
+              return NULL;
+        TreeNode* root=new TreeNode(preorder[i]);
+        i++;//now for the next node
+        root->left=constructBST(preorder,root->val);
+        root->right=constructBST(preorder,bound);
+        return root;
+        
+    }
+};
