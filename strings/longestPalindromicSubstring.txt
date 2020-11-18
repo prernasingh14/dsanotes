@@ -1,0 +1,35 @@
+Given a string s, return the longest palindromic substring in s.
+
+ Input: s = "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+Method 1: TC:O(n^3) 
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        if(s.size()==1)
+            return s;
+        if(s.size()==2 && s[0]==s[1])
+            return s;
+        int maxx=0;string ans="";string lpo="";
+      for(int i=0;i<s.size();i++)
+      {
+      for(int j=0;j<s.size();j++)
+      {
+          string lps=s.substr(j,i+1);
+          lpo=lps;
+           reverse(lpo.begin(),lpo.end());
+           if(lpo==lps)
+           {
+               if(lps.size()>=maxx)
+               {
+                   maxx=lps.size();
+                   ans=lps;
+               }
+           }
+          
+      }
+      }
+        return ans;
+    }
+};
