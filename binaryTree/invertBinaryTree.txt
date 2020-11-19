@@ -35,3 +35,16 @@ public:
         
     }
 };
+//////////////////////----------------------------//////////////////////////////////////
+we can use the swap variable to swap values
+    TreeNode* invertTree(TreeNode* root) {
+        if(root==NULL)
+            return NULL;
+        swap(root->left,root->right);
+        TreeNode* node=invertTree(root->left);
+        TreeNode* nodee=invertTree(root->right);
+        return root;
+        
+        
+    }
+};
