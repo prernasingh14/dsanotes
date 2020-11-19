@@ -36,3 +36,45 @@ public:
         return check(root,NULL,NULL);
     }
 };
+Method 2: using the fact that the inorder traversal of the tree is in increasing order if its a BST
+class Solution {
+    TreeNode prev = null;
+    public boolean isValidBST(TreeNode root) {
+        if(root == null)
+            return true;
+        
+        boolean fromLeft = isValidBST(root.left);//the left side first has start from lower values 
+        
+        if(prev != null && root.val <= prev.val){
+            return false;
+        }
+        prev = root;
+        boolean fromRight = isValidBST(root.right);
+        
+        return fromLeft  && fromRight;
+    }
+}
+Method 3:Iterative approach
+class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        //inorder traversal using stack 
+        if(root==NULL)
+            return true;
+        stack<TreeNode*>st;
+        TreeNode* prev=NULL;//we need a prev to store the value of the node just previous to it as we need to compare whether the value is greater or not
+        while(root!=NULL || !st.empty())
+        {
+            while(root!=NULL)
+            {
+                st.push(root);root=root->left;
+            }
+            root=st.top();st.pop();
+            if(prev!=NULL && root->val<=prev->val)
+                return false;
+            prev=root;
+            root=root->right;
+        }
+        return true;
+    }
+};
