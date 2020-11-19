@@ -1,0 +1,63 @@
+Given a binary search tree (BST), find the lowest common ancestor (LCA) of two given nodes in the BST.
+Example 2:
+
+
+Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+Output: 2
+Explanation: The LCA of nodes 2 and 4 is 2, since a node can be a descendant of itself according to the LCA definition.
+Method 1: if we think of basic recursive approach as we did in binary tree
+class Solution {
+public:
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==NULL)
+            return NULL;
+       if(root->val==p->val || root->val==q->val)
+           return root;
+        TreeNode* leftSide=lowestCommonAncestor(root->left,p,q);
+        TreeNode* rightSide=lowestCommonAncestor(root->right,p,q);
+        if(leftSide && rightSide)
+            return root;
+        else if(leftSide==NULL)
+            return rightSide;
+       else  
+            return leftSide;
+    }
+};
+Method 2:Based on BST property 
+class Solution {
+public:
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==NULL)
+            return NULL;
+       
+       if(root->val>p->val && root->val>q->val)//then definitely we need to search in left subtree
+        return lowestCommonAncestor(root->left,p,q);
+       else if(root->val<p->val && root->val<q->val)//then we definitely need to search in right subtree
+           return lowestCommonAncestor(root->right,p,q);
+        return root;//found then return 
+      
+    }
+};
+Method 3:iterative solution to avoid the usage of stack space in memory 
+class Solution {
+public:
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==NULL)
+            return NULL;
+       while(root!=NULL)
+       {
+       if(root->val>p->val && root->val>q->val)
+       root=root->left;
+       else if(root->val<p->val && root->val<q->val)
+          root=root->right;
+           else
+               break;
+       }
+        return root;
+      
+    }
+};
+TC of all the above solutions is O(height) height=log n in best case and in worst case it is equal to number of nodes
