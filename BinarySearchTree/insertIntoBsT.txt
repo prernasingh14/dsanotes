@@ -18,3 +18,27 @@ public:
          return root;   
     }
 };
+TC:O(h) SC:O(n) in worst case
+Method 2:Iterative solution where tC:(h) sc:o(1)
+class Solution {
+public:
+    TreeNode* insertIntoBST(TreeNode* root, int val) {
+        if(root==NULL)
+            return new TreeNode(val);
+        TreeNode* parent;TreeNode* curr=root;
+        while(curr!=NULL)
+        {
+            parent=curr;
+            if(val>curr->val)
+                curr=curr->right;
+            else
+                curr=curr->left;
+        }
+        
+      if(val>parent->val)
+          parent->right=new TreeNode(val);
+        else if (val<parent->val)
+            parent->left=new TreeNode(val);
+         return root;   
+    }
+};
