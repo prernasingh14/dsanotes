@@ -1,0 +1,23 @@
+void findPreSuc(Node* root, Node*& pre, Node*& suc, int key)
+{
+
+// Your code goes here
+if(root==NULL)
+return ;
+if(root->key<key)//if found smaller then it means that its pred
+{
+    pre=root;
+    findPreSuc(root->right,pre,suc,key);
+}
+else if(root->key==key)//if key is found to be equal then search again
+{
+    findPreSuc(root->left,pre,suc,key);
+    findPreSuc(root->right,pre,suc,key);
+}
+else 
+{
+    suc=root;//if root->data  is found to be greater then its successor
+    findPreSuc(root->left,pre,suc,key);
+}
+
+}
