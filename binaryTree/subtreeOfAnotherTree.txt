@@ -22,7 +22,9 @@ public:
             return true;
          if(s==NULL || t==NULL)
             return false;
-        return s->val==t->val && check(s->left,t->left) && check(s->right,t->right);
+        return s->val==t->val && check(s->left,t->left) && check(s->right,t->right);/* Check if the data of both roots is  
+    same and data of left and right  
+    subtrees are also same */
       
     }
     bool isSubtree(TreeNode* s, TreeNode* t) {
@@ -36,3 +38,25 @@ public:
            
     }
 };
+class Solution {
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        Stack<TreeNode> stack = new Stack<>();
+        while (s != null || !stack.isEmpty()) {
+            while (s != null) {
+                stack.push(s);
+                s = s.left;
+            }
+            s = stack.pop();
+            if (isSame(s, t)) return true;
+            s = s.right;
+        }
+        return false;
+    }
+    
+    public boolean isSame(TreeNode x, TreeNode y) {
+        if (x == null && y == null) return true;
+        if (x == null || y == null) return false;
+        if (x.val != y.val) return false;
+        return isSame(x.left, y.left) && isSame(x.right, y.right);
+    }
+}
