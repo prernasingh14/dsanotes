@@ -25,11 +25,14 @@ public:
         return s->val==t->val && check(s->left,t->left) && check(s->right,t->right);
       
     }
-    bool traverse(TreeNode* s,TreeNode* t)
-    {
-        return s!=NULL && (check(s,t) || traverse(s->left,t) || traverse(s->right,t));
-    }
     bool isSubtree(TreeNode* s, TreeNode* t) {
-        return traverse(s,t);
+       if(s==NULL)//we reached the end of the subtree to be checked thus we should return false
+           return false;
+        if(t==NULL)
+            return true;
+        if(check(s,t))
+            return true;
+        return isSubtree(s->left,t) || isSubtree(s->right,t);
+           
     }
 };
