@@ -1,3 +1,17 @@
+Given an array and a positive integer k, find the first negative integer for each and every window(contiguous subarray) of size k.
+Input:
+2
+5
+-8 2 3 -6 10
+2
+8
+12 -1 -7 8 -15 30 16 28
+3
+
+Output:
+-8 0 -6 -6
+-1 -1 -7 -15 -15 0
+
 Brute force approach is to check for every subarray of size k :two loops required outer for new subarray and inner for iterating over that subarray.
 TC:O(n*k) auxillary SC:O(1)
 int main()
@@ -33,4 +47,41 @@ int main()
 	return 0;
 
     
+}
+Above approach is expected to exceed time for large inputs as t*n*k, thus we need to optimize it
+Method 2: Linear time complexity method 
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    int arr[n];
+	    for(int i=0;i<n;i++)
+	    {
+	        cin>>arr[i];
+	    }
+	    int k;cin>>k;
+	    int index=-1;
+	    for(int i=0;i<n-k+1;i++)
+	    {
+	        // Find the index of the next negative number
+	        if(index<i)
+	        {
+	            do{
+	                index++;
+	            }while(index<n && arr[index]>=0);
+	        }
+	        // If the next negative number is within the window print it
+	        if(index<i+k)
+	        cout<<arr[index]<<" ";
+	        else
+	        cout<<0<<" ";
+	    }
+	    cout<<"\n";
+	}
+	return 0;
 }
