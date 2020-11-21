@@ -1,0 +1,36 @@
+Brute force approach is to check for every subarray of size k :two loops required outer for new subarray and inner for iterating over that subarray.
+TC:O(n*k) auxillary SC:O(1)
+int main()
+{
+
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    int arr[n];
+	    for(int i=0;i<n;i++)
+	    {
+	        cin>>arr[i];
+	    }
+	    int k;cin>>k;
+	    for(int i=0;i<=n-k;i++)
+	    {
+	        bool flag=false;
+	        for(int j=i;j<i+k;j++)
+	        {
+	            if(arr[j]<0)
+	            {
+	                cout<<arr[j]<<" ";
+	                flag=true;break;
+	            }
+	        }
+	        if(flag==false)
+	        cout<<0<<" ";
+	    }
+	    cout<<"\n";
+	}
+	return 0;
+
+    
+}
