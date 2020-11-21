@@ -45,10 +45,7 @@ void rotate(vector<vector<int> >& matrix)
     int arr[n][m];
     for(int i=0;i<matrix.size();i++)
     {
-        for(int j=0;j<matrix[0].size();j++)
-        {
             reverse(matrix[i].begin(),matrix[i].end());
-        }
     }
     for(int i=0;i<n;i++)
     {
