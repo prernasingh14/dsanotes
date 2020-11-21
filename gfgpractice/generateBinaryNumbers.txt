@@ -1,0 +1,26 @@
+Given a number N. The task is to generate and print all binary numbers with decimal values from 1 to N.
+Input:
+5
+Output: 
+1 10 11 100 101
+Explanation: 
+Binary numbers from
+1 to 5 are 1 , 10 , 11 , 100 and 101.
+what we can see is that every every number paves the way for the next two numbers by adding 0 next to it and then by adding 1 next to it.
+eg 1(1) ->10(2)->11 (3)
+ now 10(2)->100 (4)->101(5)
+ and similarly 11(3)->110(6)->111(7)
+ so we can store them in queue to pop them chance by chance 
+vector<string> generate(ll n) {
+    queue<string> q;
+    vector<string> v;
+    q.push("1");
+    while (n--) {
+        string s = q.front();
+	v.push_back(s);
+	q.pop();
+	q.push(s + "0");
+	q.push(s + "1");
+    }
+    return v;
+}

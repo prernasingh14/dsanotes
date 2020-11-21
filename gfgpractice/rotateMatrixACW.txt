@@ -1,0 +1,60 @@
+Given a square matrix[][] of size N x N. 
+The task is to rotate it by 90 degrees in an anti-clockwise direction without using any extra space.
+Input:
+N = 3
+matrix[][] = [[1 2 3],
+              [4 5 6],
+              [7 8 9]]
+Output:
+3 6 9 
+2 5 8 
+1 4 7
+Method 1:Brute force approach is to see the pattern 
+where n is the number if rows and m is the number of columns 
+for every index i,j its getting replaced by  value at j,m-1-i
+so we can take an extra  matrix to store the new values and then replace in the original matrix
+void rotate(vector<vector<int> >& matrix)
+{
+    // Your code goes here
+    int n=matrix.size();int m=matrix[0].size();
+    int arr[n][m];
+    for(int i=0;i<matrix.size();i++)
+    {
+        for(int j=0;j<matrix[0].size();j++)
+        {
+            arr[i][j]=matrix[j][m-1-i];
+        }
+    }
+    for(int i=0;i<matrix.size();i++)
+    {
+        for(int j=0;j<matrix[0].size();j++)
+    {
+        matrix[i][j]=arr[i][j];
+    }
+    }
+}
+TC:O(n*n)
+extra space thus SC:O(n*n)
+Method 2:w/o using extra space , its follows just the opposite steps of rotation in clockwise manner
+
+
+void rotate(vector<vector<int> >& matrix)
+{
+    // Your code goes here
+    int n=matrix.size();int m=matrix[0].size();
+    int arr[n][m];
+    for(int i=0;i<matrix.size();i++)
+    {
+        for(int j=0;j<matrix[0].size();j++)
+        {
+            reverse(matrix[i].begin(),matrix[i].end());
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<m;j++)
+        {
+           swap(matrix[i][j],matrix[j][i]);
+        }
+    }
+}
