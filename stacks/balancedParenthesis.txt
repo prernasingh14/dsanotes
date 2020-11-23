@@ -66,3 +66,32 @@ public:
             
     }
 };
+Instead of pushing the left parenthesis in the stack, this can be optimized to push the right parenthesis only and hence a cleaner code. The time and space complexity is the same though.
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+        
+       stack<char>st;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]=='(')
+                st.push(')');
+                else if(s[i]=='{')
+                    st.push('}');
+            else if(s[i]=='[')
+                st.push(']');
+            else if(st.empty() || st.top()!=s[i])//because any closing bracket must be equal to the topmost bracket
+            { return false;
+            }
+            else
+            st.pop();
+                
+        }
+      if(st.empty())
+            return true;
+        return false;
+            
+    }
+};
