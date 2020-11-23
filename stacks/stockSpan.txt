@@ -1,0 +1,40 @@
+Brute force solution:
+we need to  traverse elements on left of it and increment the span value of it while elements on the left side are smaller.
+as soon as we encounter any value that is greater we break out maximum consecutive streak
+TC:O(n*n) 
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;int arr[n];
+	    for(int i=0;i<n;i++)
+	    cin>>arr[i];
+	    vector<int>v;
+	    for(int i=0;i<n;i++)
+	    {
+	        int c=0;
+	        for(int j=i;j>=0;j--)
+	        {
+	            if(arr[j]<=arr[i])
+	            c++;
+	            else
+	            {
+	               break;
+	            }
+	        }
+	       
+	        v.push_back(c);
+	    }
+	    for(int i=0;i<v.size();i++)
+	    {
+	        cout<<v[i]<<" ";
+	    }
+	    cout<<"\n";
+	}
+	return 0;
+}
