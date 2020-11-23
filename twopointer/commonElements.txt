@@ -1,0 +1,37 @@
+Given two unsorted arrays , find the common elements in both and arrange the elements in increasing order .
+note that one element can be common with only one element.
+Two pointer approach 
+int main()
+{
+   int n,m;cin>>n>>m;
+   int arr[n];int brr[m];
+   for(int i=0;i<n;i++)
+   {
+       cin>>arr[i];
+   }
+   for(int i=0;i<m;i++)
+   cin>>brr[i];
+   sort(arr,arr+n);
+   sort(brr,brr+m);
+   int i=0;int j=0;vector<int>v;
+   while(i<n && j<m)
+   {
+      if(arr[i]==brr[j])
+      {
+          v.push_back(arr[i]);
+          i++;j++;
+      }
+      else if(arr[i]<brr[j])
+      {
+          i++;
+      }
+      else if(arr[i]>brr[j])
+      j++;
+   }
+   for(int i=0;i<v.size();i++)
+   {
+       cout<<v[i]<<" ";
+   }
+    return 0;
+    
+}
