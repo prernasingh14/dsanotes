@@ -11,7 +11,7 @@ Explanation:
     For number 1 in the first array, the next greater number for it in the second array is 3.
     For number 2 in the first array, there is no next greater number for it in the second array, so output -1.
 
-Method 1:
+Method 1:O(n*n) time complexity 
     class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
@@ -33,5 +33,43 @@ public:
            v.push_back(m[nums1[i]]);
        }
         return v;
+    }
+};
+Method 2:O(N) time complexity using stack and unordered_map
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+          vector<int> res(nums1.size(), -1); //to be returned, initialize it with -1.
+        stack<int> st;
+        unordered_map<int, int> umap;
+        
+        for(int i=0; i<nums2.size(); i++)
+        {
+            int element = nums2[i];
+            
+            while(!st.empty() && element > st.top())
+            {
+                //NGE of st.top() is element
+				
+                umap[st.top()] = element;
+                st.pop();
+            }
+            
+            st.push(element);
+        }
+        
+        for(int i=0; i<nums1.size(); i++)
+        {
+            int ele = nums1[i];
+            
+            if(umap.find(ele) != umap.end())
+            {
+                int nge = umap[ele];
+                res[i] = nge; //push NGE of desired element
+            }
+                
+        }
+        
+        return res;
     }
 };
