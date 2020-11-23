@@ -38,3 +38,50 @@ int main() {
 	}
 	return 0;
 }
+TC:O(n) time using stack  as if we see clearly ,
+it is like the previous concepts of next greater element on the left 
+as for example take the values:
+7 
+100 80 60 70 60 75 85
+100 ->-1
+80->100 index of 100=0 thus difference is 1-0=1
+60->80  index of 80 is 1 thus count is 2-1=1
+70->80   index of 80 is 1 thus count is 3-1=2 
+60->70   index of 70 is 3 thus count is 4-3=1
+75->80    index of 80 is 1 thus count is 5-1=4
+85->100   index of 100 is 0 thus count is 6-0=6
+
+output : 1 1 2 1 4 6
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;int arr[n];
+	    for(int i=0;i<n;i++)
+	    cin>>arr[i];
+        //we need to take  a stack of pair as we need to store the index of the next greater elmenet
+        
+	    vector<int>v(n,-1);stack<pair<int,int> >st;
+	    for(int i=n-1;i>=0;i--)
+	    {
+	       while(!st.empty() && st.top().first<arr[i])
+	       {
+	           v[st.top().second]=i;
+	           st.pop();
+	       }
+	       st.push({arr[i],i});
+	       
+	    }
+	   
+	    for(int i=0;i<n;i++)
+	    {
+	        cout<<i-v[i]<<" ";
+	    }
+	    cout<<"\n";
+	}
+	return 0;
+}
