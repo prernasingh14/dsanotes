@@ -29,3 +29,26 @@ public:
         return v;
     }
 };
+Method 2:Based on the next greater element on the right using stack in O(n) time 
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& arr) {
+        //this question is kind of similar to next greater element on the right
+        //we can do this question using stack as its easier to store the last maximum number for a range of values
+        int n=arr.size();vector<int>v(n,0);
+        stack<pair<int,int> >st;
+        for(int i=0;i<=n-1;i++)
+        {
+            while(!st.empty() && st.top().first<arr[i])
+            {
+                v[st.top().second]=i-st.top().second;
+                //as i will be the index of the day having greater temperature and subtracting it from the current will count the number of days in between 
+                st.pop();
+            }
+            st.push({arr[i],i});
+        }
+        
+        return v;
+    }
+        
+};
