@@ -1,0 +1,22 @@
+class StockSpanner {
+public:
+   
+    stack<pair<int,int> >st;
+    StockSpanner() {
+        
+    }
+    void fill()
+    {
+    }
+    int next(int price) {
+        int count =1;
+        while(!st.empty() && st.top().first<=price)
+        {
+            count+=st.top().second;
+            st.pop();
+        }
+        st.push({price,count});//we'll count the days having a lesser price and add them to our answer
+        return count;
+    }
+};
+
