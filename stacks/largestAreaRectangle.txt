@@ -1,0 +1,53 @@
+ Given n non-negative integers representing the histogram's bar height where the width of each bar is 1, 
+ find the area of largest rectangle in the histogram.
+
+ 
+
+
+Above is a histogram where width of each bar is 1, given height = [2,1,5,6,2,3].
+
+output=10;
+ 
+Brute force approach that we would think of first is that :
+find the minimum height column between every possible subarrays and then calculate area 
+area=minHeight*(distance between those two columns or boundaries)
+=minHeight*(i-j+1)
+TC:O(N*N*N)
+int main() {
+	//code
+
+	    int n;cin>>n;int arr[n];
+	    for(int i=0;i<n;i++)
+	    cin>>arr[i];
+	    //we find the minimum height between the two boundaries and that would be our height of the rectangle and the width would be 
+	    //the number of columns between these two
+	    int area=0;
+	    for(int i=0;i<n;i++)
+	    {
+	        
+	        for(int j=0;j<n;j++)
+	        {
+	            int minHeight=min(arr[i],arr[j]);
+	            for(int k=i;k<=j;k++)
+	            {
+	                minHeight=min(minHeight,arr[k]);
+	            }
+	            area=max(minHeight*(j-i+1),area);
+	        }
+	    }
+	    cout<<area<<"\n";
+	return 0;
+}
+////////////////----------------////////////////
+O(N*N) appoach id that keep on moving and calculating the area simultaneously with the minHeight 
+int area=0;
+	    for(int i=0;i<n;i++)
+	    {
+	        int minn=arr[i];
+	        for(int j=i;j<n;j++)
+	        {
+	            minn=min(arr[j],minn);
+	        area=max(minn*(j-i+1),area);
+	    }
+	    }
+	    cout<<area<<"\n";
