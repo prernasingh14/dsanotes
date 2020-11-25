@@ -71,7 +71,7 @@ class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
         int n=grid.size();int m=grid[0].size();bool marked=false;int minutes=0;int twos=0;int ones=0;
-       queue<pair<int,int> >q;
+       queue<pair<int,int> >q;//push rotting oranges into basket
         for(int i=0;i<n;i++)
         {
             for(int j=0;j<m;j++)
@@ -81,8 +81,7 @@ public:
                     q.push({i,j});twos++;
                 }
                 else if(grid[i][j]==1)
-                    ones++;
-                    
+                    ones++;     
             }
         }
         if(ones==0)//if there are no fresh oranges then we can't change any
@@ -90,6 +89,8 @@ public:
         else if(twos==0)//even if ones are there but no rotten orange then those fresh oranges will remain fresh thus
             return -1;
         int rotten=twos;int changed=0;
+         // Observe that, The first level is already rotten, 
+        // still we are counting it and hence at the end we return (ans-1) instead of //ans
         while(!q.empty())
         {
             int x=q.front().first;int y=q.front().second;q.pop();
@@ -129,5 +130,4 @@ public:
             return minutes-1;
     }
 };
-TC:O(N*M)
 
