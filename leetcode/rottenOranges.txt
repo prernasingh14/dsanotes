@@ -1,0 +1,69 @@
+The idea is very basic. Traverse through all oranges in multiple rounds. In every round, rot the oranges to the adjacent position of oranges which were rotten in the last round.
+Algorithm: 
+Create a variable no = 2 and changed = false
+Run a loop until there is no cell of the matrix which is changed in an iteration.
+Run a nested loop and traverse the matrix. If the element of the matrix is equal to no then assign the adjacent elements to no + 1 if the adjacent element’s value is equal to 1, i.e. not rotten, and update changed to true.
+Traverse the matrix and check if there is any cell which is 1. If 1 is present return -1
+Else return no – 2
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n=grid.size();int m=grid[0].size();bool marked=false;
+        int minutes=2;
+        while(1)
+        {
+        for(int i=0;i<grid.size();i++)
+        {
+           
+            for(int j=0;j<grid[0].size();j++)
+            { 
+                if(grid[i][j]==minutes)//then it will rot neightbouring fresh oranges
+                {
+                    if(i+1<n && j<m &&  grid[i+1][j]==1)
+                    {
+                    marked=true;
+                        grid[i+1][j]=grid[i][j]+1;
+                       
+                    }
+                     if(i-1>=0 && j<m &&  grid[i-1][j]==1)
+                    {
+                    marked=true;
+                        grid[i-1][j]=grid[i][j]+1; 
+                    }
+                     if(i<n && j+1<m &&  grid[i][j+1]==1)
+                    {
+                    marked=true;
+                        grid[i][j+1]=grid[i][j]+1;
+                    }
+                 if(i<n && j-1>=0 &&  grid[i][j-1]==1)
+                    {
+                    marked=true;
+                        grid[i][j-1]=grid[i][j]+1;
+                    }
+                }
+                
+                
+            }
+            
+        }
+            if (!marked)
+            break;
+        marked=false;
+            minutes++;
+        }
+        for(int i=0;i<n;i++)
+        {
+for(int j=0;j<m;j++)
+{
+    if(grid[i][j]==1)
+        return -1;
+}
+        }
+        return minutes-2;
+    }
+};
+time complexity :O(max(n,m)*n*m)
+space :O(1)
+////////////////////////--------------------///////////////////
+Method 2:
+BFS based approach
