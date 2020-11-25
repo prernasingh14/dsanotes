@@ -67,3 +67,67 @@ space :O(1)
 ////////////////////////--------------------///////////////////
 Method 2:
 BFS based approach
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int n=grid.size();int m=grid[0].size();bool marked=false;int minutes=0;int twos=0;int ones=0;
+       queue<pair<int,int> >q;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==2)
+                {
+                    q.push({i,j});twos++;
+                }
+                else if(grid[i][j]==1)
+                    ones++;
+                    
+            }
+        }
+        if(ones==0)//if there are no fresh oranges then we can't change any
+            return 0;
+        else if(twos==0)//even if ones are there but no rotten orange then those fresh oranges will remain fresh thus
+            return -1;
+        int rotten=twos;int changed=0;
+        while(!q.empty())
+        {
+            int x=q.front().first;int y=q.front().second;q.pop();
+            rotten--;
+        if(x-1>=0 && y<m && grid[x-1][y]==1)
+        {
+            grid[x-1][y]=2;ones--;changed++;
+            q.push({x-1,y});
+        }
+            if(x+1<n && y<m && grid[x+1][y]==1)
+        {
+            grid[x+1][y]=2;ones--;changed++; q.push({x+1,y});
+        }
+             if(x<n && y-1>=0 && grid[x][y-1]==1)
+        {
+            grid[x][y-1]=2;ones--;changed++; q.push({x,y-1});
+        }
+             if(x<n && y+1<m && grid[x][y+1]==1)
+        {
+            grid[x][y+1]=2;ones--;changed++; q.push({x,y+1});
+        }
+            // rotten is zero means we have completed traversing the current level of the graph
+                // and hence one unit of time is passed. Hence we increrment minutes
+                // lets go to next level, for that rotten becomes changed and changed becomes zero, 
+                // i.e. children are upgraded to current generation and child count start again from zero.
+            if(rotten==0)
+            {
+                minutes++;
+                rotten=changed;
+                changed=0;
+            }
+            
+        }
+        if(ones>0)
+            return -1;
+        else
+            return minutes-1;
+    }
+};
+TC:O(N*M)
+
