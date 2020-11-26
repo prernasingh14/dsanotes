@@ -24,10 +24,6 @@ TC:O(nlog(n))
 
 class Solution {
 public:
-    static bool compare(string & a,string& b)
-    {
-        return a[0]<b[0];
-    }
     string longestCommonPrefix(vector<string>& strs) {
         sort(strs.begin(),strs.end());string ans="";
         if(strs.size()==0)
