@@ -33,3 +33,93 @@ public:
         return ans;
     }
 };
+///////////////////////////////////////////////////////////
+Method 2:based on two pointer approach of expanding an element to its left and right and checking each charachter matched or not 
+#include<string>
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        if(s.size()==1)
+            return s;
+        if(s.size()==2 && s[0]==s[1])
+            return s;
+       //two pointer approach to expand around the middle 
+         string res="";
+        for(int i=0;i<s.size();i++)
+        {
+            char ch=s[i];int left=i;int right=i;
+            while(left>=0 && s[left]==ch)
+                left--;
+            while(right<s.size() && s[right]==ch)
+            {
+                right++;
+            }
+            //now we get the boundaries of our window now we need to check whether it is palindromic or not
+            while(left>=0 && right<s.size() && s[left]==s[right])
+            {
+                left--;
+                right++;
+            }
+            left=left+1;
+            if(right-left>res.size())
+            {
+                res=s.substr(left,right-left);
+            }
+        }
+        return res;
+    }
+};
+TC: O(N*N) in worst case like when the string is "AAAAAAAAAAAAA"
+SC:O(1)
+////////////////-----------------------------------////////////////
+DP based solution :TC:O(N*N)
+Got it in above solution, we do unnecessary recompution while validating palindomes.
+For example : if we know string "aba" is palindrome then "cabac" must be palindrome as left and right are equal.
+Time Complexity - O(N^2), Space Complexity - O(N^2) (caching all substring)
+*/
+
+class Solution
+{
+public:
+    string longestPalindrome(string s)
+    {
+        int n = s.size();
+        if (n == 0)
+            return "";
+
+        // dp[i][j] will be 'true' if the string from index i to j is a palindrome.
+        bool dp[n][n];
+
+        //Initialize with false
+
+        memset(dp, 0, sizeof(dp));
+
+        //Every Single character is palindrome
+        for (int i = 0; i < n; i++)
+            dp[i][i] = true;
+
+        string ans = "";
+        ans += s[0];
+
+        for (int i = n - 1; i >= 0; i--)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                if (s[i] == s[j])
+                {
+                    //If it is of two character OR if its susbtring is palindrome.
+                    if (j - i == 1 || dp[i + 1][j - 1])
+                    {
+                        //Then it will also a palindrome substring
+                        dp[i][j] = true;
+
+                        //Check for Longest Palindrome substring
+                        if (ans.size() < j - i + 1)
+                            ans = s.substr(i, j - i + 1);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
