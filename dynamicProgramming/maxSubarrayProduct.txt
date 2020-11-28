@@ -26,3 +26,25 @@ for(int i=0;i<n;i++)
 return maxp;
 }
 
+
+Better Approach: Similar to kadane's algorithm
+TC:O(N) 
+SC:O(1)
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int  maxSoFar=nums[0];int minSoFar=nums[0];
+        int n=nums.size();int globalMax=nums[0];
+            if(n==0)
+            return 0;
+        for(int i=1;i<nums.size();i++)
+        {
+            int tempmax=maxSoFar;
+            maxSoFar=max(nums[i],max(maxSoFar*nums[i],nums[i]*minSoFar));
+            minSoFar=min(nums[i],min(tempmax*nums[i],nums[i]*minSoFar));
+            if(maxSoFar>globalMax)
+                globalMax=maxSoFar;
+        }
+        return globalMax;
+    }
+};
