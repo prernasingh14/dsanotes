@@ -1,0 +1,51 @@
+ Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+
+ 
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+Example 2:
+
+Input: nums = [0,1,0,3,2,3]
+Output: 4
+Example 3:
+
+Input: nums = [7,7,7,7,7,7,7]
+Output: 1
+
+Brute Force approach:
+  //recursion based solution 
+    //for each item there are two possibilities -either it is there in LIS or its not 
+   // We include current item in LIS if it is greater than the previous element in LIS and recur for remaining items.
+ 
+//We exclude current item from LIS and recur for remaining items.
+    int lis(vector<int>& nums,int i,int n,int prev)
+    {
+        if(i==n)
+            return 0;
+        int inc=0;int exc=0;
+            exc=lis(nums,i+1,n,prev);
+        if(nums[i]>prev)
+         inc=1+lis(nums,i+1,n,nums[i]); 
+             return max(inc,exc);
+       
+    
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0)
+            return 0;
+        else if(n==1)
+            return 1;
+        else
+        return lis(nums,0,n,INT_MIN);
+    }
+};
+TC: will be exponential as every item chosen depends on two choices- to be taken or to be excluded
+thus O(2^n)
+recursion uses extra stack space :O(n)
