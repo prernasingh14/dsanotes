@@ -31,7 +31,7 @@ Brute Force approach:
         int inc=0;int exc=0;
             exc=lis(nums,i+1,n,prev);
         if(nums[i]>prev)
-         inc=1+lis(nums,i+1,n,nums[i]); 
+         inc=1+lis(nums,i+1,n,nums[i]); //if satisfies property then include
              return max(inc,exc);
        
     
@@ -49,3 +49,31 @@ Brute Force approach:
 TC: will be exponential as every item chosen depends on two choices- to be taken or to be excluded
 thus O(2^n)
 recursion uses extra stack space :O(n)
+//////////////////////////////////////////////////////////////
+Bottom Up Manner 
+We'll see ki whether by: 
+TC:O(N*N)
+SC:O(N)
+class Solution {
+public:
+    
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0)
+            return 0;
+        else if(n==1)
+            return 1;
+        //we'lll do memoization in bottom up manner
+        int lis[n];lis[0]=1;
+        for(int i=1;i<n;i++)
+        {
+         lis[i]=1;
+        for(int j=0;j<i;j++)
+        {
+            if(nums[i]>nums[j] && lis[i]<lis[j]+1)
+                lis[i]=lis[j]+1;
+        }
+        }
+        return *max_element(lis,lis+n);
+    }
+};
