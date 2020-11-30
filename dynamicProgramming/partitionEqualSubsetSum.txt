@@ -27,3 +27,10 @@ public:
         return equal(nums,n,sum);
     }
 };
+
+TC:O(2^n)
+SC:no extra space for storing values
+//////////////////////////////------------------------///////////////
+Memoization with recursion :
+
+we store up results in order to avoid blindly calling recursion 
