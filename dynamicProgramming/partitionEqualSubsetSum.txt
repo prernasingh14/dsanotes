@@ -1,0 +1,29 @@
+recursive solution:
+class Solution {
+public:
+    bool subset(vector<int>&nums,int n,int sum)
+    {
+        if(n==0 && sum>0)
+            return false;
+        if(sum==0)
+            return true;
+        if(nums[n-1]>sum)
+            return subset(nums,n-1,sum);
+        else 
+            return subset(nums,n-1,sum-nums[n-1]) || subset(nums,n-1,sum);
+    }
+    bool equal(vector<int>&nums,int n,int sum)
+    {
+        if(sum%2==1)
+            return false;
+        else
+            return subset(nums,n,sum/2);
+    }
+    bool canPartition(vector<int>& nums) {
+        int sum=0;
+        for(int i=0;i<nums.size();i++)
+            sum+=nums[i];
+        int n=nums.size();
+        return equal(nums,n,sum);
+    }
+};
