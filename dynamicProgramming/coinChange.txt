@@ -55,11 +55,11 @@ public:
         
       int n=coins.size();
         int dp[n+1][amount+1];
-        for(int i=1;i<n+1;i++)
+        for(int i=0;i<n+1;i++)
             dp[i][0] = 0;
 
-        for(int i=0;i<amount+1;i++)
-            dp[0][i] = INT_MAX-1;//as else it will cause integer overflow for cases when no combo makes up the amount eg:[2]
+        for(int j=0;j<amount+1;j++)
+            dp[0][j] = INT_MAX-1;//as else it will cause integer overflow for cases when no combo makes up the amount eg:[2]
  //amount is 3
         for(int i=1;i<n+1;i++){
             for(int j=1;j<amount+1;j++){
