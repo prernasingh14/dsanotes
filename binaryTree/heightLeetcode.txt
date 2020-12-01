@@ -23,7 +23,7 @@ int height(Node* root)
 TC:O(n)   //because 
 auxillary space:O(height) as stack space is being used 
 ////////////////////////--------------------////////////////////////
-method 2 :using bfs
+method 2 :using bfs :count the level of the last node
 int maxDepth(TreeNode *root)
 {
     if(root == NULL)
