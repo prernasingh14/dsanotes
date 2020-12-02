@@ -1,0 +1,47 @@
+Given two integer arrays A and B, return the maximum length of an subarray that appears in both arrays.
+
+Example 1:
+
+Input:
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+Output: 3
+Explanation: 
+The repeated subarray with maximum length is [3, 2, 1].
+ 
+
+Note:
+
+1 <= len(A), len(B) <= 1000
+0 <= A[i], B[i] < 100
+Brute force:
+recursive approach to find all substrings and find maximum count
+
+class Solution {
+public:
+    int lcs(vector<int>&a,vector<int>&b,int n,int m,int count)
+    {
+        if(n==0 || m==0)
+            return count;
+        if(a[n-1]==b[m-1])
+            count=lcs(a,b,n-1,m-1,count+1);
+        if(a[n-1]!=b[m-1])
+            count=max(max(lcs(a,b,n-1,m,0),lcs(a,b,n,m-1,0)),count);
+        return count;
+            
+        
+    }
+    int findLength(vector<int>& A, vector<int>& B) {
+        int n=A.size();
+        int m=B.size();
+        int count=0;
+        return lcs(A,B,n,m,count);
+        
+    }
+};
+
+
+/////////////////////
+but recursive approaches tend to cause stack overflow for larger inputs 
+thus we need to optimise it by converting it to 
+Memoization with recursion
