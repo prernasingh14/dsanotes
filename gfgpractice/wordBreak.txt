@@ -1,0 +1,21 @@
+bool recurword(string A,vector<string>&B,int currIndex)
+{
+    if(currIndex==A.size())
+    return true;
+    for(int i=currIndex+1;i<A.size()+1;i++)
+    {
+        string str=A.substr(currIndex,i-currIndex);
+        if(find(B.begin(),B.end(),str)!=B.end())
+        {
+            if(recurword(A,B,i))
+            return true;
+        }
+    }
+    return false;
+}
+int wordBreak(string A, vector<string> &B) {
+    //code here
+    int currIndex=0;
+    return recurword(A,B,currIndex);
+    
+}
