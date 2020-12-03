@@ -50,3 +50,26 @@ thus , we need to make a count of the maximum jump that we can make till a zero 
 TC:O(N) 
 SC:O(1)
 
+/////////////////////////////////////////////
+a more compact code though having the same time complexity 
+we make a check to exit early when if there's some jump that can take us to the end directly 
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        int n=nums.size();
+        int distReq=n-1;
+        if(nums[0]==0 && n>1)
+            return false;
+         if(n==1)
+            return true;
+        int maxxJumped=0;int jump=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(maxxJumped<i) return false;
+            if(maxxJumped>=distReq) return true;//if already there's some jump that can be made directly to reach or exceed the last index
+            maxxJumped = max(i+nums[i],maxxJumped);
+        }
+        return true;
+        
+    }
+};
