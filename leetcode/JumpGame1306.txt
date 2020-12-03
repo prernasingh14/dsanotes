@@ -68,3 +68,4 @@ public:
         return reachPossible(arr,visited,start);
     }
 };
+TC:O(n) as we mark the elements as visited and do not visit them again
