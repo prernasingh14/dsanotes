@@ -1,0 +1,49 @@
+Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach to any index with value 0.
+
+Notice that you can not jump outside of the array at any time.
+
+ 
+
+Example 1:
+
+Input: arr = [4,2,3,0,3,1,2], start = 5
+Output: true
+Explanation: 
+All possible ways to reach at index 3 with value 0 are: 
+index 5 -> index 4 -> index 1 -> index 3 
+index 5 -> index 6 -> index 4 -> index 1 -> index 3 
+Example 2:
+
+Input: arr = [4,2,3,0,3,1,2], start = 0
+Output: true 
+Explanation: 
+One possible way to reach at index 3 with value 0 is: 
+index 0 -> index 4 -> index 1 -> index 3
+
+WE will apply Bfs to find all possible paths to reach from a given point 
+
+
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {
+        queue<int>q;
+        q.push(start);bool mark[arr.size()];memset(mark,false,sizeof(mark));
+        mark[start]=true;
+        while(!q.empty())
+        {
+            int begin=q.front();q.pop();
+            if(arr[begin]==0)
+                return true;
+            int right=begin+arr[begin];
+            int left=begin-arr[begin];
+            if(right<arr.size() && mark[right]==false)
+            {
+                q.push(right);mark[right]=true;
+            }
+            if(left>=0 && mark[left]==false)
+            { q.push(left);mark[left]=true;
+            }
+        }
+        return false;
+    }
+};
