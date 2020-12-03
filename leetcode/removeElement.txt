@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int c=0;int n=nums.size();
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]==val)
+                c++;
+            
+        }
+        int k=n-1;
+        for(int i=0;i<n-1;i++)
+        {
+            if(nums[i]==val)
+            {
+                int j=i;
+                while(nums[j]==val && j<n-1)
+                {
+                   j++; 
+                }
+                swap(nums[i],nums[j]);
+            }
+                
+        }
+        return n-c;
+    }
+};
+TC:O(N*N) in worst case
+///////////////////////////////
+better solution in O(n)
+
+class Solution {
+public:
+    int removeElement(vector<int>& nums, int val) {
+     int n=nums.size();int start=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]!=val)
+            {
+                nums[start]=nums[i];
+                start++;
+            }
+            
+        }
+        return start;
+        
+    }
+};
