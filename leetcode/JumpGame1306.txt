@@ -47,3 +47,24 @@ public:
         return false;
     }
 };
+/////////////////////////
+it can also be done via recursion using the same approach 
+
+class Solution {
+public:
+    
+    bool reachPossible(vector<int>&arr,vector<bool>&visited,int i)
+    {
+        if(i>=arr.size() || i<0 || visited[i])
+            return false;
+        if(arr[i]==0)
+            return true;
+        visited[i]=true;
+        return reachPossible(arr,visited,i+arr[i]) || reachPossible(arr,visited,i-arr[i]);
+    }
+    bool canReach(vector<int>& arr, int start) {
+       
+        vector<bool>visited(arr.size(),false);
+        return reachPossible(arr,visited,start);
+    }
+};
