@@ -1,0 +1,59 @@
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+
+
+
+Brute force:  like in the given example "leetcode"
+   we can find all substrings and check whether it 
+   l(eetcode) le(etcode) lee(tcode)  leet(code)  leetc(ode) 
+                                       \
+                                        \leet present so now check for (code) 
+                                                                        \
+                                                                          \ 
+                                                                          also present 
+                                                                          and now we reached the end of the string so we return true
+
+       thus our approach :
+        bool recurword(string s,vector<string>&wordDict,int currIndex)
+    {
+        if(currIndex==s.size())
+        {return true;
+        }
+        for(int i=currIndex+1;i<=s.size();i++)
+        {
+          string str=s.substr(currIndex,i-currIndex);//one by one extract the string 
+            if(find(wordDict.begin(),wordDict.end(),str)!=wordDict.end())
+            {
+                if(recurword(s,wordDict,i))
+                {
+                    return true;
+                }
+            } 
+        }
+        return false;      
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int currIndex=0;
+        return recurword(s,wordDict,currIndex);
+    }
+};                                                                  
+
