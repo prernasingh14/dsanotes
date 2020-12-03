@@ -57,3 +57,35 @@ Brute force:  like in the given example "leetcode"
     }
 };                                                                  
 
+/////////////////////////////////////////////////
+to improve the time complexity we will do
+MEmoization with recursion :top down dp
+ bool recurword(string s,vector<string>&wordDict,vector<int>&t,int currIndex)
+    {
+        if(currIndex==s.size())
+        {return true;
+        }
+        if(t[currIndex]!=-1)
+            return t[currIndex];
+        for(int i=currIndex+1;i<=s.size();i++)
+        {
+          string str=s.substr(currIndex,i-currIndex);
+            if(find(wordDict.begin(),wordDict.end(),str)!=wordDict.end())
+            {
+                if(recurword(s,wordDict,t,i))
+                {
+                    t[currIndex]=1;
+                    return true;
+                }
+            } 
+        }
+        t[currIndex]=0;
+        return false;      
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        int currIndex=0;
+       vector<int>t(s.size(),-1);
+        return recurword(s,wordDict,t,currIndex);
+    }
+};
+///////////////////////////////
