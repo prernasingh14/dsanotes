@@ -1,0 +1,36 @@
+Given a palindromic string palindrome, replace exactly one character by any lowercase English letter so that the string becomes the lexicographically smallest possible string that isn't a palindrome.
+
+After doing so, return the final string.  If there is no way to do so, return the empty string.
+
+ 
+
+Example 1:
+
+Input: palindrome = "abccba"
+Output: "aaccba"
+Example 2:
+
+Input: palindrome = "a"
+Output: ""
+
+class Solution {
+public:
+    string breakPalindrome(string palindrome) {
+        int n=palindrome.size();
+       if(n==1)
+           return "";
+        if(palindrome[0]!='a')
+            return 'a'+palindrome.substr(1,n);
+       for(int i=0;i<n/2;i++)
+       {
+           if(palindrome[i]!='a')
+           {
+               palindrome[i]='a';
+               return palindrome;
+           }
+       }
+        palindrome[n-1]='b';
+        return palindrome;
+    }
+            
+};
