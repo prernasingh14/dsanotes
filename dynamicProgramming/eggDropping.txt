@@ -45,3 +45,30 @@ public:
         return eggdrop(eggs,floors);
     }
 };
+TC:exponential 
+//////////////////////////////////////////////////
+class Solution {
+public:
+    int t[101][10001];
+    int eggdrop(int eggs,int floors)
+    {
+        if(eggs<=1 || floors<=1)
+            return floors;
+        if(t[eggs][floors]!=-1)
+            return t[eggs][floors];
+        int minn=INT_MAX;
+        for(int i=1;i<=floors;i++)
+        {
+        int temp=1+max(eggdrop(eggs-1,i-1),eggdrop(eggs,floors-i));
+         if(temp<minn)
+         minn=temp;
+        }
+    return t[eggs][floors]=minn;
+    }
+    int superEggDrop(int K, int N) {
+        int eggs=K;int floors=N;
+        memset(t,-1,sizeof(t));
+        return eggdrop(eggs,floors);
+    }
+};
+/////////////////////////////////////////////
