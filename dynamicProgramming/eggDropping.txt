@@ -72,3 +72,49 @@ public:
     }
 };
 /////////////////////////////////////////////
+Bottom up dp solution:
+class Solution {
+public:
+    int superEggDrop(int K, int N) {
+        int eggs=K;int floors=N;
+        //bottom up dp solution
+        int t[eggs+1][floors+1];
+        //for one floor  , one attempt is needed
+        for(int i=0;i<=eggs;i++)
+        {
+            t[i][1]=1;
+            t[i][0]=0;//and for zero floors , no attempt is needed
+        }
+        //now for one egg , we need to check every floor 
+        for(int j=0;j<=floors;j++)
+        {
+           t[1][j]=j; 
+        }
+        //now optimal substructure
+        for(int i=2;i<=eggs;i++)
+        {
+            for(int j=2;j<=floors;j++)
+            {
+                t[i][j]=INT_MAX;
+                for(int x=1;x<=j;x++)
+                {
+                    int temp=1+max(t[i-1][x-1],t[i][j-x]);
+                    if(temp<t[i][j])
+                        t[i][j]=temp;
+                }
+            }
+        }
+        return t[eggs][floors];
+        
+        
+    }
+};
+TC:O(eggs*floors*floors)
+SC:O(eggs*floors)
+/////////////////////////////////////////////////////////
+we need to furthur optimize this approach as it has chances to give TLE
+for bigger values
+K=6
+N=1000
+TLE
+so instead of looping totally , we can use binary search technique
