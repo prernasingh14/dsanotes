@@ -1,0 +1,87 @@
+Suppose you have N eggs and you want to determine from which floor in a K-floor building you can drop an egg such that it doesn't break. You have to determine the minimum number of attempts you need in order find the critical floor in the worst case while using the best strategy.There are few rules given below. 
+
+An egg that survives a fall can be used again.
+A broken egg must be discarded.
+The effect of a fall is the same for all eggs.
+If the egg doesn't break at a certain floor, it will not break at any floor below.
+If the eggs breaks at a certain floor, it will break at any floor above.
+For more description on this problem see wiki page
+
+Example 1:
+
+Input:
+N = 2, K = 10
+Output: 4
+Example 2:
+
+Input:
+N = 3, K = 5
+Output: 3
+
+memoization with recursion
+
+int t[11][51];
+    int eggdropp(int eggs,int floors)
+    {
+        if(eggs<=1 || floors<=1)
+            return floors;
+        if(t[eggs][floors]!=-1)
+            return t[eggs][floors];
+        int minn=INT_MAX;
+        for(int i=1;i<=floors;i++)
+        {
+        int temp=1+max(eggdropp(eggs-1,i-1),eggdropp(eggs,floors-i));
+         if(temp<minn)
+         minn=temp;
+        }
+    return t[eggs][floors]=minn;
+    }
+int eggDrop(int n, int k) 
+{
+    // your code here
+     int eggs=n;int floors=k;
+        memset(t,-1,sizeof(t));
+        return eggdropp(eggs,floors);
+}
+//////////////////////////////////////////
+Bottom  up DP
+int eggDrop(int n, int k) 
+{
+    // your code here
+    int eggs=n;int floors=k;
+    int t[eggs + 1][floors + 1]; 
+     
+       
+
+// We need one trial for one floor and 0 
+// trials for 0 floors 
+        for (int i = 1; i <= n; i++) { 
+            t[i][1] = 1; 
+           t[i][0] = 0; 
+       }
+
+// We always need j trials for one egg 
+// and j floors. 
+         for (int j = 1; j <= k; j++) 
+          t[1][j] = j;
+
+// Fill rest of the entries in table using 
+// optimal substructure property 
+             for (int i = 2; i <= n; i++) { 
+              for (int j = 2; j <= k; j++) { 
+              t[i][j] = INT_MAX; 
+               for (int x = 1; x <= j; x++) { 
+                 int temp = 1 + max(t[i-1][x-1],t[i][j-x]); 
+                 if(temp<t[i][j])
+                 t[i][j]=temp;
+               }
+              }
+             }
+
+
+// t[n][k] holds the result 
+return t[eggs][floors];
+}
+
+TC:O(N*K*K)
+SC:O(N*K)
