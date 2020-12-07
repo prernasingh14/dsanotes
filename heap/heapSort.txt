@@ -1,0 +1,54 @@
+Heap sort is a comparison based sorting technique based on Binary Heap data structure. 
+It is similar to selection sort where we first find the maximum element and place the maximum element at the end. We repeat the same process for the remaining elements.
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+void heapify_down(int arr[],int n,int i)
+{
+    int largest=i;
+    int left=2*i+1;int right=2*i+2;
+    if(left<n && arr[left]>arr[largest])
+    largest=left;
+    if(right<n && arr[right]>arr[largest])
+    largest=right;
+    if(largest!=i)
+    {
+        swap(arr[i],arr[largest]);
+        heapify_down(arr,n,largest);
+    }
+}
+void buildHeap(int arr[],int n)
+{
+    int startIndex=n/2-1;
+    for(int i=startIndex;i>=0;i--)
+    {
+       heapify_down(arr,n,i); 
+    }
+    //now that we've built our max heap ,we'll extract the last element one by one as the minimum elemnet is at the last position in max heap
+    for(int i=n-1;i>0;i--)
+    {
+      swap(arr[0],arr[i]);  //as the last element is our minimum element thus swap it with root
+      heapify_down(arr,i,0);//reduce the size of heap now 
+    }
+}
+int main()
+{
+    int n;cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++)
+    cin>>arr[i];
+    buildHeap(arr,n);
+    for(int i=0;i<n;i++)
+    cout<<arr[i]<<" ";
+    
+    return  0;
+    
+}
+
+  
+  TC:O(N*LOG N)
+  SC:O(1)
