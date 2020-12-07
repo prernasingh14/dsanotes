@@ -1,0 +1,52 @@
+recursive approach:
+  bool checkHeap(int arr[],int n,int i)
+{
+    if(2*i+1>n || 2*i+2>n)
+    return true;
+    bool left=arr[i]<=arr[2*i+1] && checkHeap(arr,n,2*i+1);
+     bool right=arr[i]<=arr[2*i+2] && checkHeap(arr,n,2*i+2);
+     return left && right;
+    
+}
+int main()
+{
+    int n;cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++)
+    cin>>arr[i];
+   bool flag=true;
+    if(checkHeap(arr,n,0))
+    cout<<"is min heap"<<"\n";
+    else
+    cout<<"is not a min heap"<<"\n";
+    return 0;
+}
+
+  as recursion is costly , we prefer itertive approach 
+iterative approach :
+int main()
+{
+    int n;cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++)
+    cin>>arr[i];
+   bool flag=true;
+    for(int i=0;i<n/2-1;i++)
+    {
+    int smallest=i;
+    int left=2*i+1;int right=2*i+2;
+    if(left<n && arr[left]<arr[smallest] || right<n && arr[right]<arr[smallest])
+  {
+      flag=false;
+      cout<<"NOT A MIN HEAP"<<"\n";break;
+  }
+    }
+    if(flag)
+    cout<<"IS A MIN HEAP"<<"\n";
+    return  0;
+    
+}
+TC:O(N) 
+
+
+  
