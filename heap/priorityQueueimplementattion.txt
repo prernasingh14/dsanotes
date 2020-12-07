@@ -1,0 +1,89 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+struct PriorityQueue{
+    private:
+    vector<int>a;
+    int parent(int i)
+    {
+        return (i-1)/2;
+    }
+    int Left(int i)
+    {
+        return 2*i+1;
+    }
+    int Right(int i)
+    {
+        return 2*i+2;
+    }
+    void heapify_down(int i)
+    {
+       int largest=i;
+       int left=Left(i);int right=Right(i);
+       if(left<a.size() && a[left]>a[i])
+       largest=left;
+       if(right<a.size() && a[right]>a[largest])
+       largest=right;
+       if(largest!=i)
+       {
+           swap(a[largest],a[i]);
+           heapify_down(largest);
+       }
+    }
+    void heapify_up(int i)
+    {
+        // check if node at index i and its parent violates 
+        // the heap property
+        if (i && a[parent(i)] < a[i]) 
+        {
+            // swap the two if heap property is violated
+            swap(a[i], a[parent(i)]);
+            
+            // call Heapify-up on the parent
+            heapify_up(parent(i));
+        }
+    }
+    public:
+    bool empty(){
+    return a.size();
+    }
+    void push(int data)
+    {
+        a.push_back(data);int i=a.size()-1;
+        heapify_up(i);
+    }
+    void pop()
+    {
+        if(a.size()==0)
+        cout<<"NO element";
+        
+        a[0]=a.back();
+        a.pop_back();
+        heapify_down(0);
+    }
+    int top(){
+        if(a.size()==0)
+        cout<<"NO element";
+        else
+        return a[0];
+    }
+    
+};
+int main()
+{
+    PriorityQueue pq;
+    pq.push(3);pq.push(2);
+    pq.push(15);pq.push(18);pq.push(24);
+    cout<<pq.top()<<" ";
+    pq.pop();
+    cout<<pq.top();
+    
+    return  0;
+    
+}
+
+  
