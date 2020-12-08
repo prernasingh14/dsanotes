@@ -47,3 +47,38 @@ public:
     }
 };
 TC:O(nlogn) as one element insertion in set takes logn time
+////////////////////
+better O(n) solution 
+class Solution {
+public:
+    //we can solve this via min heap as we need do not care about smallest elements so we need somwthing to access them and remove them 
+    int thirdMax(vector<int>& nums) {
+        if(nums.size()==1)
+            return nums[0];
+        if(nums.size()==2)
+            return max(nums[0],nums[1]);
+        int firstmax=INT_MIN;int secondmax=INT_MIN;int thirdmax=INT_MIN;int count=0;
+        int n=nums.size();
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i]==INT_MIN)
+                count++;
+            if(nums[i]>firstmax)
+                firstmax=nums[i];
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i]>secondmax && nums[i]<firstmax)
+                secondmax=nums[i];
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(nums[i]>thirdmax && nums[i]<secondmax && nums[i]<firstmax)
+                thirdmax=nums[i];
+        }
+        if(count==0 && thirdmax==INT_MIN || secondmax==INT_MIN)
+        return firstmax;
+        else
+            return thirdmax;
+    }
+};
