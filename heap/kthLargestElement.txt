@@ -59,4 +59,4 @@ public:
         return pq.top();
     }
 };
-tc:O(n+klogn)
+tc:O(n+klogn) //as building a heap takes o(n) and popping k elements takes klogn as pop() for one element is logn
