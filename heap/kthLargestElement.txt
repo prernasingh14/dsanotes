@@ -60,3 +60,66 @@ public:
     }
 };
 tc:O(n+klogn) //as building a heap takes o(n) and popping k elements takes klogn as pop() for one element is logn
+
+
+
+
+
+another method is based on using partition subroutine of quick sort 
+average time complexity is O(n)
+we choose a pivot and we know that at the end of our partitioning our array will look like:
+
+  |elements>=pivot | pivot| elements<=pivot |
+  so our work space gets reduced 
+  for the array : 3 2 1 5 6 4 
+   we see that after partioning our array will look like: initially we chose leftmost as pivot i.e 3
+   5 4 6 3 2 1 , so we see that our pivot always lands up at its right position  as if we would have sorted it array would look like: 6 5 4 3 2 1 thus position of pivot is correct 
+   so we keep on doing partioning and ignoring the elements we know that will always be lesser
+   till we get pivotIndex==k-1(as we need k'th largest element)
+   if k==4 then 3 (index=k-1=3) would have been our answer 
+
+class Solution {
+public:
+    //by using quick select
+  int partition(vector<int>&nums,int left,int right)
+  {
+int pivot=nums[left];//we choose our leftmost element as pivot
+  int i=left+1;
+  int j=right;
+  while(i<=j)
+  {
+      if(nums[i]<pivot && nums[j]>pivot)
+      {
+          swap(nums[i],nums[j]);i++;j--;
+      }
+      if(nums[i]>=pivot)
+      {
+       i++;   
+      }
+      if(nums[j]<=pivot)
+          j--;
+  }
+      swap(nums[j],nums[left]);
+      return j;
+  }
+    int findKthLargest(vector<int>& nums, int k) {
+       int left=0;int right=nums.size()-1;
+        int index=0;int kth=0;
+        while(true)
+        {
+            int index=partition(nums,left,right);
+            if(index==k-1)
+            {
+                kth=nums[index];
+                break;
+            }
+            if(index<k-1)
+            {
+                left=index+1;
+            }
+            else
+                right=index-1;
+        }
+        return kth;
+    }
+};
