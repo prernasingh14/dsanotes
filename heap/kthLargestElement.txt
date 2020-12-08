@@ -1,0 +1,44 @@
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Example 1:
+
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+Example 2:
+
+Input: [3,2,3,1,2,4,5,5,6] and k = 4
+Output: 4
+Method 1:sort the array and return the element accordingly
+class Solution {
+public:
+  
+    int findKthLargest(vector<int>& nums, int k) {
+        int n=nums.size();
+       sort(nums.begin(),nums.end());
+        return nums[n-k];
+    }
+};
+TC:O(n*log n)
+////////////////////////////////////////
+Method 2:
+using min heap in O(nlogk)
+class Solution {
+public:
+    //by using min heap
+  
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int,vector<int>,greater<int> >pq(nums.begin(), nums.begin() + k);int res=0;
+        for (int i = k; i < nums.size(); i++)
+    {
+        // if current element is more than the root of the heap
+        if (nums[i] > pq.top())
+        {
+            // replace root with the current element
+            pq.pop();
+            pq.push(nums[i]);
+        }
+    }
+        return pq.top();
+        
+    }
+};
