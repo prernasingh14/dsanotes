@@ -42,3 +42,21 @@ public:
         
     }
 };
+/////////////////////////////////
+by usinh max heap
+push all elements inside the heap then pop elements k times
+class Solution {
+public:
+    //by using max heap
+  
+    int findKthLargest(vector<int>& nums, int k) {
+        priority_queue<int,vector<int> >pq(nums.begin(),nums.end());
+        while(--k)
+        {
+            pq.pop();
+            
+        }
+        return pq.top();
+    }
+};
+tc:O(n+klogn)
