@@ -1,0 +1,52 @@
+Given K sorted arrays arranged in the form of a matrix of size K*K. The task is to merge them into one sorted array.
+Example 1:
+
+Input:
+K = 3
+arr[][] = {{1,2,3},{4,5,6},{7,8,9}}
+Output: 1 2 3 4 5 6 7 8 9
+Explanation:Above test case has 3 sorted
+arrays of size 3, 3, 3
+arr[][] = [[1, 2, 3],[4, 5, 6], 
+[7, 8, 9]]
+The merged list will be 
+[1, 2, 3, 4, 5, 6, 7, 8, 9].
+
+Brute force:
+put all the elements into a single array and sort
+TC:O(nklognk)
+
+Efficient approach:
+use a min heap of size k
+#define ppi pair<int,pair<int,int> >
+// your task is tocomplete this function
+// function should return an pointer to output array int*
+// of size k*k
+int *mergeKArrays(int arr[][N], int k)
+{
+//code here
+//every row has the same size 
+int *v=new int[k*k];int index=0;
+priority_queue<ppi,vector<ppi>,greater<ppi> >pq;
+//first we'll insert first elements of every k array
+for(int i=0;i<k;i++)
+{
+   pq.push({arr[i][0],{i,0}}); 
+}
+while(!pq.empty())
+{
+ppi temp=pq.top();
+int i=temp.second.first;
+int j=temp.second.second;
+pq.pop();
+v[index++]=temp.first;//pushing back the smallest element
+if(j+1<k)//then jis row ka we pushed smallest element uska next element we got to push for comparison
+pq.push({arr[i][j+1],{i,j+1}});
+
+}
+return v;
+
+}
+TC:O(nklogk)
+because total nk times loop runs and for each time insertion and deletion in heap take O(H) times which is O(logk)
+SC:linear
