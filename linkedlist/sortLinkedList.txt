@@ -1,0 +1,102 @@
+Given the head of a linked list, return the list after sorting it in ascending order.
+
+Follow up:
+ Can you sort the linked list in O(n logn) time and O(1) memory (i.e. constant space)?
+
+Input: head = [-1,5,3,4,0]
+Output: [-1,0,3,4,5]
+
+Method 1: what i can think of 
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+       if(head==NULL)
+           return NULL;
+       unordered_map<int,int>m;
+        ListNode* temp=head;
+        while(temp!=NULL)
+        {
+            m[temp->val]++;
+            temp=temp->next;
+        }
+        temp=head;
+        while(temp!=NULL)
+        {
+          temp->val=
+            pq.pop();
+            temp=temp->next;
+        }
+    return head;
+        
+    }
+};
+
+
+////////////////////
+
+Method 2 : doing it in with merge sort
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+
+//merge sort solution TC:O(nlogn) space:O(nlogn) as stack space 
+    class Solution {
+public:
+        ListNode* merge(ListNode* l1, ListNode* l2) {
+    ListNode* l = new ListNode(-1), *p = l;
+    
+    while (l1 != NULL && l2 != NULL) {
+      if (l1->val < l2->val) {
+        p->next = l1;
+        l1 = l1->next;
+      } else {
+        p->next = l2;
+        l2 = l2->next;
+      }
+      p = p->next;
+    }
+    
+    if (l1 != NULL)
+      p->next = l1;
+    
+    if (l2 != NULL)
+      p->next = l2;
+    
+    return l->next;
+  }
+    ListNode* sortList(ListNode* head) {
+       if(head==NULL || head->next==NULL)
+           return head;
+        ListNode* temp=new ListNode(0);ListNode* prev=NULL;
+        ListNode* slow=head;ListNode* fast=head;
+        while(fast!=NULL && fast->next!=NULL)
+        {
+            prev=slow;
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        prev->next=NULL;
+        ListNode* l1=sortList(head);
+        ListNode* l2=sortList(slow);
+        return merge(l1,l2);   
+    }
+};
+  
+
