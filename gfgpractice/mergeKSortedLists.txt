@@ -50,4 +50,6 @@ Node * mergeKLists(Node *arr[], int N)
        
 }
 
-
+//outer loop runs logk times and every time ,it processes nk elements
+TC:O(nklogk)
+SC:O(1)
