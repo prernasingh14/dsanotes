@@ -38,6 +38,8 @@ public:
         }
         for(int i=1;i<=n;i++)
         {
+            //any vertex whose outgoing edges is zero and 
+            //the number of incoming edges is equal to n-1
             if(graph[i].size()==0 && m[i]==n-1)
             {
                 townJudge=i;
