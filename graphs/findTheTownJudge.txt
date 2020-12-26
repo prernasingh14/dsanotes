@@ -50,4 +50,49 @@ public:
 };
 
 
+Method 2:
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+       
+        unordered_map<int,int>incoming;
+        unordered_map<int,int>outgoing;
+        int townJudge=-1;
+        for(int i=0;i<trust.size();i++)
+        {
+            int src=trust[i][0];
+            int dest=trust[i][1];
+            incoming[dest]++;
+            outgoing[src]++;
+        }
+     for(int i=1;i<=n;i++)
+     {
+        if(outgoing[i]==0 && incoming[i]==n-1)
+            townJudge=i;
+      }
+        return townJudge;
+    }
+};
 
+Method 3:
+class Solution {
+public:
+    int findJudge(int n, vector<vector<int>>& trust) {
+        int incoming[1001]={0};
+        int outgoing[1001]={0};
+        int townJudge=-1;
+        for(int i=0;i<trust.size();i++)
+        {
+            int src=trust[i][0];
+            int dest=trust[i][1];
+            incoming[dest]++;
+            outgoing[src]++;
+        }
+     for(int i=1;i<=n;i++)
+     {
+        if(outgoing[i]==0 && incoming[i]==n-1)
+            townJudge=i;
+      }
+        return townJudge;
+    }
+};
