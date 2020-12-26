@@ -1,0 +1,48 @@
+Given two arrays and a number x, find the pair whose sum is closest to x and the pair has an element from each array.
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n,m;cin>>n>>m;
+	    int arr[n];
+	    int brr[m];
+	    int ele1=0;
+	    int ele2=0;int sum=0;int minn=INT_MAX;
+	    
+	    for(int i=0;i<n;i++)
+	    {
+	        cin>>arr[i];
+	    }
+	    for(int i=0;i<m;i++)
+	    {
+	        cin>>brr[i];
+	    }
+	    int x;cin>>x;
+	    sort(arr,arr+n);
+	    sort(brr,brr+m);
+	    for(int i=0;i<n;i++)
+	    {
+	        for(int j=0;j<m;j++)
+	        {
+	          sum=arr[i]+brr[j];
+	          if(abs(x-sum)<minn)
+	          {
+	              minn=abs(x-sum);
+	              ele1=arr[i];
+	              ele2=brr[j];
+	          }
+	        }
+	    }
+	    cout<<ele1<<" "<<ele2<<"\n";
+	    
+	}
+	return 0;
+}
