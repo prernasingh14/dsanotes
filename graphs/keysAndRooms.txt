@@ -30,7 +30,8 @@ Note:
 The number of keys in all rooms combined is at most 3000.
 
 DFS based approach :
-
+//we use  dfs to see whether we can reach all nodes from the starting node 
+    //if any node remains unvisited after complete dfs, we return false
 class Solution {
 public:
      
@@ -62,3 +63,48 @@ public:
     }
         
 };
+
+TC:
+SC:
+
+//////////////////////////////
+Method 2:bfs based approach
+class Solution {
+public:
+     //we use  dfs to see whether we can reach all nodes from the starting node 
+    //if any node remains unvisited after complete dfs, we return false
+   
+    bool canVisitAllRooms(vector<vector<int>>& rooms) {
+        int n=rooms.size();int c=0;
+        if(n==0)
+            return true;
+       bool visited[n];
+        memset(visited,false,sizeof(visited));
+        visited[0]=true;
+       queue<int>q;
+        q.push(0);
+        while(!q.empty())
+        {
+            int src=q.front();
+            q.pop();
+            for(int i=0;i<rooms[src].size();i++)
+            {
+                if(visited[rooms[src][i]]==false)
+                {
+                    visited[rooms[src][i]]=true;
+                    q.push(rooms[src][i]);
+                }
+             }
+        }
+       for(int i=0;i<n;i++)
+       {
+           if(visited[i]==false)
+               return false;
+       }
+        return true;
+    }
+        
+};
+TC:
+SC:
+
