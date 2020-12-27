@@ -1,0 +1,83 @@
+Given a directed graph and two vertices ‘u’ and ‘v’ in it, count all the possible walks from ‘u’ to ‘v’ with exactly k edges on the walk.
+
+Input:
+
+The first line of input contains an integer T denoting the number of test cases. Then T test cases follow. Each test case consists of three lines.
+The first line of each test case is N which is number of vertices in input graph.
+The second line of each test case contains N x N binary values that represent graph[N][N].
+The third line of each test case contains u, v, k where u is starting position, v is destination and k is number of edges.
+
+Output:
+
+Print all possible walks from 'u' to 'v'.
+
+Constraints:
+
+1 ≤ T ≤ 50
+1 ≤ N ≤ 20
+0 ≤ graph[][] ≤ 1
+
+Example:
+
+Input
+1
+4
+0 1 1 1 0 0 0 1 0 0 0 1 0 0 0 0
+
+0 3 2
+
+Output
+2
+ 
+
+Explanation:
+
+For example consider the following graph. Let source ‘u’ be vertex 0, destination ‘v’ be 3 and k be 2. The output should be 2 as there are two walk from 0 to 3 with exactly 2 edges. The walks are {0, 2, 3} and {0, 1, 3}
+
+  #include <bits/stdc++.h>
+using namespace std;
+int dp[22][22];
+void clear(){
+    memset(dp,-1,sizeof dp);
+}
+int dfs(vector<int>* graph,int root,int v,int k){
+    if(k==0 && root==v) return 1;
+    if(k==0 && root!=v) return 0;
+    if(dp[root][k]!=-1) return dp[root][k];
+    int count=0;
+    for(int i=0;i<graph[root].size();i++){
+        count+=dfs(graph,graph[root][i],v,k-1);
+    }
+    dp[root][k]=count;
+    return count;
+}
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin>>t;
+    while(t--){
+        int n;
+        cin>>n;
+        char c;
+        vector<int> graph[n];
+        int u,v,k;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                cin>>c;
+                int val = c-'0';
+                if(val) graph[i].push_back(j);
+            }
+        }
+        cin>>u>>v>>k;
+        int dp[n][k];
+        clear();
+        cout<<dfs(graph,u,v,k)<<"\n";
+        clear();
+    }
+    return 0; 
+}
+
+
+TC:O(v*k)
+
