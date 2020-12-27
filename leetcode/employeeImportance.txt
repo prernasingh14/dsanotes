@@ -1,0 +1,76 @@
+class Solution {
+public:
+    int getImportance(vector<Employee*> employees, int id) {
+        int result=0;
+        for(auto &emp:employees)
+        {
+            if(emp->id==id)
+            { 
+                result=emp->importance;
+           if(!emp->subordinates.empty())
+           {
+            for(auto &sub:emp->subordinates)
+            {
+               result+=getImportance(employees,sub);
+            }
+        }
+        return result;
+        }
+        }
+        return result;
+    }
+};
+
+//////////dfs approach//////////
+
+class Solution {
+public:
+    unordered_map<int,Employee*>m;
+    int dfs(int id)
+    {
+        Employee* emp=m[id];
+        int result=emp->importance;
+        for(auto &it:emp->subordinates)
+        {
+            result+=dfs(it);
+        }
+        return result;
+    }
+    int getImportance(vector<Employee*> employees, int id) {
+        int result=0;
+        for(auto &emp:employees)
+        {
+            m[emp->id]=emp;
+        }
+        return dfs(id);
+    }
+};
+
+
+//////////bfs approach//////////
+
+class Solution {
+public:
+    unordered_map<int,Employee*>m;
+    int getImportance(vector<Employee*> employees, int id) {
+        int result=0;
+        for(auto &emp:employees)
+        {
+            m[emp->id]=emp;
+        }
+        queue<Employee*>q;
+        q.push(m[id]);
+        while(!q.empty())
+        {
+          Employee* emp=q.front();q.pop();
+            int id=emp->id;
+            result+=emp->importance;
+            for(auto &it:emp->subordinates)
+            {
+                q.push(m[it]);
+            }
+            
+        }
+        return result;
+    }
+};
