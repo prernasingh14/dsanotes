@@ -90,3 +90,66 @@ public:
 
 
 TC:O(Nodes+Edges)
+
+
+Method 2:BFS BASED APPROACH using Kahn's algo for topological sorting to detect a cycle
+
+class Solution {
+public:
+  
+    bool bfs(vector<vector<int>>& graph,int num)
+    {
+        vector<int>indegree(num,0);
+        queue<int>q;
+        int c=0;
+        for(int i=0;i<num;i++)
+        {
+            for(int j=0;j<graph[i].size();j++)
+            {
+                //increase the indegree of the neighbours by one
+                indegree[graph[i][j]]++;
+            }
+        }
+        for(int i=0;i<num;i++)
+        {
+            if(indegree[i]==0)//push the node having 0 indegree
+            {
+                q.push(i);
+            }
+        }
+        while(!q.empty())
+        {
+            int top=q.front();
+            q.pop();
+            //now decrease the indegrees of neighbours by 1
+            for(int j=0;j<graph[top].size();j++)
+            {
+                indegree[graph[top][j]]--;
+                if(indegree[graph[top][j]]==0)
+                    q.push(graph[top][j]);
+            }
+            c++;
+        }
+        if(c==num)//if count of nodes is equal to the number of vertices then there is no cycle
+            return true;
+        else
+            return false;
+        
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int> >graph(numCourses);
+        if(numCourses<=1)
+            return true;
+        for(int i=0;i<prerequisites.size();i++)
+        {
+            int coursetake=prerequisites[i][0];
+            int coursefinish=prerequisites[i][1];//there's a directed edge from the above node to it
+            graph[coursefinish].push_back(coursetake);
+        }
+        return bfs(graph,numCourses);
+       
+    }
+};
+
+TC:O(N+E)
+SC:O(N)
