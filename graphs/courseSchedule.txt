@@ -1,0 +1,92 @@
+There are a total of numCourses courses you have to take, labeled from 0 to numCourses-1.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+
+Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+
+ 
+
+Example 1:
+
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0. So it is possible.
+Example 2:
+
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0, and to take course 0 you should
+             also have finished course 1. So it is impossible.
+
+it can be solved via visualizing it as  a directed graph 
+     what we can deduce from the last example is that in case of a cycle there's no way to finish all courses as one course will then depend on the another and no way to break that deadlock/dependency
+
+
+
+Method 1:DFS detect cycle via back edge method
+There is a cycle in a graph only if t
+here is a back edge present in the graph. 
+A back edge is an edge that is from a node to itself (self-loop) or one of its ancestors in the tree produced by DFS.
+If a vertex is reached that is already in the recursion stack, 
+then there is a cycle in the tree. 
+
+
+class Solution {
+public:
+  
+    bool cycle(vector<vector<int> >&graph,vector<bool>&visited,vector<bool>&stack,int i)
+    {
+       visited[i]=true;
+        stack[i]=true;
+        for(int j=0;j<graph[i].size();j++)
+        {
+            if(!visited[graph[i][j]])
+            {
+                if(cycle(graph,visited,stack,graph[i][j]))//whether any of its neighbour causes a cycle
+                    return true;
+            }
+                else if(stack[graph[i][j]])//if that node is already in stack means back edge 
+                    return true;
+                    
+            }
+        
+        stack[i]=false;
+        return false;
+    }
+    bool acyclic(vector<vector<int> >graph,int numCourses)
+    {
+        vector<bool>visited(numCourses);vector<bool>stack(numCourses);
+        for(int i=0;i<numCourses;i++)
+        {
+            visited[i]=false;
+            stack[i]=false;
+        }
+        for(int i=0;i<numCourses;i++)
+        {
+            if(visited[i]==false)
+            {
+                if(cycle(graph,visited,stack,i))//whether that node causes a cycle
+                    return false;
+            }
+        }
+        return true;
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int> >graph(numCourses);
+        if(numCourses<=1)
+            return true;
+        for(int i=0;i<prerequisites.size();i++)
+        {
+            int coursetake=prerequisites[i][0];
+            int coursefinish=prerequisites[i][1];//there's a directed edge from the above node to it
+            graph[coursefinish].push_back(coursetake);
+        }
+        return acyclic(graph,numCourses);
+        
+    }
+};
+
+
+TC:O(Nodes+Edges)
