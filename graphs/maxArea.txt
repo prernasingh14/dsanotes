@@ -1,0 +1,101 @@
+Given a non-empty 2D array grid of 0's and 1's, an island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+
+Find the maximum area of an island in the given 2D array. (If there is no island, the maximum area is 0.)
+
+Example 1:
+
+[[0,0,1,0,0,0,0,1,0,0,0,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,1,1,0,1,0,0,0,0,0,0,0,0],
+ [0,1,0,0,1,1,0,0,1,0,1,0,0],
+ [0,1,0,0,1,1,0,0,1,1,1,0,0],
+ [0,0,0,0,0,0,0,0,0,0,1,0,0],
+ [0,0,0,0,0,0,0,1,1,1,0,0,0],
+ [0,0,0,0,0,0,0,1,1,0,0,0,0]]
+Given the above grid, return 6. Note the answer is not 11, because the island must be connected 4-directionally.
+Example 2:
+
+[[0,0,0,0,0,0,0,0]]
+Given the above grid, return 0.
+Note: The length of each dimension in the given grid does not exceed 50.
+
+Method 1:DFS based solution 
+
+class Solution {
+public:
+    void dfs(int x,int y,vector<vector<int>>& grid,int n,int m,int &area)
+    {
+        if(x>=n || x<0 || y>=m || y<0 || grid[x][y]==0)
+        {
+            return ;
+        }
+        grid[x][y]=0;
+        area++;
+        dfs(x+1,y,grid,n,m,area);
+        dfs(x-1,y,grid,n,m,area);
+        dfs(x,y+1,grid,n,m,area);
+        dfs(x,y-1,grid,n,m,area);
+       
+    }
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+       
+        int n=grid.size();
+        int m=grid[0].size();
+       int maxarea=0;
+
+         for(int i=0;i<grid.size();i++)
+        {
+            for(int j=0;j<grid[i].size();j++)
+            {
+              if(grid[i][j]==1)
+              {
+                  int area=0;
+                  dfs(i,j,grid,n,m,area);
+                  maxarea=max(maxarea,area);
+              }
+            }
+        }
+        return maxarea;
+    }
+};
+
+other way to write this is also
+class Solution {
+public:
+    int dfs(int x,int y,vector<vector<int>>& grid,int n,int m)
+    {
+        if(x>=n || x<0 || y>=m || y<0 || grid[x][y]==0)
+        {
+            return 0;
+        }
+        grid[x][y]=0;
+        
+        return 1+dfs(x+1,y,grid,n,m)+dfs(x-1,y,grid,n,m)+dfs(x,y+1,grid,n,m)+ dfs(x,y-1,grid,n,m);
+       
+    }
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+       
+        int n=grid.size();
+        int m=grid[0].size();
+       int maxarea=0;
+
+         for(int i=0;i<grid.size();i++)
+        {
+            for(int j=0;j<grid[i].size();j++)
+            {
+              if(grid[i][j]==1)
+              {
+                  
+                  
+                  maxarea=max(maxarea,dfs(i,j,grid,n,m));
+              }
+            }
+        }
+        return maxarea;
+    }
+};
+TC:O(n*m)
+
+/////////////
+Method 2:BFS based solution
+
