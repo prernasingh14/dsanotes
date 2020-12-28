@@ -1,0 +1,148 @@
+Consider a matrix with N rows and M columns, where each cell contains either a ‘0’ or a ‘1’ and any cell containing a 1 is called a filled cell. Two cells are said to be connected if they are adjacent to each other horizontally, vertically, or diagonally. If one or more filled cells are connected, they form a region. The task is to find the unit area of the largest region.
+
+Input:
+The first line of input will be the number of testcases T, then T testcases follow. The first line of each testcase contains 2 space separated integers n and m. Then in the next line are the n x m inputs of the matrix A separated by space.
+
+Output:
+The output in the expected output will be the length of the largest region formed.
+
+Constraints:
+1 <= T <= 100
+1 <= N, M <= 50
+0 <= A[][] <= 1
+
+Example:
+Input:
+2
+3 3
+1 1 0 0 0 1 1 0 1
+1 3
+1 1 1
+
+Output:
+4
+3
+
+Explanation:
+Testcase 1: Matrix can be shown as follows:
+1 1 0
+0 0 1
+1 0 1
+
+Largest region of 1s in the above matrix is with total 4 1s (colored in Red).
+
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+int grid[51][51];
+int dfs(int i,int j,int n,int m )
+{
+    if(i<0 || j<0 || i>=n || j>=m || grid[i][j]==0)
+    return 0;
+    grid[i][j]=0;
+    return 1+dfs(i+1,j,n,m)+dfs(i-1,j,n,m)+dfs(i,j+1,n,m)+dfs(i,j-1,n,m)+dfs(i+1,j+1,n,m)+dfs(i+1,j-1,n,m)+dfs(i-1,j-1,n,m)+dfs(i-1,j+1,n,m);
+}
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n,m;cin>>n>>m;
+	  
+	    for(int i=0;i<n;i++)
+	    {
+	        for(int j=0;j<m;j++)
+	        {
+	            cin>>grid[i][j];
+	        }
+	    }
+	    int maxarea=0;
+	    for(int i=0;i<n;i++)
+	    {
+	        for(int j=0;j<m;j++)
+	        {
+	            if(grid[i][j]==1)
+	            {
+	                maxarea=max(maxarea,dfs(i,j,n,m));
+	            }
+	        }
+	    }
+	    cout<<maxarea<<"\n";
+	    
+	}
+	return 0;
+}
+
+
+//////////
+BFS Solution
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define pb push_back
+#define pf push_front
+
+ll mat[1001][1001];
+bool vis[1001][1001];
+
+ll bfs(ll n, ll m, ll i, ll j){
+    vis[i][j] = true;
+    queue<pair<ll, ll>> q;
+    q.push(make_pair(i, j));
+    
+    ll dx[] = {-1, -1, -1, 1, 1, 1, 0, 0};
+    ll dy[] = {-1, 0, 1, -1, 0, 1, -1, 1};
+    ll cnt = 0;
+    while(!q.empty()){
+        ll len = q.size();
+        while(len--){
+            pair<ll, ll> p = q.front();
+            cnt++;
+            q.pop();
+            
+            for(ll k=0; k<8; k++){
+                ll x = p.first + dx[k], y = p.second + dy[k];
+                if(x>=0 && x<n && y>=0 && y<m && mat[x][y] && !vis[x][y]){
+                    vis[x][y] = true;
+                    q.push(make_pair(x, y));
+                }
+            }
+        }
+    }
+    return cnt;
+}
+
+ll largestRegion(ll n, ll m){
+    memset(vis, false, sizeof(vis));
+    ll max_area = 0;
+    for(ll i=0; i<n; i++){
+        for(ll j=0; j<m; j++){
+            if(mat[i][j] && !vis[i][j]){
+                max_area = max(max_area, bfs(n, m, i, j));
+            }
+        }
+    }
+    return max_area;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    ll t;
+    cin>>t;
+    while(t--)
+    {
+        ll n,m; cin>>n>>m;
+        for(ll i=0; i<n; i++){
+            for(ll j=0; j<m; j++){
+                cin>>mat[i][j];
+            }
+        }
+        
+        cout<<largestRegion(n, m)<<"\n";
+    }
+    return 0;
+}
