@@ -130,7 +130,7 @@ public:
             }
             c++;
         }
-        if(c==num)//if count of nodes is equal to the number of vertices then there is no cycle
+        if(c==num)//if count of the process being repeated is equal to the number of vertices then there is no cycle
             return true;
         else
             return false;
