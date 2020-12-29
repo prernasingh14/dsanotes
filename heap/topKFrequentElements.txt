@@ -54,3 +54,35 @@ TC:O(nlogn)+O(nlogn)+O(n) i.e O(nlogn)
 SC:O(n)
 
 
+//////////////////////////////////////////
+Method 2: whenever we think about any problem that wants us to catch first k largest or smallest 
+it should instantly come to our mind to use a heap of size k
+ 
+ the key for comparison of elements in heap is the frequnecy of each element 
+ we'll use min heap as then we can easily access items having smaller frequency so we can remove them
+
+
+  class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        int n=nums.size();
+        unordered_map<int,int> m;//to store the frequency of each element
+        for(int i=0;i<n;i++){
+            m[nums[i]]++;
+        }
+        priority_queue<pair<int,int>> pq;  //First element stores frequency and second element value
+		//As we have not use any compare function max heap will sort according to first element of pair
+        unordered_map<int,int>::iterator itr;
+        for(itr=m.begin();itr!=m.end();itr++){
+            pq.push({itr->second,itr->first});
+        }
+        vector<int> ans(k);
+        for(int i=0;i<k;i++){
+            ans[i]=pq.top().second;
+            pq.pop();
+        }
+        return ans;
+    }
+    };
+
+
