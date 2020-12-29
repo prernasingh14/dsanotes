@@ -1,0 +1,92 @@
+Given a string s, find the length of the longest substring without repeating characters.
+
+ 
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+Example 4:
+
+Input: s = ""
+Output: 0
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of English letters, digits, symbols and spaces.
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string str) {
+        int maxlen=-1;
+        if(str.size()==0 )
+            return 0;
+         int n=str.size();
+        for(int i=0;i<n;i++)
+        {
+            unordered_map<char,bool>visited;
+            int len=0;
+            for(int j=i;j<n;j++)
+            {
+              if(visited[str[j]-'a']==false)
+              {
+                  len++;
+                  visited[str[j]-'a']=true;
+              }
+                else
+                {
+                    maxlen=max(maxlen,len);
+                    len=0;
+                }
+                
+            }
+            maxlen=max(maxlen,len);
+        }
+    
+    return maxlen;
+    }
+};
+
+
+TC:O(N*N)
+SC:O(1)
+///////////////////////////////////////
+
+as soon as we encounter a character that has been already inserted then we move our window to the position of occurence of that character 
+class Solution {
+public:
+    int lengthOfLongestSubstring(string str) {
+        int maxlen=0;
+        if(str.size()==0 )
+            return 0;
+        int left=-1;int n=str.size();
+        unordered_map<int,int>m;
+         for(int i=0;i<n;i++)
+         {
+             if(m.count(str[i])!=0)//means that character is already present thus shift window
+             {
+              left=max(left,m[str[i]]);
+             }
+             m[str[i]]=i;
+             maxlen=max(maxlen,i-left);
+}
+        return maxlen;
+    }
+};
+
+
+TC:O(n)
