@@ -52,3 +52,45 @@ int main()
 
 TC:O(N*N*N)
 SC:O(1) as a vector of constant size used
+
+
+Method 2: window sliding technique is used 
+in case of a repeating character , remove the leftmost charcter and continue 
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	   
+	string str;cin>>str;int maxx=-2;
+    int n=str.size();int c=0;
+    for(int i=0;i<n;i++)
+    {
+        vector<bool>visited(26);
+        int c=0;
+        for(int j=i;j<n;j++)
+        {
+           if(visited[str[j]-'a']==false)
+           {
+               c++;
+               visited[str[j]-'a']=true;
+           }
+           else
+           {
+               maxx=max(maxx,c);c=0;
+           }
+        }
+         maxx=max(maxx,c);
+        
+    }
+     
+    cout<<maxx<<"\n";
+	}
+	return 0;
+}
+
+TC:O(N*N)
+SC:O(1)
