@@ -73,7 +73,7 @@ int main() {
         int c=0;
         for(int j=i;j<n;j++)
         {
-           if(visited[str[j]-'a']==false)
+           if(visited[str[j]-'a']==false)//if not visited 
            {
                c++;
                visited[str[j]-'a']=true;
@@ -83,7 +83,7 @@ int main() {
                maxx=max(maxx,c);c=0;
            }
         }
-         maxx=max(maxx,c);
+         maxx=max(maxx,c);//if no repeating 
         
     }
      
