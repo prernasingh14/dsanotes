@@ -50,8 +50,9 @@ public:
 };
 
 
-TC:O(nlogn)+O(nlogn)+O(n) i.e O(nlogn)
-SC:O(n)
+TC:O(nlogd) i.e O(nlogd)
+SC:O(d)
+d=number of distinct elements
 
 
 //////////////////////////////////////////
