@@ -1,0 +1,53 @@
+Given an m x n matrix. If an element is 0, set its entire row and column to 0. Do it in-place.
+
+Follow up:
+
+A straight forward solution using O(mn) space is probably a bad idea.
+A simple improvement uses O(m + n) space, but still not the best solution.
+Could you devise a constant space solution?
+ 
+
+Example 1:
+
+
+Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+Output: [[1,0,1],[0,0,0],[1,0,1]]
+
+
+Brute force solution: 
+what we can think here is that when we find a zero in the matrix , we need to change that whole row and column to zero ,so if we do it in that own matrix then it would cause wrong answer as then new zeroes would be added
+so we will take another matrix which is the copy of the original and then change the original accordingly 
+
+class Solution {
+public:
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        vector<vector<int> >visited;
+        for(int i=0;i<m;i++)
+        {
+         visited.push_back(matrix[i]);
+        }
+        for(int i=0;i<m;i++)
+        {
+        for(int j=0;j<n;j++)
+        {
+            if(visited[i][j]==0)
+            {
+                for(int k=0;k<m;k++)//for column wise
+                {
+                    matrix[k][j]=0;
+                }
+                for(int l=0;l<n;l++)//for row wise
+                {
+                    matrix[i][l]=0;
+                }
+            }
+        }
+        }
+    }
+};
+
+
+TC:O(m*n)
+SC:O(m*n)
