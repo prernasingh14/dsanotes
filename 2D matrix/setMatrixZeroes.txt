@@ -93,3 +93,76 @@ public:
 
 TC:O(m*n)
 SC:O(m+n)
+
+
+//////////////////////////////////////
+
+
+class Solution {
+public:
+   
+    void setZeroes(vector<vector<int>>& matrix) {
+        int m=matrix.size();
+        int n=matrix[0].size();
+        //we'll take the extra row and column vector in the matrix itself instead of having separately 
+        //the first row of the matrix will store whether that row has zero or not
+         //the first column of the matrix will store whether that column has zero or not
+        bool row_has_zero=false;//whether the first row has zero or not
+        for(int i=0;i<n;i++)
+        {
+            if(matrix[0][i]==0)
+            {row_has_zero=true;
+             break;
+            }
+        }
+        bool column_has_zero=false;//whether the first column has zero or not
+        for(int i=0;i<m;i++)
+        {
+            if(matrix[i][0]==0)
+            {column_has_zero=true;
+             break;
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+        for(int j=0;j<n;j++)
+        {
+            if(matrix[i][j]==0)//if that cell has zero
+            {
+               matrix[0][j]=0;//mark that row's id as 0
+                matrix[i][0]=0;//mark that col's id as zero
+            }
+        }
+        }
+        //now traverse matrix 
+        for(int i=1;i<m;i++)
+        {
+        for(int j=1;j<n;j++)
+        {
+            if(matrix[0][j]==0 || matrix[i][0]==0)//if marked as 0 present
+            {
+               matrix[i][j]=0;
+            }
+        }
+        }
+         // Zero out first col
+  if (column_has_zero) {
+    for (int i = 0; i < m; i++) {
+      matrix[i][0] = 0;
+    }
+  }
+
+  // Zero out first row
+  if (row_has_zero) {
+    for (int j = 0; j <n; j++) {
+      matrix[0][j] = 0;
+    }
+  }
+    }
+        
+       
+};
+
+
+TC:O(n*m)
+SC:O(1)
