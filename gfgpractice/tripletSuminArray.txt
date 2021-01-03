@@ -1,0 +1,87 @@
+Given an array A[] of N numbers and another number x, determine whether or not there exist three elements in A[] whose sum is exactly x.
+
+Input:
+First line of input contains number of testcases T. For each testcase, first line of input contains n and x. Next line contains array elements.
+
+Output:
+Print 1 if there exist three elements in A whose sum is exactly x, else 0.
+
+Constraints:
+1 ≤ T ≤ 100
+1 ≤ N ≤ 103
+1 ≤ A[i] ≤ 105
+
+Example:
+Input:
+2
+6 13
+1 4 45 6 10 8
+5 10
+1 2 4 3 6
+
+Output:
+1
+1
+
+Explanation:
+Testcase 1: There is one triplet with sum 13 in the array. Triplet elements are 1, 4, 8, whose sum is 13.
+ 
+
+ brute force Solution is to : find triplet by running three loops 
+ O(N*N*N)
+
+ better solution: by sorting first then using two pointer technique to find the triplets 
+
+
+#include <bits/stdc++.h>
+using namespace std;
+bool search(int arr[],int n,int x,int i)
+{
+    int left=i+1;int right=n-1;
+    while(left<right)
+    {
+        int sum=arr[left]+arr[right]+arr[i];
+        if(sum==x)
+        {
+           return true; 
+        }
+        else if(sum>x)
+        {
+            right--;
+        }
+        else
+        left++;
+        
+    }
+    return false;
+}
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n,x;cin>>n>>x;
+	    int arr[n];
+	    for(int i=0;i<n;i++)
+	    cin>>arr[i];
+	    bool flag=false;
+	    sort(arr,arr+n);
+	    for(int i=0;i<n-2;i++)
+	    {
+	        if(search(arr,n,x,i))
+	        {
+	            flag=true;
+	            break;
+	        }
+	    }
+	    if(flag)
+	    cout<<1<<"\n";
+	    else
+	    cout<<0<<"\n";
+	    
+	}
+	return 0;
+}
+
+
+TC:O(n*n)
