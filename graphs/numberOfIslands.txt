@@ -1,6 +1,6 @@
 class Solution {
 public:
-    //we use bfs to keep on shrinking the islands once visited 
+    //we use dfs to keep on shrinking the islands once visited 
     void bfs(vector<vector<char>>&grid,int i,int j)
     {
         if(i<0 || j<0 || i>=grid.size() || j>=grid[0].size() || grid[i][j]=='0')
@@ -24,7 +24,7 @@ public:
             if(grid[i][j]=='1')
             {
                 c++;
-                bfs(grid,i,j);
+                dfs(grid,i,j);
                
             }
          }
@@ -32,3 +32,6 @@ public:
         return c;
     }
 };
+
+
+TC:O(n*m)
