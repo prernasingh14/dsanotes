@@ -1,0 +1,49 @@
+Given a Undirected Graph. Check whether it contains a cycle or not. 
+
+
+Method 1: DFS based approachwe have to check if there exists a back edge or not 
+
+if any node's neighbour - is already visited and that is not the parent of the node , then obviously there must have been a cycle present which allowed that node to be visited fromm some other node 
+
+
+bool cyclereal(int i,vector<bool> &mark,int parent,vector<int>graph[])
+    {
+       
+        mark[i]=true;//that node is marked as visited
+       
+        for(int j=0;j<graph[i].size();j++)
+        {
+            if(mark[graph[i][j]]==false)
+            {
+                if(cyclereal(graph[i][j],mark,i,graph)==true)
+                    return true;
+            }
+            else  if(mark[graph[i][j]]==true && graph[i][j]!=parent)
+                return true;
+        }
+        return false;
+        
+        
+    }
+bool isCyclic(vector<int> g[], int v)
+{
+   // Your code here
+    vector<bool> mark(v);
+     
+        for(int i=0;i<v;i++)
+        {
+            mark[i]=false;
+        }
+        for(int i=0;i<v;i++)
+        {
+            if(mark[i]==false)
+                if(cyclereal(i,mark,-1,g))//parent of source node is not present thus -1
+            return true;
+        }
+            return false;
+    }
+   
+   
+
+   TC:O(v+e)
+   SC:O(v)
