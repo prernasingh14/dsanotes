@@ -89,4 +89,31 @@ SC:O(n)
 optimal approach in O(1) space complexity 
 
 
+what we can do here is to merge both the left and right arrays in the result array itself
+no neeed of taking extra vectors except the output vector to be printed
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+       int n=nums.size();
+        vector<int>result(n,0);int pro=1;
+        result[0]=1;
+        for(int i=1;i<n;i++)
+        {
+          result[i]=result[i-1]*nums[i-1];  //product of elemnets on the left of nums[i]
+        }
+        int right=1;
+        for(int i=n-1;i>=0;i--)
+        {
+          result[i]*=right;//thus variable right to multiply left by right
+            right=right*nums[i];
+        }
+        return result;
+    }
+    
+};
+
+
+TC:O(n)
+SC:O(1)
 
