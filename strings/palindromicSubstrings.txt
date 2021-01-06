@@ -1,0 +1,62 @@
+Given a string, your task is to count how many palindromic substrings in this string.
+
+The substrings with different start indexes or end indexes are counted as different substrings even they consist of same characters.
+
+Example 1:
+
+Input: "abc"
+Output: 3
+Explanation: Three palindromic strings: "a", "b", "c".
+ 
+
+Example 2:
+
+Input: "aaa"
+Output: 6
+Explanation: Six palindromic strings: "a", "a", "a", "aa", "aa", "aaa".
+ 
+
+Note:
+
+The input string length won't exceed 1000.
+
+
+class Solution {
+public:
+     bool palin(string rev)
+    {
+         
+        int n=rev.size();
+        for(int i=0;i<n/2;i++)
+        {
+            if(rev[i]!=rev[n-1-i])
+                return false;
+        }
+        return true;
+    }
+    int countSubstrings(string s) {
+        int n=s.size();int c=0;string rev="";
+        //find all substrings and check whether they are palindromic or not
+        for(int i=0;i<n;i++)
+        {
+          
+          for(int j=i;j<n;j++)
+          {
+            rev="";
+           for(int k=i;k<=j;k++)
+           {
+               rev+=s[k];
+               
+           }
+        
+              if( palin(rev)==true)
+                  c++; 
+          }
+
+        }
+        return c;
+    }
+};
+
+TC:O(n*n*n)
+SC:O(1)
