@@ -17,6 +17,7 @@ Output: c
 Explanation: In the given string, 'c' is
 the character which is non-repeating. 
 
+ traverse string s 2 times. First time, store counts of every character into the hash table, second time, find the first character that appears only once.
 char nonrepeatingCharacter(string S)
 {
    //Your code here
@@ -37,6 +38,26 @@ char nonrepeatingCharacter(string S)
    return '$';
 }
 
-TC:O(n)
+TC:O(n+n)
 SC:O(1)
 
+if the string is extremely long, we wouldn't want to traverse it twice, so instead only storing just counts of a char, we also store the index, and then traverse the hash table.
+
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        unordered_map<char, pair<int, int>> m;
+        int idx = s.size();
+        for (int i = 0; i < s.size(); i++) {
+            m[s[i]].first++;
+            m[s[i]].second = i;
+        }
+        for (auto &p : m) {
+            if (p.second.first == 1) idx = min(idx, p.second.second);
+        }
+        return idx == s.size() ? -1 : idx;
+    }
+};
+
+
+TC:O(26+n) 
