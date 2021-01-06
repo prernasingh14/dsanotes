@@ -1,0 +1,142 @@
+Given a string, the task is to count all palindromic sub-strings present in it.
+
+Input:
+
+The first line of input will contain no of test cases T . Then T test cases follow . Each test case contains 2 lines. The first line of each test case contains an integer N denoting the length of the string, next line of test case contains the string
+
+
+Output:
+
+For each test case output a single line depecting the number of palindromic substrings present.
+
+
+Constraints:
+
+1<=T<=100
+2<=N<=500
+
+
+Example:
+
+Input
+
+2
+5
+abaab
+7
+abbaeae
+
+Output
+
+3
+4
+
+Explanation:
+
+Test Case 1
+Input : str = "abaab"
+Output: 3
+All palindrome substring are : "aba" , "aa" , "baab"
+
+Test Case 2
+Input : str = "abbaeae"
+Output: 4
+All palindrome substring are : "bb" , "abba" ,"aea","eae"
+
+recursive approach :
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int substringCheck(string str,int i,int j)
+{
+    if(i>=j)
+    return 1;
+    if(str[i]==str[j])//equal characters 
+    {
+        return substringCheck(str,i+1,j-1);
+    }
+    else
+    return 0;
+}
+int countsub(string str)
+{
+    int n=str.size();int c=0;
+    for(int i=0;i<n;i++)
+    {
+        for(int j=i;j<n;j++)
+        {
+            if(j-i>=1)//as in the given question we can't consider a single character as palindrome 
+            c+=substringCheck(str,i,j);
+        }
+    }
+    return c;
+}
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    string str;cin>>str;
+	    cout<<countsub(str)<<"\n";
+	}
+	return 0;
+}
+
+
+recursion with memoization:
+
+#include <bits/stdc++.h>
+using namespace std;
+ int dp[501][501];
+int substringCheck(string str,int i,int j)
+{
+    
+    if(i>=j)
+    return 1;
+    if(dp[i][j]!=-1)
+    return dp[i][j];
+    else if(str[i]==str[j])//equal characters 
+    {
+       return  dp[i][j]= substringCheck(str,i+1,j-1);
+    }
+    else
+    return dp[i][j]=0;
+}
+int countsub(string str)
+{
+    int n=str.size();int c=0;
+   
+    for(int i=0;i<n;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(i!=j)
+            dp[i][j]=-1;
+            if(i==j)
+            dp[i][j]=0;
+        }
+    }
+    for(int i=0;i<n;i++)
+    {
+        for(int j=i;j<n;j++)
+        {
+            if(j-i>=1)//as in the given question we can't consider a single character as palindrome 
+            c+=substringCheck(str,i,j);
+        }
+    }
+    return c;
+}
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    string str;cin>>str;
+	    cout<<countsub(str)<<"\n";
+	}
+	return 0;
+}
