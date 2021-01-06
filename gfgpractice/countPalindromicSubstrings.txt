@@ -140,3 +140,55 @@ int main() {
 	}
 	return 0;
 }
+
+
+
+/////////////////////////
+top down dp 
+
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    string str;cin>>str;
+	   bool dp[n][n];int count=0;
+	   memset(dp,false, sizeof(dp));
+	  for(int i=0;i<n;i++)//for single characters 
+	  {
+	      dp[i][i]=true;
+
+	  }
+	  //now for two length characters 
+	  for(int i=1;i<n;i++)
+	  {
+	      if(str[i-1]==str[i])
+	      {
+	          dp[i-1][i]=true;
+              count++;
+	      }
+	  }
+        
+        for (int gap = 2;gap <n; gap++) {
+            for(int i=0, j=gap;j<n;j++,i++)
+            {
+                if(str[i]==str[j])
+                {
+                    if(dp[i+1][j-1])
+                    {
+                        dp[i][j]=true;
+                        count+=dp[i][j];
+                    }
+                }
+            }
+        }
+        cout<< count<<"\n";
+    }
+        
+        
+	return 0;
+}
