@@ -1,0 +1,93 @@
+Given an initial computer network connections. You can extract certain cables between two directly connected computers, and place them between any pair of disconnected computers to make them directly connected. Return the minimum number of times you need to do this in order to make all the computers connected. If it's not possible, return -1. 
+
+ 
+
+Example 1:
+
+
+
+Input: n = 4, connections = [[0,1],[0,2],[1,2]]
+Output: 1
+Explanation: Remove cable between computer 1 and 2 and place between computers 1 and 3.
+Example 2:
+
+
+
+Input: n = 6, connections = [[0,1],[0,2],[0,3],[1,2],[1,3]]
+Output: 2
+Example 3:
+
+Input: n = 6, connections = [[0,1],[0,2],[0,3],[1,2]]
+Output: -1
+Explanation: There are not enough cables.
+Example 4:
+
+Input: n = 5, connections = [[0,1],[0,2],[3,4],[2,3]]
+Output: 0
+ 
+
+Constraints:
+
+1 <= n <= 10^5
+1 <= connections.length <= min(n*(n-1)/2, 10^5)
+connections[i].length == 2
+0 <= connections[i][0], connections[i][1] < n
+connections[i][0] != connections[i][1]
+There are no repeated connections.
+No two computers are connected by more than one cable.
+
+
+
+
+class Solution {
+public:
+    void dfs(vector<vector<int>>&graph,int i,vector<bool>&visited,int n)
+    {
+       visited[i]=true;
+        //now tranerse all its components
+        for(int j=0;j<graph[i].size();j++)
+        {
+           if(!visited[graph[i][j]])
+           {
+               dfs(graph,graph[i][j],visited,n);
+           }
+        }
+        
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        //we need to find the number if connected components first 
+        int edges=connections.size();
+        if(edges<n-1)//as for a graph containing n nodes there should be n-1 edges atleast for connected  
+            return -1;
+        vector<vector<int>> graph(n);
+        vector<bool>visited(n,false);
+      
+        for(int i=0;i<edges;i++)
+        {
+            int x=connections[i][0];
+             int y=connections[i][1];
+            graph[x].push_back(y);
+            graph[y].push_back(x);
+        }
+        int c=0;
+        
+        for(int i=0;i<n;i++)
+        {
+            if(!visited[i])
+            {
+                dfs(graph,i,visited,n);
+                c++;
+            }
+        }
+        int wiresNeeded=c-1;//connectedComponents-1
+        return c-1;
+        
+    }
+};
+
+TC:O(v+e)
+
+//////////////////
+
+method 2 : based on finding connected components by DSU
+
