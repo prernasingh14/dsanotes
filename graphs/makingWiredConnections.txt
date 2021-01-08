@@ -91,3 +91,71 @@ TC:O(v+e)
 
 method 2 : based on finding connected components by DSU
 
+
+class Solution {
+public:
+    //finding the parent
+   int find(vector<int>&parent,int v)
+   {
+       int root=v;
+       while(root!=parent[root])
+       {
+           root=parent[root];
+       }
+       return root;
+   }
+    //whether they already belong to the same set if not then merge
+    void unionn(vector<int>&parent,int u,int v)
+    {
+        int parentU=find(parent,u);
+        int parentV=find(parent,v);
+        if(parentU !=parentV)
+        {
+            parent[parentU]=parentV;
+        }
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        //we need to find the number if connected components first 
+        int edges=connections.size();
+        if(edges<n-1)
+            return -1;
+      
+        vector<int>parent(n);
+        //initialize every node as parent of self
+        for(int i=0;i<n;i++)
+        {
+            parent[i]=i;
+        }
+        int redundant=0;
+      
+        for(int i=0;i<edges;i++)
+        {
+            int x=connections[i][0];
+             int y=connections[i][1];
+           if(find(parent,x)==find(parent,y))
+           {
+               redundant++;//extra wires 
+           }
+            else
+            {
+                unionn(parent,x,y);
+            }
+        }
+        int connected=0;
+        for(int i=0;i<n;i++)
+        {
+            if(parent[i]==i)
+            {
+                connected++;
+            }
+        }
+        if(connected-1<=redundant)
+            return connected-1;
+        else
+            return -1;
+       
+        
+    }
+};
+
+TC:O(v*e)
