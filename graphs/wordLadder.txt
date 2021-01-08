@@ -1,0 +1,93 @@
+Given two words beginWord and endWord, and a dictionary wordList, return the length of the shortest transformation sequence from beginWord to endWord, such that:
+
+Only one letter can be changed at a time.
+Each transformed word must exist in the word list.
+Return 0 if there is no such transformation sequence.
+
+ 
+
+Example 1:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+Output: 5
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog", return its length 5.
+Example 2:
+
+Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+Output: 0
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+ 
+
+Constraints:
+
+1 <= beginWord.length <= 100
+endWord.length == beginWord.length
+1 <= wordList.length <= 5000
+wordList[i].length == beginWord.length
+beginWord, endWord, and wordList[i] consist of lowercase English letters.
+beginWord != endWord
+All the strings in wordList are unique.
+
+ The idea is to use BFS. 
+Approach: 
+
+Start from the given start word.
+Push the word in the queue
+Run a loop until the queue is empty
+Traverse all words that adjacent (differ by one character) to it and push the word in a queue (for BFS)
+Keep doing so until we find the target word or we have traversed all words.
+
+
+
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+       unordered_set<string>dict(wordList.begin(),wordList.end());
+        if(dict.find(endWord)==dict.end())
+            return 0;
+        queue<string>q;
+        q.push(beginWord);//push the starting word into the queue
+        int ladder=1;
+        while(!q.empty())
+        {
+           int len=q.size(); 
+           for(int i=0;i<len;i++)//the elements present already in the queue
+           {
+               string  word=q.front();//remove the first word from the queue
+               q.pop();
+               if(word==endWord)
+                   return ladder;
+              
+               for(int j=0;j<word.size();j++)
+               {
+                   char ch=word[j];
+                   for(int k=0;k<26;k++)
+                   {
+                       // Replace the current character with
+                // every possible lowercase alphabet
+                      word[j]='a'+k;
+                       if(dict.find(word)!=dict.end())//if that word is there in the dictionary
+                       {
+                           // And push the newly generated word
+                    // which will be a part of the chain
+                           q.push(word); dict.erase(word);
+                       }
+                }
+                   word[j]=ch;
+               }
+           }
+            ladder++;
+        }
+        return 0;
+        
+    }
+};
+
+
+
+
+Time complexity: O(n²m), where m is the number of entries originally in the dictionary and n is the size of the string. 
+ 
+Auxiliary Space:O(m*n), where m are the strings are stored in queue. 
+So the space Complexity is O(m*n).
