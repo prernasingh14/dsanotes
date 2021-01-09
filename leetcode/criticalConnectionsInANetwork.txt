@@ -1,0 +1,80 @@
+There are n servers numbered from 0 to n-1 connected by undirected server-to-server connections forming a network where connections[i] = [a, b] represents a connection between servers a and b. Any server can reach any other server directly or indirectly through the network.
+
+A critical connection is a connection that, if removed, will make some server unable to reach some other server.
+
+Return all critical connections in the network in any order.
+
+ 
+
+Example 1:
+
+
+
+Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
+Output: [[1,3]]
+Explanation: [[3,1]] is also accepted.
+ 
+
+Constraints:
+
+1 <= n <= 10^5
+n-1 <= connections.length <= 10^5
+connections[i][0] != connections[i][1]
+There are no repeated connections.
+
+
+
+class Solution {
+public:
+    void dfs(list<int>graph[],int i,vector<bool>&visited)
+    {
+        visited[i]=true;
+        for(auto j:graph[i])
+        {
+            if(!visited[j])
+                dfs(graph,j,visited);
+        }
+        
+    }
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+       //find all the bridges in the network
+        vector<vector<int>>bridges;
+        list<int>graph[n];
+        int edges=connections.size();
+        for(int i=0;i<edges;i++)//creating the graph
+        {
+            int x=connections[i][0];
+            int y=connections[i][1];
+            graph[x].push_back(y);
+            graph[y].push_back(x);
+         }
+        //remove each edge one by one and check whether that is a bridge or not 
+        for(int i=0;i<edges;i++)
+        {
+            int u=connections[i][0];
+            int v=connections[i][1];
+            graph[u].remove(v);
+            graph[v].remove(u);
+            vector<bool>visited(n,false);
+            dfs(graph,u,visited);//see if v can be reached by u or not via some other path then if not that means we increased the disconnected components 
+            
+            if(!visited[v])
+            {
+              vector<int>t;
+                t.push_back(u);
+                t.push_back(v);
+                bridges.push_back(t);
+                
+            }
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+            
+}
+        return bridges;
+        
+    }
+};
+
+
+TC:O(E*(V+E))
+causes TLE on leetcode
