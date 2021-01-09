@@ -1,0 +1,51 @@
+Given an array arr of N integers, write a function that returns true if there is a triplet (a, b, c) that satisfies a2 + b2 = c2, otherwise false.
+
+Example 1:
+
+Input:
+N = 5
+Arr[] = {3, 2, 4, 6, 5}
+Output: Yes
+Explanation: a=3, b=4, and c=5 forms a
+pythagorean triplet.
+Example 2:
+
+Input:
+N = 3
+Arr[] = {3, 8, 5}
+Output: No
+Explanation: No such triplet possible.
+
+
+class Solution{
+public:
+	// Function to check if the
+	// Pythagorean triplet exists or not
+	bool checkTriplet(int arr[], int n) {
+	    // code here
+	    unordered_map<int,int>m;
+	   for(int i=0;i<n;i++)
+	   {
+	       arr[i]=arr[i]*arr[i];
+	       m[arr[i]]=i;
+	   }
+	   int sum=0;
+	   for(int i=0;i<n;i++)
+	   {
+	       for(int j=i+1;j<n;j++)
+	       {
+	           sum=arr[i]+arr[j];
+	           if(m.find(sum)!=m.end())
+	           {
+	               return true;
+	           }
+	       }
+	   }
+	    return false;
+	}
+};
+
+
+
+
+TC:O(n*n)
