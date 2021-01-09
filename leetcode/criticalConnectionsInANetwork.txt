@@ -57,7 +57,7 @@ public:
             graph[v].remove(u);
             vector<bool>visited(n,false);
             dfs(graph,u,visited);//see if v can be reached by u or not via some other path then if not that means we increased the disconnected components 
-            
+
             if(!visited[v])
             {
               vector<int>t;
@@ -78,3 +78,46 @@ public:
 
 TC:O(E*(V+E))
 causes TLE on leetcode
+
+
+
+optimized method :TC:O(V+E)
+
+class Solution {
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<bool> visited(n, false);
+        vector<int> disc(n, 0), low(n, 0), parent(n, -1);
+        vector<vector<int>> graph(n, vector<int>()), res;
+        for (auto& p : connections) {
+            graph[p[0]].push_back(p[1]);
+            graph[p[1]].push_back(p[0]);
+        }
+        for (int i = 0; i < n; ++i) {
+            if (!visited[i])
+            dfsmodified(i, visited, disc, low, parent, graph, res);
+        }
+        return res;
+    }
+
+    void dfsmodified(int u, vector<bool>& visited, vector<int>& disc, vector<int>& low, vector<int>& parent, vector<vector<int>>& graph, vector<vector<int>>& res) {
+        static int time = 0;
+        visited[u] = true;
+        disc[u] = low[u] = ++time;
+        for (int v : graph[u]) {
+            if (!visited[v]) {
+                parent[v] = u;
+                dfsmodified(v, visited, disc, low, parent, graph, res);
+                low[u] = min(low[u], low[v]);
+                if (low[v] > disc[u]) {
+                    res.push_back({u, v});
+                }
+
+            } else if (v != parent[u]) {
+                low[u] = min(low[u], disc[v]);
+            }
+
+        }
+    }
+
+};
