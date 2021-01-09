@@ -1,0 +1,74 @@
+ bridges represent vulnerabilities in a connected network and are useful for designing reliable networks. For example, in a wired computer network, an articulation point indicates the critical computers and a bridge indicates the critical wires or connections.
+
+An edge in an undirected connected graph is a bridge iff removing it disconnects the graph. For a disconnected undirected graph, definition is similar, a bridge is an edge removing which increases number of disconnected components.
+
+
+Brute force approach :
+ simple approach is to one by one remove all edges and see if removal of an edge causes disconnected graph. Following are steps of simple approach for connected graph.
+
+1) For every edge (u, v), do following
+…..a) Remove (u, v) from graph
+..…b) See if the graph remains connected (We can either use BFS or DFS)
+…..c) Add (u, v) back to the graph.
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+
+
+//reach all the nodes that can be reached by it 
+void dfs(list<int>adj[],int i,vector<bool>&visited)
+{
+    visited[i]=true;
+    for(auto j:adj[i])
+    {
+        if(!visited[j])
+        {
+            dfs(adj,j,visited);
+        }
+    }
+}
+int main() {
+   imp();
+   int v,e;cin>>v>>e;
+   list<int>adj[v];vector<vector<int>>edges;
+   for(int i=0;i<e;i++)
+   {
+       int x,y;cin>>x>>y;
+       vector<int>t;
+       t.pb(x);
+       t.pb(y);
+       edges.pb(t);
+       adj[x].pb(y);
+       adj[y].pb(x);
+   }
+   for(int i=0;i<edges.size();i++)
+   {
+      adj[edges[i][0]].remove(edges[i][1]); //remove that edge from graph
+      adj[edges[i][1]].remove(edges[i][0]);
+      vector<bool>visited(v,false);
+      dfs(adj,edges[i][0],visited);
+      if(!visited[edges[i][1]])//if from the chosen source node the destination node can't be reached via any back edge that means we disconnected from the network
+      cout<<"one bridge "<<edges[i][0]<<" "<<edges[i][1]<<"\n";//bridge found thus
+       adj[edges[i][0]].pb(edges[i][1]); //add those edges back to the graph 
+       adj[edges[i][1]].pb(edges[i][0]); //""
+      
+   }
+	return 0;
+}
+
+
+TC:O(E*(V+E))
+as for every edge we're calling dfs to see if connected or not 
+
+SC:O(V+E)
+
+/////////////////
+
+
+optimized approach:

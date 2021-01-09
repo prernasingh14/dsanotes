@@ -1,0 +1,6 @@
+Given a Directed Acyclic Graph having V vertices and E edges, where each edge {U, V} represents the Jobs U and V such that Job V can only be started only after completion of Job U. The task is to determine the minimum time taken by each job to be completed where each Job takes unit time to get completed.
+
+https://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjG8s71sYzuAhWbbn0KHYP5AkgQFjAAegQIAhAC&url=https%3A%2F%2Fwww.geeksforgeeks.org%2Fminimum-time-taken-by-each-job-to-be-completed-given-by-a-directed-acyclic-graph%2F&usg=AOvVaw2LZBJK1g3eCLMAzdeHR9js
+
+
+
