@@ -13,7 +13,7 @@ We can clearly see that there are 3 Strongly
 Connected Components in the Graph
 
 
-read gfg article on kosaraju's algo 
+very helpful: tech dose video on kosaraju
 
 class Solution{
 	public:
@@ -23,17 +23,29 @@ class Solution{
     *   adj[]: array of vectors to represent graph
     */
     
-    void dfs(vector<int>adj[],int i,vector<bool>&visited,stack<int>&st1)
+    void dfsModified(vector<int>adj[],int i,vector<bool>&visited,stack<int>&st1)
     {
         visited[i]=true;
         for(int j=0;j<adj[i].size();j++)
         {
             if(!visited[adj[i][j]])
             {
-                dfs(adj,adj[i][j],visited,st1);
+                dfsModified(adj,adj[i][j],visited,st1);
             }
         }
         st1.push(i);
+    }
+    void dfs(vector<int>adj[],int i,vector<bool>&visited)
+    {
+        visited[i]=true;
+        for(int j=0;j<adj[i].size();j++)
+        {
+            if(!visited[adj[i][j]])
+            {
+                dfs(adj,adj[i][j],visited);
+            }
+        }
+       
     }
     int kosaraju(int V, vector<int> adj[]) {
         //code here
@@ -42,9 +54,8 @@ class Solution{
        stack<int>st1;int cnt=0;
         for(int i=0;i<V;i++)
         if(!visited[i])
-         dfs(adj,i,visited,st1);
+         dfsModified(adj,i,visited,st1);
         
-         stack<int>st2;
          for (int v = 0; v < V; v++) 
     { 
         // Recur for all the vertices adjacent to this vertex 
@@ -59,7 +70,7 @@ class Solution{
          }
         while(!st1.empty()){
         if(!visited[st1.top()]){
-            dfs(rev,st1.top(), visited, st2);
+            dfs(rev,st1.top(),visited);
             cnt++;
         }
         st1.pop();
