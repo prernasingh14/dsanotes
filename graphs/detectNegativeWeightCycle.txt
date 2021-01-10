@@ -80,3 +80,59 @@ TC:O(e*v) as relaxation done for v-1 times and for e edges (v-1)*e
 method 2:floyd warshall 
 
 
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	 int v,e;cin>>v>>e;
+	 vector<pair<int,pair<int,int> >>graph;int dist[v][v];
+	 for(int i=0;i<v;i++)
+	 {
+	     for(int j=0;j<v;j++)
+	     {
+	         if(i==j)
+	         dist[i][j]=0;
+	         else
+	         dist[i][j]=INT_MAX;
+	     }
+	 }
+	 for(int i=0;i<e;i++)
+	 {
+	     int x,y,z;cin>>x>>y>>z;
+	     graph.push_back({x,{y,z}});
+	     dist[x][y]=z;
+	 }
+	 bool flag=false;
+	 
+	for(int k=0;k<v;k++)
+	{
+	 for(int i=0;i<v;i++)//do for v-1 times
+	 {
+	    for(int j=0;j<v;j++)//for all the edges
+	    {
+	       if(dist[i][k]!=INT_MAX && dist[k][j]!=INT_MAX)
+	      dist[i][j]=min(dist[i][j],dist[i][k]+dist[k][j]);
+	    }
+	 }
+	}
+
+	 
+	 for(int j=0;j<v;j++)
+	 {
+	       
+	        if(dist[j][j]<0)
+	       {
+	           cout<<1<<"\n";flag=true;
+	           break;
+	       }//means now again path gets shortened
+	 }
+	 if(flag==false)
+	 cout<<0<<"\n";
+	}
+	return 0;
+}
+
+TC:O(v*v*v)
