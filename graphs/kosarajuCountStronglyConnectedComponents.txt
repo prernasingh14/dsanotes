@@ -1,0 +1,73 @@
+Given a Directed Graph with V vertices and E edges, Find the number of strongly connected components in the graph.
+ 
+
+Example 1:
+
+Input:
+
+Output:
+3
+Explanation:
+
+We can clearly see that there are 3 Strongly
+Connected Components in the Graph
+
+
+read gfg article on kosaraju's algo 
+
+class Solution{
+	public:
+	/*  Function to find the number of strongly connected components
+    *   using Kosaraju's algorithm
+    *   V: number of vertices
+    *   adj[]: array of vectors to represent graph
+    */
+    
+    void dfs(vector<int>adj[],int i,vector<bool>&visited,stack<int>&st1)
+    {
+        visited[i]=true;
+        for(int j=0;j<adj[i].size();j++)
+        {
+            if(!visited[adj[i][j]])
+            {
+                dfs(adj,adj[i][j],visited,st1);
+            }
+        }
+        st1.push(i);
+    }
+    int kosaraju(int V, vector<int> adj[]) {
+        //code here
+        vector<bool>visited(V,false);
+        int src=0;vector<int>rev[V];
+       stack<int>st1;int cnt=0;
+        for(int i=0;i<V;i++)
+        if(!visited[i])
+         dfs(adj,i,visited,st1);
+        
+         stack<int>st2;
+         for (int v = 0; v < V; v++) 
+    { 
+        // Recur for all the vertices adjacent to this vertex 
+        for(int j=0;j<adj[v].size();j++)
+        {
+            rev[adj[v][j]].push_back(v);
+        }
+    }
+         for(int i=0;i<V;i++)
+         {
+             visited[i]=false;
+         }
+        while(!st1.empty()){
+        if(!visited[st1.top()]){
+            dfs(rev,st1.top(), visited, st2);
+            cnt++;
+        }
+        st1.pop();
+    }    
+    return cnt;
+    
+    }
+};
+
+
+TC:O(v+e)
