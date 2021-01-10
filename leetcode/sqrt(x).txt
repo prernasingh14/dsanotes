@@ -34,3 +34,36 @@ public:
 };
 
 TC:O(sqrt(x))
+
+
+
+//////////////
+since we know our sequence is monotonically increasing  thus we can apply binary search to it 
+
+class Solution {
+public:
+    int mySqrt(int x) {
+        if(x==0 || x==1)
+            return x;
+        // Staring from 1, try all numbers until 
+    // i*i is greater than or equal to x. 
+        long long low=1;long long high=x;long long ans=0;
+       while(low<=high)
+       {
+           long long mid=(low+high)/2;
+           if(mid*mid==x)
+               return mid;
+           else if(mid*mid<x)
+           {
+               low=mid+1;
+               ans=mid;
+           }
+           else
+               high=mid-1;
+       }
+        return ans;
+    }
+};
+
+
+TC:O(log x)
