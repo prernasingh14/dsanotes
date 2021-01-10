@@ -22,6 +22,9 @@ Output:
 0
 1
 
+method 1:
+using bellman ford algo :
+
 int main() {
 	//code
 	int t;cin>>t;
@@ -34,7 +37,7 @@ int main() {
 	     int x,y,z;cin>>x>>y>>z;
 	     graph.push_back({x,{y,z}});
 	 }
-	 vector<int>dist(v,INF);dist[0]=0;
+	 vector<int>dist(v,INT_MAX);dist[0]=0;
 	 for(int i=0;i<v-1;i++)//do for v-1 times
 	 {
 	    for(int j=0;j<e;i++)//for all the edges
@@ -71,3 +74,9 @@ int main() {
 
 
 TC:O(e*v) as relaxation done for v-1 times and for e edges (v-1)*e
+
+
+
+method 2:floyd warshall 
+
+
