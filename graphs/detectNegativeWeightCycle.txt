@@ -1,0 +1,73 @@
+Given a graph, the task is to check if it contains a negative weight cycle or not.
+
+Input:
+The first line of input contains an integer T denoting the no of test cases. Then T test cases follow. Each test case contains 2 lines the first line contains two space separated integers v and e denoting the no of vertices and no of edges respectively. Then in the next line are 3*e space separated values x,y,z denoting an edge from x to y with a weight of z.
+
+Output:
+For each test case in a new line print 0 if there is no negative weight cycle else print 1.
+
+Constraints:
+1 <= T <= 50
+1 <= v <= 100
+1 <= e <= 50
+
+Example:
+Input:
+2
+5 8
+0 1 -1 0 2 4 1 2 3 1 3 2 1 4 2 3 2 5 3 1 1 4 3 -3
+3 3
+0 1 -5 1 2 -6 2 0 -9
+Output:
+0
+1
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	 int v,e;cin>>v>>e;
+	 vector<pair<int,pair<int,int> >>graph;
+	 for(int i=0;i<e;i++)
+	 {
+	     int x,y,z;cin>>x>>y>>z;
+	     graph.push_back({x,{y,z}});
+	 }
+	 vector<int>dist(v,INF);dist[0]=0;
+	 for(int i=0;i<v-1;i++)//do for v-1 times
+	 {
+	    for(int j=0;j<e;i++)//for all the edges
+	    {
+	        int u=graph[j].first;
+	        int v=graph[j].second.first;
+	        int wt=graph[j].second.second;
+	        if(dist[v]>dist[u]+wt)
+	        dist[v]=dist[u]+wt;
+	    }
+	 }
+	 bool flag=false;
+	 //relax for one more time 
+	 for(int j=0;j<e;j++)
+	 {
+	        int u=graph[j].first;
+	        int v=graph[j].second.first;
+	        int wt=graph[j].second.second;
+	        if(dist[v]>dist[u]+wt)
+	       {
+	           //cout<<"negative weight edge"<<"\n";
+               flag=true;
+               cout<<1<<"\n";
+	           break;
+	       }//means now again path gets shortened
+	 }
+	 if(flag==false)
+	 {//cout<<"NO negative weight cycle"<<"\n";
+     cout<<0<<"\n";
+     }
+	}
+	return 0;
+}
+
+
+TC:O(e*v) as relaxation done for v-1 times and for e edges (v-1)*e
