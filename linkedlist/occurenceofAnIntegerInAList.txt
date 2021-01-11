@@ -1,0 +1,75 @@
+Given a singly linked list and a key, count the number of occurrences of given key in the linked list.
+
+Example 1:
+
+Input:
+N = 7
+Link List = 1->2->1->2->1->3->1
+search_for = 1
+Output: 4
+Explanation:1 appears 4 times.
+ 
+
+Your Task:
+
+You dont need to read input or print anything. Complete the function count() which takes the head of the link list and search_for i.e- the key as input parameters and returns the count of occurrences of the given key.
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+0 ≤ N ≤ 10^4
+
+
+
+iterative:
+
+
+
+int count(struct node* head, int search_for)
+{
+//add your code here
+  node* temp=head;
+  int count[10001];
+  for(int i=0;i<10001;i++)
+  {
+      count[i]=0;
+  }
+  while(temp!=NULL)
+  {
+      count[temp->data]++;
+     temp=temp->next; 
+  }
+  return count[search_for];
+}
+
+if w/o storage 
+
+int count(struct node* head, int search_for)
+{
+//add your code here
+  if(head==NULL)
+  return NULL;
+  int c=0;
+  while(head!=NULL)
+  {
+      if(head->data==search_for)
+      {
+          c++;
+      }
+      head=head->next;
+  }
+  return c;
+}
+
+
+recursive:
+
+int count(struct node* head, int search_for)
+{
+//add your code here
+  if(head==NULL)
+  return NULL;
+  return (head->data==search_for) +count(head->next,search_for);
+}
+
