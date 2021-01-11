@@ -60,3 +60,10 @@ Node* segregate(Node *head) {
 
 TC:O(n)
 
+
+The above solution does not work when these values have associated data with them.
+For example,
+ these three represent three colours and different types of objects associated with the colours and sort the objects (connected with a linked list) based on colours.
+
+
+ 
