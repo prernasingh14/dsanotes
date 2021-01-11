@@ -1,0 +1,69 @@
+Leetcode 206
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
+Follow up:
+
+A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+
+method 1 :
+iterative 
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+       
+        if(head==NULL || head->next==NULL)
+            return head;
+        ListNode* curr=NULL;ListNode* prev=NULL;
+        while(head!=NULL)
+        {
+            curr=head->next;
+            head->next=prev;
+            prev=head;
+            head=curr;
+        }
+        return prev;
+    }
+};
+
+
+
+TC:O(N) where N is the number of nodes
+
+
+///////////////////////
+
+
+method 2:
+
+
+recursive approach
+
+
+class Solution {
+public:
+    ListNode* reverse(ListNode* prev,ListNode* head)
+    {
+        if(head==NULL)
+            return prev;
+        ListNode* curr=head->next;
+        head->next=prev;
+       return reverse(head,curr);
+    }
+    ListNode* reverseList(ListNode* head) {
+       
+        if(head==NULL || head->next==NULL)
+            return head;
+        ListNode *prev=NULL;
+       return reverse(prev,head);
+    }
+};
+
+
+TC:O(n)
+
