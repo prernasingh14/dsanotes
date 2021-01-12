@@ -1,0 +1,109 @@
+Given an array of integers nums sorted in ascending order, find the starting and ending position of a given target value.
+
+If target is not found in the array, return [-1, -1].
+
+Follow up: Could you write an algorithm with O(log n) runtime complexity?
+
+ 
+
+Example 1:
+
+Input: nums = [5,7,7,8,8,10], target = 8
+Output: [3,4]
+Example 2:
+
+Input: nums = [5,7,7,8,8,10], target = 6
+Output: [-1,-1]
+Example 3:
+
+Input: nums = [], target = 0
+Output: [-1,-1]
+ 
+
+Constraints:
+
+0 <= nums.length <= 105
+-109 <= nums[i] <= 109
+nums is a non-decreasing array.
+-109 <= target <= 109
+
+
+method 1: 
+
+first traverse from the left side of the array and find the first occurrence
+then traverse from the right end and find the first index that matches that will be the last occurence of the element 
+
+
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int n=nums.size();
+        int start=-1;
+        int end=-1;int c=0;
+        vector<int>v;
+        for(int i=0;i<n;i++)
+        {
+           if(nums[i]==target)
+           {
+               start=i;
+               break;
+           }
+           
+        }
+        for(int i=n-1;i>=0;i--)
+        {
+           if(nums[i]==target)
+           {
+               end=i;
+               break;
+           }
+           
+        }
+        v.push_back(start);
+         v.push_back(end);
+        return v;
+    }
+};
+
+
+TC:O(n)
+
+/////////////////////////////////////////////
+
+one passs of the array 
+s to traverse linearly and store start & end 
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int n=nums.size();
+        int start=-1;
+        int end=-1;int c=0;
+        vector<int>v;
+        for(int i=0;i<n;i++)
+        {
+           if(nums[i]==target && c==0)
+           {
+               start=i;
+               c++;
+           }
+            if(nums[i]==target)
+            {
+                end=i;
+            }
+        }
+        v.push_back(start);
+         v.push_back(end);
+        return v;
+    }
+};
+
+
+TC:O(n)
+
+///////////////////////////////////////////////////
+
+
+
+efficient solution using binary search :
+
+
