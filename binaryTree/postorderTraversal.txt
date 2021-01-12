@@ -124,3 +124,34 @@ public:
         return nodes;
     }
 };
+
+
+///using two stacks 
+
+class Solution {
+public:
+   we want left right root so in stack it should be like root -right -left so that we can get reverse 
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> ret;
+        if(!root) return ret;
+        //using two stacks
+        stack<TreeNode*>st1,st2;
+        while(root || !st1.empty())
+        {
+            while(root)
+            {
+                st1.push(root);st2.push(root);
+                root=root->right;
+            }
+            root=st1.top();
+            st1.pop();
+            root=root->left;
+}
+        while(!st2.empty())
+        {
+           ret.push_back(st2.top()->val);
+            st2.pop();
+        }
+        return ret;
+    }
+};
