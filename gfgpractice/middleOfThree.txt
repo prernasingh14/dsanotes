@@ -1,0 +1,46 @@
+Given three distinct numbers A, B and C. Find the number with value in middle (Try to do it with minimum comparisons).
+
+
+Example 1:
+
+Input:
+A = 978, B = 518, C = 300
+Output:
+518
+Explanation:
+Since 518>300 and 518<978, so 
+518 is the middle element.
+
+
+class Solution{
+  public:
+    int middle(int a, int b, int c){
+        //code here//Position this line where user code will be pasted.
+        int maxx=max(a,max(b,c));//O(1)
+        int minn=min(a,min(b,c));//O(1)
+        if(a!=maxx && a!=minn)
+        return a;
+        else if(b!=maxx && b!=minn)
+        return b;
+        else
+        return c;
+    }
+
+
+
+
+class Solution{
+  public:
+    int middle(int a, int b, int c){
+        //code here//Position this line where user code will be pasted.
+        if(a>b)
+        swap(a,b);
+        if(b>c)
+        swap(b,c);
+        if(a>b)
+        swap(a,b);
+        return b;
+    
+    }
+    3 comparisons
+    
