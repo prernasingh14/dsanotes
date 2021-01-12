@@ -23,7 +23,21 @@ Output: 1
 Explanation: Note that the third maximum here means the third maximum distinct number.
 Both numbers with value 2 are both considered as second maximum.
 
-Method 1:using set 
+
+
+Method 1: using sorting -sort the array in descending order 
+return arr[2] if it exists 
+
+   tc: O(nlogn) 
+
+
+
+
+
+
+
+
+Method 2:using set 
 class Solution {
 public:
     int thirdMax(vector<int>& nums) {
@@ -47,7 +61,14 @@ public:
     }
 };
 TC:O(nlogn) as one element insertion in set takes logn time
-////////////////////
+
+
+
+
+/////////////////////////////////
+
+
+
 better O(n) solution 
 class Solution {
 public:
