@@ -107,3 +107,59 @@ TC:O(n)
 efficient solution using binary search :
 
 
+class Solution {
+public:
+    int firstOcc(vector<int>&nums,int target)
+    {
+        int low=0;int high=nums.size()-1;int result=-1;
+        while(low<=high)
+        {
+            int mid=(low+high)/2;
+            if(nums[mid]==target)
+            {
+                result=mid;
+                high=mid-1;//contract its boundary towards left 
+            }
+            else if(nums[mid]>target)
+            {
+                high=mid-1;
+            }
+            else
+                low=mid+1;
+        }
+        return result;
+    }
+    int lastOcc(vector<int>&nums,int target)
+    {
+        int low=0;int high=nums.size()-1;int result=-1;
+        while(low<=high)
+        {
+            int mid=(low+high)/2;
+            if(nums[mid]==target)
+            {
+                result=mid;
+                low=mid+1;//contract its boundary towards the right 
+            }
+            else if(nums[mid]>target)
+            {
+                high=mid-1;
+            }
+            else
+                low=mid+1;
+        }
+        return result;
+    }
+    vector<int> searchRange(vector<int>& nums, int target) {
+        int n=nums.size();
+        int left=-1;int right=-1;
+        left=firstOcc(nums,target);
+     right=lastOcc(nums,target);
+        
+        if(left==-1 && right==-1)
+        return vector<int>{-1,-1};
+        else
+        return vector<int>{left,right};
+    }
+};
+
+TC:O(logn)
