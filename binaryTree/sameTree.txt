@@ -1,0 +1,54 @@
+
+Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+
+Two binary trees are considered the same if they are structurally identical, and the nodes have the same value.
+
+ 
+
+Example 1:
+
+
+Input: p = [1,2,3], q = [1,2,3]
+Output: true
+
+
+
+
+
+
+
+class Solution {
+public:
+    //the first approach that I could think of is doing preorder traversal of a tree 
+    void preorder(TreeNode* root,vector<int>&v)
+    {
+        if(root==NULL)
+        {
+            v.push_back(-1);
+        return ;
+        }
+        v.push_back(root->val);
+        preorder(root->left,v);
+        preorder(root->right,v);
+    }
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+     if(p==NULL && q==NULL)
+         return true;
+        vector<int>v1,v2;
+        preorder(p,v1);
+        preorder(q,v2);
+        for(int i=0;i<v1.size();i++)
+        {
+            if(i>v2.size())
+                return false;
+            else if(v1[i]!=v2[i])
+                return false;
+            cout<<v1[i]<<" "<<v2[i];
+        }
+         return true;
+    }
+     
+};
+
+TC:O(n)+O(m)
+SC:O(m)+O(n)
