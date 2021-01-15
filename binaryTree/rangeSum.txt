@@ -1,0 +1,68 @@
+Given the root node of a binary search tree, return the sum of values of all nodes with a value in the range [low, high].
+
+ 
+
+Example 1:
+
+
+Input: root = [10,5,15,3,7,null,18], low = 7, high = 15
+Output: 32
+
+
+
+class Solution {
+public:
+    void inorderSum(TreeNode* root,int &sum,int L,int R)
+    {
+       if(root==NULL)
+           return ;
+        inorderSum(root->left,sum,L,R);
+        if(root->val>=L && root->val<=R)
+        {
+            sum+=root->val;
+        }
+        inorderSum(root->right,sum,L,R);
+    }
+    int rangeSumBST(TreeNode* root, int L, int R) {
+        //follow any traversal of the tree and return the sum
+        int sum=0;
+        inorderSum(root,sum,L,R);
+        return sum;
+    }
+};
+
+
+
+
+
+////////////////////////////////////////////////////////////////
+
+Iterative solution:
+
+TC:O(nodes)
+SC:O(height)
+
+
+class Solution {
+public:
+    int rangeSumBST(TreeNode* root, int L, int R) {
+        //follow any traversal of the tree and return the sum
+        int sum=0;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty())
+        {
+            TreeNode* root=q.front();
+            q.pop();
+            if(root->val>=L && root->val<=R)
+            {
+                sum+=root->val;
+            }
+            if(root->left)
+                q.push(root->left);
+            if(root->right)
+                q.push(root->right);
+        }
+        return sum;
+    }
+};
