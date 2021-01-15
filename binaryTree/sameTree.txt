@@ -52,3 +52,38 @@ public:
 
 TC:O(n)+O(m)
 SC:O(m)+O(n)
+
+
+//////////////////////////////////////////////////////////////////////////
+
+class Solution {
+public:
+  
+    bool traverse(TreeNode* p,TreeNode* q)
+    {
+        if(p==NULL && q==NULL)
+        {
+        return true;
+        }
+       if(p==NULL || q==NULL)
+       {
+           return false;
+       }
+        else if(p->val==q->val)
+        {
+            return traverse(p->left,q->left) && traverse(p->right,q->right);
+        }
+        else
+            return false;
+    }
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+     if(p==NULL && q==NULL)
+         return true;
+       return traverse(p,q);
+    }
+     
+};
+
+
+
+
