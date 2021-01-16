@@ -1,0 +1,102 @@
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+
+// 
+method 1:iterative level order traversal then reverse vector for every odd level number 
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+         vector<vector<int> >level;
+        if(root==NULL)
+            return level;
+        queue<TreeNode*>q;
+        q.push(root);int i=0;
+        while(!q.empty())
+        {
+            int len=q.size(); vector<int>v;
+            for(int i=0;i<len;i++)
+            {
+                 TreeNode* root=q.front();
+                  q.pop();
+                v.push_back(root->val);
+                if(root->left)
+                q.push(root->left);
+                 if(root->right)
+                q.push(root->right);
+            }
+            if(level.size()%2==1)
+                reverse(v.begin(),v.end());
+            level.push_back(v);
+           
+        }
+
+        return level;
+    }
+};
+
+
+////////////////////////////////
+
+
+using deque
+
+
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+         vector<vector<int> >res;
+    if(!root) return res;
+    deque<TreeNode*> deq;
+    deq.push_back(root);
+    int iszig=1;//even level
+    while(!deq.empty()) {
+        int sz=deq.size();
+        iszig=iszig^1;
+        vector<int> row;
+        while(sz--) {
+            if(iszig) { // pop_front, push_back, right then left
+                root=deq.front();
+                deq.pop_front();
+                row.push_back(root->val);
+                if(root->right)
+                    deq.push_back(root->right);
+                if(root->left) 
+                    deq.push_back(root->left);
+            }
+            else { // pop_back, push_front, left then right
+                root=deq.back();
+                deq.pop_back();
+                row.push_back(root->val);
+                if(root->left) 
+                    deq.push_front(root->left);
+                if(root->right)
+                    deq.push_front(root->right);
+            }
+        }
+        res.push_back(row);
+    }
+    return res;
+    }
+};
+
+
+
+TC:O(n)
+sc:O(n)
