@@ -26,6 +26,8 @@ Explanation:
 Three leaves are 3 , 5 and 1.
 
 
+
+method 1: recursive approach
 int leaves(Node* root)
    {
        if(root==NULL)
@@ -45,4 +47,36 @@ int countLeaves(Node* root)
 }
 
 
+
 TC:O(n)
+
+
+
+method 2:iterative solution 
+
+
+int countLeaves(Node* root)
+{
+  // Your code here
+  if(root==NULL)
+  return 0;
+  int count=0;
+  queue<Node*>q;
+  q.push(root);
+  while(!q.empty())
+  {
+      Node* roott=q.front();
+      q.pop();
+      if(roott->left!=NULL)
+      q.push(roott->left);
+       if(roott->right!=NULL)
+      q.push(roott->right);
+      else if(roott->left==NULL && roott->right==NULL)
+      count++;
+  }
+  return count;
+  
+}
+
+TC:O(n)
+
