@@ -1,0 +1,48 @@
+Given a Binary Tree of size N , You have to count leaves in it. For example, there are two leaves in following tree
+
+        1
+     /      \
+   10      39
+  /
+5
+
+ 
+
+Example 1:
+
+
+Input:
+Given Tree is 
+               4
+             /   \
+            8     10
+           /     /   \
+          7     5     1
+         /
+        3 
+Output:
+3
+Explanation: 
+Three leaves are 3 , 5 and 1.
+
+
+int leaves(Node* root)
+   {
+       if(root==NULL)
+       return 0;
+      else if(root->left==NULL && root->right==NULL)
+          return  1+leaves(root->left)+leaves(root->right);
+          else
+          return leaves(root->left)+leaves(root->right);
+   }
+int countLeaves(Node* root)
+{
+  // Your code here
+  if(root==NULL)
+  return 0;
+  return leaves(root);
+  
+}
+
+
+TC:O(n)
