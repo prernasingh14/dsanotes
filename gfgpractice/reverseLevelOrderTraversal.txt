@@ -64,5 +64,32 @@ vector<int> reverseLevelOrder(Node *root)
 }
 
 
+recursive approach :
 
+
+class Solution {
+public:
+     vector<vector<int>> ans;
+     void dfs(TreeNode *root, int height){
+        if (root == NULL) 
+            return;
+        while (ans.size() <= height)
+            ans.push_back(vector<int>());
+        ans[height].push_back(root->val);
+        dfs(root->left, height + 1);
+        dfs(root->right, height + 1);
+    }
+
+
+    //traverse level wise & then reverse it 
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int> >level;
+        if(root==NULL)
+            return level;
+   
+       dfs(root, 0);
+       reverse(ans.begin(), ans.end());
+        return ans;    
+    }
+};
 
