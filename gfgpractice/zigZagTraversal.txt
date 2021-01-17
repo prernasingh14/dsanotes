@@ -1,0 +1,59 @@
+Given a Binary Tree. Find the Zig-Zag Level Order Traversal of the Binary Tree.
+
+ 
+
+Example 1:
+
+Input:
+        3
+      /   \
+     2     1
+Output: 3 1 2
+
+
+
+vector <int> zigZagTraversal(Node* root)
+{
+    vector<int>level;
+    if(root==NULL)
+    return level;
+	// Code here
+	deque<Node*>dq;
+	dq.push_front(root);int sq=1;
+	while(!dq.empty())
+	{
+	   sq=sq^1;
+	   int sz=dq.size();
+	   while(sz--)
+	   {
+	   if(sq==0)
+	   {
+	       Node* root=dq.back();
+	       level.push_back(root->data);
+	       dq.pop_back();
+	       if(root->left)
+	       {
+	           dq.push_front(root->left);
+	       }
+	       if(root->right)
+	       dq.push_front(root->right);
+	   }
+	   else
+	   {
+	    Node* root=dq.front();
+	    dq.pop_front();
+	    level.push_back(root->data);
+	    if(root->right)
+	    dq.push_back(root->right);
+	     if(root->left)
+	    dq.push_back(root->left);
+	   }
+	   }
+	}
+	return level;
+	
+}
+
+
+TC:O(n)
+SC:O(n)
