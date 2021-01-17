@@ -71,6 +71,6 @@ public:
 };
 
 
-TC:O(height) as we are processing every once every level 
+TC:O(nodes) as we are processing every node
 
 
