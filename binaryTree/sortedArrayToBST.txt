@@ -17,6 +17,10 @@ One possible answer is: [0,-3,9,-10,null,5], which represents the following heig
 
 
 recursive approach:
+
+As the tree is heightbalanced the root will be present at the n/2 location of the nums array where n is the size of the array.
+So we can use this base case to build our tree
+
 make the middle element as the root first and then recur for the left &  right subtree making the middle element of the left & right subarray 
 
 class Solution {
