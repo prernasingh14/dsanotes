@@ -1,0 +1,87 @@
+Given a Binary Tree, print the diagonal traversal of the binary tree.
+
+Consider lines of slope -1 passing between nodes. Given a Binary Tree, print all diagonal elements in a binary tree belonging to same line.
+
+Example 1:
+
+Input :
+            8
+         /     \
+        3      10
+      /   \      \
+     1     6     14
+         /   \   /
+        4     7 13
+Output : 8 10 14 3 6 7 13 1 4
+Explanation:
+unnamed
+Diagonal Traversal of binary tree : 
+ 8 10 14 3 6 7 13 1 4
+
+
+
+
+ iterative version:  using a queue
+
+we analyze that we have to print right most nodes & then left node of the root & then similarly for others 
+
+ vector<int> diagonal(Node *root)
+{
+   // your code here
+   vector<int>diagonal;
+   queue<Node*>q;
+   q.push(root);
+   while(!q.empty())
+   {
+      Node* temp=q.front();
+      q.pop();
+      diagonal.push_back(temp->data);
+      if(temp->left)
+      {
+        q.push(temp->left);  
+      }
+      temp=temp->right;
+      while(temp)
+      {
+         diagonal.push_back(temp->data);
+         if(temp->left)
+         q.push(temp->left);
+         temp=temp->right;
+      }
+   }
+   return diagonal;
+}
+
+TC:O(n)
+SC:O(n)
+
+
+
+recursive approach is based on hashmap
+stroing the nodes at each level 
+
+
+void diag(Node* root,int d,map<int,vector<int> >&m)
+{
+    if(root==NULL)
+    return ;
+    m[d].push_back(root->data);
+     diag(root->left,d+1,m);
+      diag(root->right,d,m);
+}
+vector<int> diagonal(Node *root)
+{
+   // your code here
+   vector<int>v;
+   map<int,vector<int> >m;
+   diag(root,0,m);
+   for(auto i:m)
+   {
+     for(auto j:i.second)
+     v.push_back(j);
+   }
+   return v;
+}
+
+TC:O(nlogn)
+sc:O(n)
