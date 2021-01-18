@@ -1,0 +1,72 @@
+Given a sorted array. Convert it into a Height balanced Binary Search Tree (BST).
+Height balanced BST means a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+Example 1:
+
+Input: nums = {1,2,3,4,5,6,7}
+Ouput: {4,2,1,3,6,5,7}
+Explanation: The possible answer is:
+{4,2,1,3,6,5,7} which is the preorder
+traversal of theheight balanced BST:
+        4
+       / \
+      2   6
+     / \  / \
+    1   3 5  7
+Your Task:
+You don't need to read or print anything. Your task is to complete the function sortedArrayToBST() which takes nums as input paramater and returns the preorder traversal of height balanced BST.
+
+Expected Time Complexity: O(n)
+Expected Space Complexity: O(n)
+
+Constraints:
+1 ≤ |nums| ≤ 104
+-104 ≤ nums[i] ≤ 104
+
+
+
+
+recursive approach:
+
+
+
+make the middle element as root to make it always a balanced bst 
+
+and recur the same of left subtree and right subtree
+
+class Node{
+    public:
+    int data;
+    Node* left;
+    Node* right;
+    Node(int d)
+    {
+        data=d;
+    }
+};
+
+class Solution {
+public:
+     Node* buildTree(vector<int>&nums,int low,int high,vector<int>&res)
+     {
+         if(low>high)
+         return NULL;
+         int mid=low+(high-low)/2;
+         Node* root=new Node(nums[mid]);
+         res.push_back(nums[mid]);
+         root->left=buildTree(nums,low,mid-1,res);
+         root->right=buildTree(nums,mid+1,high,res);
+         return root;
+     }
+    vector<int> sortedArrayToBST(vector<int>& nums) {
+        // Code here
+        vector<int>res;
+        int n=nums.size();
+        Node* root=buildTree(nums,0,n-1,res);
+        return res;
+    }
+};
+
+TC:O(n)
+SC:O(n)
+
