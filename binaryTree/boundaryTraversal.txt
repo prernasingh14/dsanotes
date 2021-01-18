@@ -1,0 +1,119 @@
+Given a Binary Tree, find its Boundary Traversal. The traversal should be in the following order: 
+
+Left boundary nodes: defined as the path from the root to the left-most node ie- the leaf node you could reach when you always travel preferring the left subtree over the right subtree. 
+Leaf nodes: All the leaf nodes except for the ones that are part of left or right boundary.
+Reverse right boundary nodes: defined as the path from the right-most node to the root. The right-most node is the leaf node you could reach when you always travel preferring the right subtree over the left subtree. Exclude the root from this as it was already included in the traversal of left boundary nodes.
+Note: If the root doesn't have a left subtree or right subtree, then the root itself is the left or right boundary. 
+
+Example 1:
+
+Input:
+        1
+      /   \
+     2     3    
+   
+Output: 1 2 3
+Explanation:
+
+
+Example 2:
+
+Input:
+          20
+        /   \
+       8     22
+     /   \    \
+    4    12    25
+        /  \ 
+       10   14 
+
+Output: 20 8 4 10 14 25 22
+Explanation: 
+
+
+
+for better clarity try this test case :
+6 4 9 N 10 4 5 N 10 1 9 N 8 6 1 N 5 9 3 N 6 8 7 N 4 4
+
+output is :6 4 10 10 6 8 7 4 4 9 3 6 8 5 9 
+
+
+
+
+
+//print left view first 
+//then leaf nodes 
+//then right view
+
+void pleft(Node* root,vector<int>&result)
+{
+    if(root==NULL)
+    return ;
+    if(root->left)
+    {
+        result.push_back(root->data);
+        pleft(root->left,result);
+    }
+    else if(root->right)
+    {
+       result.push_back(root->data);
+       pleft(root->right,result);
+    }
+    
+}
+void pright(Node *root,vector<int> &right)
+{
+if(root==NULL)
+return ;
+if(root->right!=NULL)
+{
+right.push_back(root->data);
+pright(root->right,right);
+}
+else if(root->left!=NULL)
+{
+right.push_back(root->data);
+pright(root->left,right);
+
+}
+
+}
+Node* bottomMost(Node* root,vector<int>&result)
+{
+    if(root==NULL)
+    return NULL;
+    root->left=bottomMost(root->left,result);
+    root->right=bottomMost(root->right,result);
+     if(root->left==NULL && root->right==NULL)
+     {
+      result.push_back(root->data);
+      }
+return root;
+}
+vector <int> printBoundary(Node *root)
+{
+     //Your code here
+     //leftmost nodes first 
+     //then bottom most nodes
+     //then rightmost nodes
+     vector<int>result,right;
+     if(root==NULL)
+     return result;
+     result.push_back(root->data);
+     pleft(root->left,result);
+     bottomMost(root,result);
+     pright(root->right,right);
+     reverse(right.begin(),right.end());
+     for(int i=0;i<right.size();i++)
+     {
+         result.push_back(right[i]);
+     }
+     return result;
+     
+}
+
+
+
+
+TC:O(n)
+SC:O(n)
