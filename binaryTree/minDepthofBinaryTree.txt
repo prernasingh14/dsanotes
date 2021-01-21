@@ -1,0 +1,100 @@
+Given a binary tree, find its minimum depth.
+
+The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+
+Note: A leaf is a node with no children.
+
+ 
+
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: 2
+
+
+
+recursive approach:dfs 
+
+
+class Solution {
+public:
+    int minn=INT_MAX;
+    void  dfs(TreeNode* root,int count)
+    {
+        if(root==NULL)
+            return ;
+         if(root->left==NULL && root->right==NULL)
+         {
+             minn=min(minn,count);count=0;
+         }
+         dfs(root->left,count+1);
+        dfs(root->right,count+1);
+    }
+    int minDepth(TreeNode* root) {
+        int count=1;
+        if(root==NULL)
+            return 0;
+        dfs(root,count);
+        return minn;
+        
+    }
+};
+
+
+
+
+TC:O(n)
+SC:O(n)
+
+
+///////////////////////////////////////////////////
+
+
+
+
+
+
+iterative approach:
+
+
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        int count=1;int minDep=INT_MAX;
+        if(root==NULL)
+            return 0;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty())
+        {
+            int sz=q.size();
+            while(sz--)
+            {
+             TreeNode* t=q.front();
+                q.pop();
+                if(t->left==NULL && t->right==NULL)
+                {
+                    minDep=min(minDep,count);
+                }
+                if(t->left)
+                {
+                    q.push(t->left);
+                }
+                if(t->right)
+                {
+                    q.push(t->right);
+                }
+               
+            }
+            count++;//its basically storing the level of each node
+        }
+        return minDep;
+        
+        
+    }
+};
+
+TC:O(n) as we are traversing each node once 
+
