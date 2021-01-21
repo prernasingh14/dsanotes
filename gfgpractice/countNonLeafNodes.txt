@@ -1,0 +1,56 @@
+Given a Binary Tree of size N, your task is to complete the function countNonLeafNodes(), that should return the count of all the non-leaf nodes of the given binary tree.
+Example:
+
+Input : 
+Image
+Output :
+2
+
+
+void leaves(Node* root,int &c)
+{
+    if(root==NULL)
+    return ;
+    leaves(root->left,c);
+    leaves(root->right,c);
+    if(root->left==NULL && root->right==NULL)
+    c+=1;
+}
+int countNodes(Node* root)
+{
+    if(root==NULL)
+    return 0;
+    return 1+countNodes(root->left)+countNodes(root->right);
+}
+int countNonLeafNodes(Node* root)
+{
+    // Code here
+    int c=0;
+    leaves(root,c);
+    int total=countNodes(root);
+    return total-c;
+    
+}
+
+TC:O(n)
+sc:O(n)
+
+
+/////////////
+
+
+
+much simpler way:
+
+
+
+int countNonLeafNodes(Node* root)
+{
+    // Code here
+   if(root==NULL)
+   return 0;
+   if(root->left==NULL && root->right==NULL)
+   return 0;
+   return 1+countNonLeafNodes(root->left)+countNonLeafNodes(root->right);
+}
+
