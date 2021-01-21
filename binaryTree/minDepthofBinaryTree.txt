@@ -48,6 +48,29 @@ TC:O(n)
 SC:O(n)
 
 
+other way 
+
+
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (root == NULL) 
+            return 0;
+        if (root->left == NULL && root->right == NULL) // Reach to leaf node
+            return 1; 
+        if (root->left == NULL) 
+            return minDepth(root->right) + 1;
+        if (root->right == NULL) 
+            return minDepth(root->left) + 1;
+        return min(minDepth(root->left), minDepth(root->right)) + 1;
+    }
+};
+TC:O(n)
+SC:O(height)
+
+
+
+
 ///////////////////////////////////////////////////
 
 
@@ -76,7 +99,8 @@ public:
                 q.pop();
                 if(t->left==NULL && t->right==NULL)
                 {
-                    minDep=min(minDep,count);
+                    return count;//the first ever encountered leaf node will be the minDepth one
+                    
                 }
                 if(t->left)
                 {
@@ -90,11 +114,10 @@ public:
             }
             count++;//its basically storing the level of each node
         }
-        return minDep;
+        return -1;
         
         
     }
 };
-
 TC:O(n) as we are traversing each node once 
 
