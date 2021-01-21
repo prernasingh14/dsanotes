@@ -1,0 +1,139 @@
+Consider all the leaves of a binary tree, from left to right order, the values of those leaves form a leaf value sequence.
+
+
+
+For example, in the given tree above, the leaf value sequence is (6, 7, 4, 9, 8).
+
+Two binary trees are considered leaf-similar if their leaf value sequence is the same.
+
+Return true if and only if the two given trees with head nodes root1 and root2 are leaf-similar.
+
+ 
+
+Example 1:
+
+
+Input: root1 = [3,5,1,6,2,9,8,null,null,7,4], root2 = [3,5,1,6,7,4,2,null,null,null,null,null,null,9,8]
+Output: true
+Example 2:
+
+Input: root1 = [1], root2 = [1]
+Output: true
+Example 3:
+
+Input: root1 = [1], root2 = [2]
+Output: false
+Example 4:
+
+Input: root1 = [1,2], root2 = [2,2]
+Output: true
+Example 5:
+
+
+Input: root1 = [1,2,3], root2 = [1,3,2]
+Output: false
+
+
+class Solution {
+public:
+    //we need to find leaf nodes first 
+    void leaves(TreeNode* root,vector<int>&leaf)
+    {
+        if(root==NULL)
+            return;
+        leaves(root->left,leaf);
+        leaves(root->right,leaf);
+        if(root->left==NULL && root->right==NULL)
+            leaf.push_back(root->val);
+        
+    }
+    bool leafSimilar(TreeNode* root1, TreeNode* root2) {
+        if(root1==NULL || root2==NULL)
+            return false;
+        vector<int>leaf1,leaf2;
+        leaves(root1,leaf1);
+          leaves(root2,leaf2);
+        if(leaf1.size()!=leaf2.size())
+            return false;
+        for(int i=0;i<leaf1.size();i++)
+        {
+            if(leaf1[i]!=leaf2[i])
+                return false;
+        }
+        return true;
+    }
+};
+
+
+TC:O(m+n)
+SC:O(mm+nn)//where mm & nn is the number of leaf nodes
+
+
+
+iterative version: in order to reduce the space complexity -
+the idea is to traverse both the trees simultaneously and check at that instant only the leaf nodes
+ Traverse both trees simultaneously, look for a leaf node in both trees and compare the found leaves. All leaves must match.
+
+class Solution {
+public:
+    bool isLeaf(TreeNode* root)
+    {
+        if(root==NULL)
+            return false;
+        if(root->left==NULL && root->right==NULL)
+            return true;
+        return false;
+    }
+    bool leafSimilar(TreeNode* root1, TreeNode* root2) {
+        if(root1==NULL || root2==NULL)
+            return false;
+       stack<TreeNode*>st1;stack<TreeNode*>st2;
+        st1.push(root1);
+        st2.push(root2);
+        while(!st1.empty() || !st2.empty() )
+        {
+            if(st1.empty() || st2.empty())
+                return false;
+            TreeNode* temp1=NULL;
+            TreeNode* temp2=NULL;
+            while(!st1.empty())
+            {
+            
+             temp1 = st1.top();
+               st1.pop();
+                if(temp1->left == NULL && temp1->right==NULL)
+                    break;
+                 else
+                 {
+                  if(temp1->right)
+                      st1.push(temp1->right);
+                      if(temp1->left)
+                         st1.push(temp1->left);   
+                 }
+            }
+            while(!st2.empty())
+            {
+             temp2 = st2.top();
+               st2.pop();
+                if(temp2->left ==NULL &&  temp2->right==NULL)
+                    break;
+                 else
+                 {
+                  if(temp2->right)
+                      st2.push(temp2->right);
+                      if(temp2->left)
+                         st2.push(temp2->left);   
+                 }
+            }
+            if(temp1 && !temp2)
+                return false;
+            if(!temp1 && temp2)
+                return false;
+            if(temp1 && temp2 && temp1->val!=temp2->val)
+                return false;
+        }
+        return true;
+    }
+};
+
+sc:O(h1+h2)
