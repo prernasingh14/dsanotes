@@ -1,0 +1,78 @@
+Given a binary tree and two node values your task is to find the minimum distance between them.
+
+Example 1:
+
+Input:
+        1
+      /  \
+     2    3
+a = 2, b = 3
+Output: 2
+Explanation: The tree formed is:
+       1
+     /   \ 
+    2     3
+We need the distance between 2 and 3.
+Being at node 2, we need to take two
+steps ahead in order to reach node 3.
+The path followed will be:
+2 -> 1 -> 3. Hence, the result is 2. 
+
+
+
+Node* lca(Node* root,int a,int b,int count)
+   {
+       if(root==NULL)
+       return NULL;
+       if(root->data==a || root->data==b)
+       {
+           return root;
+       }
+       Node* lfound=lca(root->left,a,b,count);
+       Node* rfound=lca(root->right,a,b,count);
+       if(lfound && rfound)
+       return root;
+       else if(lfound)
+       return lfound;
+       else
+       return rfound;
+   }
+int distRootToNode(Node* root,int node)
+{
+    if(root==NULL)
+    return -1;
+    if(root->data==node)
+    {
+        return 0;
+    }
+    int ll=-1;int rl=-1;
+    ll=1+distRootToNode(root->left,node);
+     rl=1+distRootToNode(root->right,node);
+    if(ll>0)
+    return ll;
+    else if(rl>0)
+    return rl;
+    else
+    return -1;
+    
+}
+int findDist(Node* root, int a, int b) {
+    // Your code here
+    if(root==NULL)
+    return 0;
+    int count=0;
+    Node* p=lca(root,a,b,count);
+    //cout<<p->data;
+    //cout<<distRootToNode(p,a);
+    // cout<<distRootToNode(p,b);
+     int dista=distRootToNode(p,a);
+      int distb=distRootToNode(p,b);
+     count=count+dista+distb;
+    
+    return count;
+    
+
+
+    TC:O(n)
+    SC:O(h)
+    
