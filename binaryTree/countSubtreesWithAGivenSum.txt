@@ -43,7 +43,7 @@ int subtreeSum(Node* root,int &count,int X)
 {
     if(root==NULL)
     return 0;
-    int sum=root->data+subtreeSum(root->left,count,X)+subtreeSum(root->right,count,X);
+    int sum=root->data+subtreeSum(root->left,count,X)+subtreeSum(root->right,count,X);//calculate the subtree sum at each root 
     if(sum==X)
     count++;
     return sum;
