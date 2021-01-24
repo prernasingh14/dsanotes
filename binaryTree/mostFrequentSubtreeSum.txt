@@ -1,0 +1,63 @@
+Given the root of a tree, you are asked to find the most frequent subtree sum. The subtree sum of a node is defined as the sum of all the node values formed by the subtree rooted at that node (including the node itself). So what is the most frequent subtree sum value? If there is a tie, return all the values with the highest frequency in any order.
+
+Examples 1
+Input:
+
+  5
+ /  \
+2   -3
+return [2, -3, 4], since all the values happen only once, return all of them in any order.
+Examples 2
+Input:
+
+  5
+ /  \
+2   -5
+return [2], since 2 happens twice, however -5 only occur once.
+Note: You may assume the sum of values in any subtree is in the range of 32-bit signed integer.
+
+
+
+class Solution {
+public:
+    int subtreeSum(TreeNode* root,vector<int>&v)
+    {
+        if(root==NULL)
+            return 0;
+        int sum=root->val;
+        sum+=subtreeSum(root->left,v);//left subtree sum
+        sum+=subtreeSum(root->right,v);//right subtree sum
+        v.push_back(sum);
+        return sum;
+    }
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        vector<int>v;int sum=0;
+        if(root==NULL)
+            return v;
+        vector<int>freq;
+        subtreeSum(root,v);
+        unordered_map<int,int>m;int maxx=-1;
+        for(int i=0;i<v.size();i++)
+        {
+            m[v[i]]++;
+            cout<<v[i]<<" ";//sum of subtrees at each root
+        }
+        for(auto i:m)
+        {
+           maxx=max(maxx,i.second);
+        }
+        for(auto i:m)
+        {
+           if(i.second==maxx)
+           {
+               freq.push_back(i.first);
+           }
+        }
+        
+        return freq;
+    }
+};
+
+TC:O(n)
+SC:O(h)
+
