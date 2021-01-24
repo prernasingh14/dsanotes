@@ -61,3 +61,32 @@ int countSubtreesWithSumX(Node* root, int X)
 
 TC:O(n)
 sc:O(h)
+
+
+//////////
+
+another simpler to understand Solution
+
+class Tree
+{
+static int count = 0;
+static int find(Node root , int sum) {
+if(root == null) return 0;
+if(root.left == null && root.right == null) {
+if(root.data == sum) count++;
+return root.data;
+}
+int ls = find(root.left , sum);
+int rs = find(root.right , sum);
+if(ls + rs + root.data == sum) count++;
+return ls + rs + root.data;
+}
+int countSubtreesWithSumX(Node root, int X)
+{
+if(root == null) return 0;
+count = 0;
+find(root , X);
+return count;
+}
+}
+
