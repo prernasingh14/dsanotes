@@ -37,7 +37,7 @@ bool  pathFromRootToNode(Node* root,int node,vector<int>&path)
 {
     if(root==NULL)//means we reached the end and weren't able to find the node
     return false;
-    path.push_back(root->data);//put the currnet  node as it comes in the path from root to that node
+    path.push_back(root->data);//put the currentt  node as it comes in the path from root to that node
     if(root->data==node)
     {
         return true;
