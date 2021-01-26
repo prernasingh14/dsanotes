@@ -48,5 +48,36 @@ TC:O(nlogn)
 sc:O(1)
 
 
-method 2: using hashmap
+method 2: using hashset 
 
+int findLongestConseqSubseq(int arr[], int n)
+{
+  //Your code here
+  unordered_set<int>s;
+  for(int i=0;i<n;i++)
+  {
+     s.insert(arr[i]); 
+  }
+  int maxlength=0;
+  for(int i=0;i<n;i++)
+  {
+      //Check if this element is the starting point of a subsequence.
+      //To check this, simply look for arr[i] – 1 in the hash,
+      //if not found, then this is the first element a subsequence.
+      if(s.find(arr[i]-1)==s.end())
+      {
+        int j=arr[i];//start the sequence with it 
+        while(s.find(j)!=s.end())
+        {
+          j++;//find its next consecutive integers 
+        }
+        maxlength=max(maxlength,j-arr[i]);
+      }
+  }
+  return maxlength;
+  
+}
+
+
+TC:O(n)
+sc:O(n)
