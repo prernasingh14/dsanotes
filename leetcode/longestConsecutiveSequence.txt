@@ -1,0 +1,77 @@
+Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+
+ 
+
+Example 1:
+
+Input: nums = [100,4,200,1,3,2]
+Output: 4
+Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+Example 2:
+
+Input: nums = [0,3,7,2,5,8,4,6,0,1]
+Output: 9
+
+
+basic approach is to sort the vector and find the consecutive sequences length 
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        sort(nums.begin(),nums.end());
+        int c=1;//starting from the first element into account 
+        int maxlength=0;
+        for(int i=0;i<nums.size()-1;i++)
+        {
+            if(nums[i+1]-nums[i]<=1)
+            {
+                if(nums[i+1]!=nums[i])
+                    c++;
+            }
+            else
+            {
+                maxlength=max(maxlength,c);
+                c=1;
+            }
+        }
+         maxlength=max(maxlength,c);
+        return maxlength;
+    }
+};
+
+
+TC:O(nlogn)
+SC:O(1)
+
+
+
+///////////////////
+
+optimised solution :O(n)
+
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        unordered_set<int>s;
+        int maxlength=0;
+        for(int i=0;i<nums.size();i++)
+        {
+        s.insert(nums[i]);
+        }
+        for(int i=0;i<nums.size();i++)
+        {
+            if(s.find(nums[i]-1)==s.end())//means that is the starting point of the sequence 
+            {
+                int j=nums[i];
+                while(s.find(j)!=s.end())//as long as consecutive integers are there 
+                    j++;
+                maxlength=max(maxlength,j-nums[i]);
+            }
+        }
+        return maxlength;
+    }
+};
+TC:O(n)
