@@ -1,0 +1,52 @@
+Given an array of positive integers. Find the length of the longest sub-sequence such that elements in the subsequence are consecutive integers, the consecutive numbers can be in any order.
+ 
+
+Example 1:
+
+Input:
+N = 7
+a[] = {2,6,1,9,4,5,3}
+Output:
+6
+Explanation:
+The consecutive numbers here
+are 1, 2, 3, 4, 5, 6. These 6 
+numbers form the longest consecutive
+subsquence.
+
+
+
+
+brute force:
+just sort the array & then find the maximum length of sequences having consecutive integers
+int findLongestConseqSubseq(int arr[], int n)
+{
+  //Your code here
+  sort(arr,arr+n);//as they can be of any order
+  int c=1;int maxlength=0;
+  for(int i=0;i<n-1;i++)
+  {
+   if(arr[i+1]-arr[i]<=1)
+   {
+       //cout<<arr[i]<<" ";
+       if(arr[i+1]!=arr[i])//because those integers shouldn't be same eg : 1 1 2 3 isn't valid but 1 2 3 is valid 
+       c++;
+   }
+   else
+   {
+       maxlength=max(maxlength,c);
+       c=1;
+   }
+  }
+   maxlength=max(maxlength,c);
+  return maxlength;
+  
+}
+
+
+TC:O(nlogn)
+sc:O(1)
+
+
+method 2: using hashmap
+
