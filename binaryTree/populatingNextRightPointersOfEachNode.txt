@@ -1,0 +1,121 @@
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL.
+
+ 
+
+Follow up:
+
+You may only use constant extra space.
+Recursive approach is fine, you may assume implicit stack space does not count as extra space for this problem.
+ 
+
+Example 1:
+
+
+
+Input: root = [1,2,3,4,5,6,7]
+Output: [1,#,2,3,#,4,5,6,7,#]
+Explanation: Given the above perfect binary tree (Figure A), your function should populate each next pointer to point to its next right node, just like in Figure B. The serialized output is in level order as connected by the next pointers, with '#' signifying the end of each level.
+ 
+
+Constraints:
+
+The number of nodes in the given tree is less than 4096.
+-1000 <= node.val <= 1000
+
+
+
+
+the first approach which i would  come up with is doing level order traversal of the tree
+
+and then on each level make a horizontal chain pass :
+first node is prev and the second node gets as : prev->next=node and then second node becomes our prev and so on for every node continuing the chain 
+
+
+
+class Solution {
+public:
+    Node* connect(Node* root) {
+        if(root==NULL)
+            return NULL;
+       //i think we could do a level order traversal & the last node of every level doesn't have any next right pointer 
+        queue<Node*>q;
+        q.push(root);Node* prev=NULL;
+        while(!q.empty())
+        {
+            int sz=q.size();int firstSize=0;
+            while(sz--)
+            {
+               Node* t=q.front();
+               q.pop();
+                if(firstSize==0)// start from the first node of every level 
+                {
+                    prev=t;
+                }
+                else
+                {
+                    prev->next=t;//then set the next node as next of the first node of that level 
+                    prev=t;//then pass on the chain
+                }
+                if(t->left)
+                {
+                   q.push(t->left); 
+                }
+                if(t->right)
+                {
+                    q.push(t->right);
+                }
+                firstSize++;
+        }
+    }
+        return root;
+    }
+};
+
+
+TC:O(n)
+SC:O(n)
+
+
+
+
+///////////////////////////////
+
+
+
+but the question is to do it in constant space :
+
+class Solution {
+public:
+    void populate(Node* root){//try visualizing the tree then its easier to understand 
+          if(root == NULL)
+        return;
+        
+    if(root->left != NULL) //not a leaf node
+        root->left->next = root->right;//actually the parents right child is the next right of it  eg: 2->3 with parent as 1
+    if(root->right != NULL && root->next != NULL)//root->next!=NULL means that not the last node of the level 
+        root->right->next = root->next->left;
+    populate(root->left);
+    populate(root->right);
+    }
+    Node* connect(Node* root) {
+        if(root==NULL)
+            return NULL;
+        populate(root);
+        return root;
+      
+    }
+};
+
+
+TC:O(n)
+space is used by implicit stack 
