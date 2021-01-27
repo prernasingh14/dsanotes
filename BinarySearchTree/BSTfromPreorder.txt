@@ -1,7 +1,55 @@
 Return the root node of a binary search tree that matches the given preorder traversal.
 Input: [8,5,1,7,10,12]
 Output: [8,5,10,1,7,null,12]
-Method 1:Iterative solution based on basic BST property TC:O(n*h) where h is the height of the tree
+
+
+basic approach:
+
+The first element of preorder traversal is always root.
+ We first construct the root.
+  Then we find the index of first element which is greater than root. 
+  Let the index be ‘ind’. 
+  The values between root and ‘ind’ will be part of left subtree, and the values between ‘ind+1’ and ‘n-1’ will be part of right subtree.
+   Divide given pre[] at index “ind” and recur for left and right sub-trees. 
+
+class Solution {
+public:
+    TreeNode*  bstConstruct(vector<int>preorder,int start,int end)
+    {
+        if( start>end)
+            return NULL;
+        TreeNode* root=new TreeNode(preorder[start]);
+         if(start==end)
+            return root;
+        int ind;
+        for(int i=start+1;i<=end;i++)
+        {
+            if(preorder[i]>root->val)
+            {
+                ind=i;
+                break;
+            }
+        }
+        root->left=bstConstruct(preorder,start+1,ind-1);
+        root->right= bstConstruct(preorder,ind,end);
+        return root;     
+    }
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+    //the first node in preorder is always the root
+       
+        //the first value greater than the root will be its right child
+        int start=0;int end=preorder.size()-1;
+       return bstConstruct(preorder,start,end);
+    }
+};
+
+TC:O(n*n)
+
+
+
+
+
+Method :Iterative solution based on basic BST property TC:O(n*h) where h is the height of the tree
 class Solution {
 public:
      TreeNode* bstFromPreorder(vector<int>& preorder) {
