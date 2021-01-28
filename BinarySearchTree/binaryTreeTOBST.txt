@@ -1,0 +1,80 @@
+Given a Binary Tree, convert it to Binary Search Tree in such a way that keeps the original structure of Binary Tree intact.
+ 
+
+Example 1:
+
+Input:
+      1
+    /   \
+   2     3
+Output: 1 2 3
+
+Example 2:
+
+Input:
+          1
+       /    \
+     2       3
+   /        
+ 4       
+Output: 1 2 3 4
+Explanation:
+The converted BST will be
+
+        3
+      /   \
+    2     4
+  /
+ 1
+ 
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function binaryTreeToBST() which takes the root of the Binary tree as input and returns the root of the BST. The driver code will print inorder traversal of the converted BST.
+
+
+Expected Time Complexity: O(NLogN).
+Expected Auxiliary Space: O(N).
+
+
+Constraints:
+1 <= Number of nodes <= 1000
+
+
+void inorder(Node* root,vector<int>&temp)
+{
+    if(root==NULL)
+    return ;
+    inorder(root->left,temp);
+    temp.push_back(root->data);
+    inorder(root->right,temp);
+}
+void buildInorder(Node* root,vector<int>temp,int &start)
+{
+    if(root==NULL)
+    return ;
+    buildInorder(root->left,temp,start);
+    root->data=temp[start++];
+    buildInorder(root->right,temp,start);
+    
+    
+}
+Node *binaryTreeToBST (Node *root)
+{
+    //Your code goes here
+    vector<int>temp;
+    inorder(root,temp);
+    sort(temp.begin(),temp.end());
+    int n=temp.size();int start=0;
+     buildInorder(root,temp,start);
+     return root;
+    
+}
+
+TC:O(nlogn)
+
+
+
+
+instead of vector we can use set too that will give us values in sorted order so we need not sort.
+
+
