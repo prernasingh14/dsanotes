@@ -41,7 +41,7 @@ public:
         return 0;
     }
 };
-TC:O(height) as nodes get popped out once we reach from root to leaf 
+TC:O(height+k) as nodes get popped out once we reach from root to leaf 
 
 
 SC:O(height) as height can be proportional to number of nodes in the tree in case of skewed tree 
@@ -73,4 +73,7 @@ public:
     }
 };
 
-TC:O(nodes)
+TC:O(h+k)
+The code first traverses down to the leftmost node which takes O(h) time, 
+then traverses k elements in O(k) time. 
+Therefore overall time complexity is O(h + k).
