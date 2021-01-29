@@ -12,28 +12,65 @@ Input: root = [3,1,4,null,2], k = 1
    2
 Output: 1
 
+
+
 class Solution {
 public:
     //we perform inorder traversal as in inorder traversal we get increasing order of bst therefore we can easily find the position of the k'th element
+    class Solution {
+public:
     int kthSmallest(TreeNode* root, int k) {
         if(root==NULL)
             return 0;
-        stack<TreeNode*>st;int index=0;
-        while(root!=NULL || !st.empty())
+        stack<TreeNode*>st;
+        while(root!=NULL || !st.empty() )
         {
-           while(root!=NULL)
-           {
-               st.push(root);
-               root=root->left;
-           }
-            root=st.top();st.pop();
-            index++;
-            if(index==k)
-            {return root->val;
+            while(root!=NULL)
+            {
+                  st.push(root);
+                root=root->left;
             }
+            root=st.top();
+             st.pop();
+             k--;
+            if(k==0)
+                return root->val;
             root=root->right;
             
         }
         return 0;
     }
-}; TC:O(height)
+};
+TC:O(height) as nodes get popped out once we reach from root to leaf 
+
+
+SC:O(height) as height can be proportional to number of nodes in the tree in case of skewed tree 
+
+
+///
+recursive approach : based on inorder traversal
+
+class Solution {
+public:
+    int found=0;
+    void  inorder(TreeNode* root,int &k)
+    {
+        if(root==NULL)
+            return ;
+        inorder(root->left,k);
+        k--;
+            if(k==0)
+            {
+                found=root->val;
+                return ;
+            }
+       inorder(root->right,k);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        int count=0;
+         inorder(root,k);
+        return found;
+    }
+};
+
+TC:O(nodes)
