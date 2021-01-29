@@ -1,0 +1,28 @@
+//just do reverse inorder traversal
+TC:O(h+k)
+SC:O(h)
+
+
+
+void inorder(Node* root,int &found,int &K)
+{
+  if(root==NULL || K<=0)
+  return ;
+  inorder(root->right,found,K);
+  K--;
+  if(K==0)
+  {
+      found=root->data;
+      return ;
+  }
+  inorder(root->left,found,K);
+}
+int kthLargest(Node *root, int K)
+{
+    //Your code here
+    if(root==NULL || K==0)
+    return -1;
+    int found=-1;
+    inorder(root,found,K);
+    return found;
+}
