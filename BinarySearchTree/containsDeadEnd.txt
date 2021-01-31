@@ -1,0 +1,70 @@
+void inorder(Node* root,vector<pair<int,int> >&v)
+{
+    if(root==NULL)
+    return;
+    inorder(root->left,v);
+    if(root->left==NULL && root->right==NULL)
+    v.push_back({root->data,1});//leaf node
+    else
+    v.push_back({root->data,0});//not a leaf node
+    inorder(root->right,v);
+    
+}
+bool isDeadEnd(Node *root)
+{
+    //Your code here
+    //basically we need to check whether any leaf node contains x-1 and x+1 already in the BST or not 
+    //except for 1 as 0 can't be there so we'll check only whether 2 is there or not 
+    vector<pair<int,int> >v;
+    inorder(root,v);
+    for(int i=0;i<v.size()-1;i++)
+    {
+        if(v[i].second==1)//means a leaf node
+        {
+           if(v[i].first==1 && v[i+1].first==2) 
+           return true;
+           else if(v[i+1].first==v[i].first+1 && v[i-1].first==v[i].first-1)
+           return true;
+        }
+    }
+    return false;
+}
+
+
+TC:O(n)
+SC:O(n)
+
+
+///////////////////////////////////////////////////////////
+
+
+
+
+
+
+better without using any extra space 
+
+
+
+bool dfs(Node* root,int minn,int maxx)
+{
+    if(root==NULL)
+    return false;
+    if(minn==maxx || maxx==1)//if any nodes minimum & maximum value that it can have is same then that means its a dead end 
+    return true;
+    return dfs(root->left,minn,root->data-1) || dfs(root->right,root->data+1,maxx);
+    
+}
+bool isDeadEnd(Node *root)
+{
+    //Your code here
+    //basically we need to check whether any leaf node contains x-1 and x+1 already in the BST or not 
+    //except for 1 as 0 can't be there so we'll check only whether 2 is there or not 
+   
+    int minn=INT_MIN;int maxx=INT_MAX;
+    return dfs(root,minn,maxx);
+    
+}
+
+TC:O(n)
+sc:O(1)
