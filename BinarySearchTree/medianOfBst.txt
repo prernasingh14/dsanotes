@@ -1,0 +1,67 @@
+Given a Binary Search Tree of size N, find the Median of its Node values.
+
+Example 1:
+
+Input:
+       6
+     /   \
+   3      8   
+ /  \    /  \
+1    4  7    9
+Output: 6
+Explanation: Inorder of Given BST will be:
+1, 3, 4, 6, 7, 8, 9. So, here median will 6.
+
+Example 2:
+
+Input:
+       6
+     /   \
+   3      8   
+ /   \    /   
+1    4   7   
+Output: 5
+Explanation:Inorder of Given BST will be:
+1, 3, 4, 6, 7, 8. So, here median will
+(4 + 6)/2 = 10/2 = 5.
+
+brute force approach: is to just do inorder traversal & store the values in ascending order and then find median
+
+void inorder(Node* root,vector<int>&ans)
+{
+    if(root==NULL)
+    return ;
+    inorder(root->left,ans);
+    ans.push_back(root->data);
+ inorder(root->right,ans);
+}
+float findMedian(struct Node *root)
+{
+    vector<int>ans;
+    float flo=0.0;
+    if(root==NULL)
+    return flo;
+      inorder(root,ans);
+      int n=ans.size();
+      if(n%2==1)//even
+      flo=ans[n/2];
+      else
+      {
+          flo=(ans[n/2]+ans[n/2-1])/2.0;
+      }
+      return flo;
+}
+
+TC:O(n)
+sc:O(n)
+
+///////////////////////////////////////////////////////////////
+
+
+
+
+but we need to find a way to do in O(1) space
+
+
+
+it is very trivial
