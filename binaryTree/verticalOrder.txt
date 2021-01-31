@@ -1,45 +1,93 @@
+987. Vertical Order Traversal of a Binary Tree
 
-       1(0)
-    /    \
-   2(-1)     3(1)
- /   \      \
-4(-2)  5(0)   6(2)
-Output: 4 2 1 5 3 6
+Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
 
-//what we have to do in here is just bfs of the tree using queue 
-and maintain a hashmap to store the nodes having the different distances
+For each node at position (row, col), its left and right children will be at positions (row + 1, col - 1) and (row + 1, col + 1) respectively. The root of the tree is at (0, 0).
 
+The vertical order traversal of a binary tree is a list of top-to-bottom orderings for each column index starting from the leftmost column and ending on the rightmost column. There may be multiple nodes in the same row and same column. In such a case, sort these nodes by their values.
+
+Return the vertical order traversal of the binary tree.
+
+ 
+
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: [[9],[3,15],[20],[7]]
+Explanation:
+Column -1: Only node 9 is in this column.
+Column 0: Nodes 3 and 15 are in this column in that order from top to bottom.
+Column 1: Only node 20 is in this column.
+Column 2: Only node 7 is in this column.
+Example 2:
+
+
+Input: root = [1,2,3,4,5,6,7]
+Output: [[4],[2],[1,5,6],[3],[7]]
+Explanation:
+Column -2: Only node 4 is in this column.
+Column -1: Only node 2 is in this column.
+Column 0: Nodes 1, 5, and 6 are in this column.
+          1 is at the top, so it comes first.
+          5 and 6 are at the same position (2, 0), so we order them by their value, 5 before 6.
+Column 1: Only node 3 is in this column.
+Column 2: Only node 7 is in this column.
+Example 3:
+
+
+Input: root = [1,2,3,4,6,5,7]
+Output: [[4],[2],[1,5,6],[3],[7]]
+Explanation:
+This case is the exact same as example 2, but with nodes 5 and 6 swapped.
+Note that the solution remains the same since 5 and 6 are in the same location and should be ordered by their values.
+
+
+Output: 
 values stored in the map as are follows
-             -2:4
-             -1:2
-              0:1,5,6
-              1:3
-              2:6
-vector<int> verticalOrder(Node *root)
-{
-    //Your code here
-    vector<int>nodes;
-    if(root==NULL)
-    return nodes;
-    queue<pair<Node*,int> >q;
-    q.push({root,0});
-    map<int,vector<int> >m;   //vector to push in the nodes having same horizontal distances
-    while(!q.empty())
+         class Solution {
+public:
+    //do level order traversal and allocate values to the right & left child as (root's value-1 ) & (root's value+1) respectively 
+    static bool compare(pair<int,int>&a,pair<int,int>&b)
     {
-       pair<Node*,int>p=q.front();
-       q.pop();
-       Node* temp=p.first;
-       int hd=p.second;
-       if(temp->left)
-       q.push({temp->left,hd-1});
-       if(temp->right)
-       q.push({temp->right,hd+1});
-       m[hd].push_back(temp->data);
+        if(a.second==b.second)//as in case of same depth we need to sort them in ascending order 
+            return a.first<b.first;
+        return a.second>b.second;//else in decresaing order of depth 
     }
-    for(auto i:m)
+    void levelorder(TreeNode* root,int x,int y,map<int,vector<pair<int,int> >>&m)
     {
-        for(auto j:i.second)
-       nodes.push_back(j);
+        if(root==NULL)
+            return ;
+        m[x].push_back({root->val,y});
+        levelorder(root->left,x-1,y-1,m);
+        levelorder(root->right,x+1,y-1,m);
     }
-    
-}
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        map<int,vector<pair<int,int> >>m;
+        vector<vector<int> >v;
+        if(root==NULL)
+            return v;
+        int x=0;int y=0;//y for depth & x for level
+        levelorder(root,x,y,m);
+        vector<int>temp;
+        for(auto i:m)
+        {
+          if(i.second.size()>1)
+          {
+              sort(i.second.begin(),i.second.end(),compare);
+          }
+            for(auto j:i.second)
+            {
+            temp.push_back(j.first);
+            }
+            v.push_back(temp);
+            temp.clear();
+        }
+        return v;
+        
+    }
+};
+
+
+
+
