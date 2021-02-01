@@ -1,0 +1,45 @@
+Given a stack with push(), pop(), empty() operations, delete the middle of the stack without using any additional data structure.
+Middle: ceil(size_of_stack/2.0) 
+ 
+
+Example 1:
+
+Input: 
+Stack = {1, 2, 3, 4, 5}
+Output:
+ModifiedStack = {1, 2, 4, 5}
+Explanation:
+As the number of elements is 5 , 
+hence the middle element will be the 3rd
+element which is deleted
+
+
+
+brute force which I would think of is to use an extra space to store the elements till we reach the middle point & then delete the middle & push those elements stored in the vector 
+back in the stack
+
+
+
+class Solution {
+public:
+    void deleteMid(stack<int>&st, int sizeOfStack)
+    {
+        // code here 
+    vector<int>v;int n=sizeOfStack/2;
+    while(n>=0)
+    {
+        v.push_back(st.top());
+        st.pop();
+        n--;
+        
+    }
+   for(int i=v.size()-2;i>=0;i--)
+   {
+       st.push(v[i]);
+   }
+    }
+};
+
+
+TC:O(n)
+sc:O(n)
