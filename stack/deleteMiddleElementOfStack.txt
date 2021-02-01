@@ -43,3 +43,32 @@ public:
 
 TC:O(n)
 sc:O(n)
+
+
+/////////////////////////////////////////
+
+
+
+
+class Solution {
+public:
+stack<int>  deletion(stack<int>&s,int size,int current)
+{
+    if(current==size/2 )
+    {
+        s.pop();//delete the middle element without storing 
+        return s;
+    }
+    int x=s.top();
+    s.pop();
+      s=deletion(s,size,current+1);
+    s.push(x);
+    return s;
+}
+    void deleteMid(stack<int>&st, int sizeOfStack)
+    {
+        // code here 
+        deletion(st,sizeOfStack,0);
+   
+    }
+};
