@@ -1,0 +1,74 @@
+You are given an integer array nums and you have to return a new counts array. The counts array has the property where counts[i] is the number of smaller elements to the right of nums[i].
+
+ 
+
+Example 1:
+
+Input: nums = [5,2,6,1]
+Output: [2,1,1,0]
+Explanation:
+To the right of 5 there are 2 smaller elements (2 and 1).
+To the right of 2 there is only 1 smaller element (1).
+To the right of 6 there is 1 smaller element (1).
+To the right of 1 there is 0 smaller element.
+Example 2:
+
+Input: nums = [-1]
+Output: [0]
+Example 3:
+
+Input: nums = [-1,-1]
+Output: [0,0]
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+-104 <= nums[i] <= 104
+
+
+
+
+brute force approach is to : use two loops and for each 'i' check whether elements on its right are smaller if smaller increase the count 
+
+
+
+class Solution {
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        int c=0;int n=nums.size();
+        vector<int>v;
+        if(n==0)
+            return v;
+        for(int i=0;i<n-1;i++)
+        {
+            c=0;
+            for(int j=i+1;j<n;j++)
+            {
+                if(nums[i]>nums[j])
+                {
+                    c++;
+                }
+                    
+            }
+            v.push_back(c);
+        }
+        v.push_back(0);
+        return v;
+    }
+};
+
+
+TC:O(n*n) thus will cause TLE for higher values of n 
+
+
+
+optimized approach:   
+we can use merge sort technique to count inversions 
+
+
+we use merge sort to sort the array in a given order but the steps used in that can very much help us in finding inversions 
+
+
+
+
