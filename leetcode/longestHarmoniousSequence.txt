@@ -1,0 +1,83 @@
+We define a harmonious array as an array where the difference between its maximum value and its minimum value is exactly 1.
+
+Given an integer array nums, return the length of its longest harmonious subsequence among all its possible subsequences.
+
+A subsequence of array is a sequence that can be derived from the array by deleting some or no elements without changing the order of the remaining elements.
+
+ 
+
+Example 1:
+
+Input: nums = [1,3,2,2,5,2,3,7]
+Output: 5
+Explanation: The longest harmonious subsequence is [3,2,2,2,3].
+Example 2:
+
+Input: nums = [1,2,3,4]
+Output: 2
+Example 3:
+
+Input: nums = [1,1,1,1]
+Output: 0
+
+
+the brite force solution which I can think of is :
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        int n=nums.size();int maxlength=0;int length=0;
+       //the difference between the maximum & minimum number of that sequence is exactly 1
+          sort(nums.begin(),nums.end());
+          for(int i=0;i<n;i++)
+             {
+             int j=i;length=0;
+              while(j<n && (nums[j]==nums[i] || nums[j]==nums[i]+1))
+              {
+                  length++;j++;
+              }
+              if(nums[j-1]!=nums[i])i.e if the number isn't equal to itself eg in the case of [1,1,1,1] & has different min & max values 
+               maxlength=max(maxlength,length); 
+              
+          }
+        return maxlength;
+    
+    }
+};
+
+
+
+TC:O(nlogn)
+sc:O(n)
+
+
+
+class Solution {
+public:
+    int findLHS(vector<int>& nums) {
+        unordered_map<int,int>m;int maxlength=0;int length=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            m[nums[i]]++;//count the occurences of each number 
+        }
+        for(int i=0;i<nums.size();i++)
+        {
+            length=0;
+            if(m.find(nums[i]-1)!=m.end())//if there exists a smaller number to it i.e consecutive to it 
+            {
+                length=m[nums[i]]+m[nums[i]-1];//as sequence would be comprising of itself & its smaller number eg [6,6,6,7,7]
+            }
+            maxlength=max(maxlength,length);//find maxlength of every sequence 
+            
+            
+        }
+        return maxlength;
+    }
+};
+
+TC:O(n)
+sc:O(n)
+
+
+
+
+
