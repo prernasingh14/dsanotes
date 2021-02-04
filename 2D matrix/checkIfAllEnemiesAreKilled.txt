@@ -1,0 +1,88 @@
+
+Given a Character matrix as input, the task is to check whether all the enemies are killed or not based on below conditions: 
+
+1. The matrix can contain 3 characters 
+X –> Denotes the War area. 
+B –> Denotes the bomb. 
+E –> Denotes the Enemies.
+2. Bomb ‘B’ can blast in only horizontal and vertical directions from one end to another. 
+3. If all enemies are killed by the present bombs, print Yes, else print No 
+ 
+
+Examples:  
+
+Input: matrix =
+XXEX
+XBXX
+XEXX
+XXBX 
+Output: Yes
+
+Input: matrix =
+XXEX
+XBXX
+XEXX
+XXXX
+Output: No
+
+
+
+#include<bits/stdc++.h>
+using namespace std;
+int kill_Enemy(string s[],int row,int col)
+{
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(s[i][j]=='B')
+            {
+                //then make all E in i row & col j as XXEX
+                for(int k=0;k<col;k++) // Kill all enemies
+                // in horizontal direction
+                {
+                    s[i][k]='X';
+                }
+                for(int k=0;k<row;k++) // Kill all enemies
+                // in vertical direction
+                {
+                    s[k][j]='X';
+                }
+            }
+        }
+    }
+    for(int i=0;i<row;i++)
+    {
+        for(int j=0;j<col;j++)
+        {
+            if(s[i][j]=='E')
+            return 0;
+        }
+    }
+    return 1;
+}
+int main()
+{
+    // Get the input matrix
+    string s[] = { "XXEX",
+                   "XBXX",
+                   "XEXX",
+                   "XXBX" };
+ 
+    // Calculate Rows and columns of the string
+    int row = sizeof(s) / sizeof(s[0]),
+        col = s[0].length();
+ 
+    // Check if all enemies will be killed or not
+    if (kill_Enemy(s, row, col) == 1)
+        cout << "Yes";
+    else
+        cout << "No";
+ 
+    return 0;
+}
+
+
+TC:O(n*m)
+SC:O(1) as no extra space required
+
