@@ -73,3 +73,64 @@ but this approach gives us TLE for higher values of number of people
 Better approach :
 
 
+All you need to understand is that, The heaviest person only has the possibility to pair with the lightest one. After that it all makes sense.
+Just initialise 2 pointers, and only move the left pointer forward if the heavier person can go with the lighter. i.e. people[r] + people[l] <= limit
+
+
+
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        
+        int boats=0;
+        int n=people.size();
+        sort(people.begin(),people.end());
+        int i=0;int j=n-1;
+        while(i<=j)
+        {
+            if(i==j)//only a single person is left 
+            {
+                boats++;i++;
+            }
+            else if(people[i]+people[j]<=limit)//then these two people can go on the same boat 
+            {
+                j--;
+                i++;
+                boats++;
+            }
+            else if(people[i]+people[j]>limit)//else that heavier person definitely needs to go on a separate boat as no other person would be able to accomodate him
+            {
+                j--;boats++;
+            }
+        }
+       return boats;
+    }
+};
+
+
+TC:O(nlogn)
+SC:O(1)
+
+though it can be written more clearly by 
+
+
+class Solution {
+public:
+    int numRescueBoats(vector<int>& people, int limit) {
+        int boats=0;
+        int n=people.size();
+        sort(people.begin(),people.end());
+        int i=0;int j=n-1;
+        while(i<=j)
+        {
+            if(people[i]+people[j]<=limit)//then these two people can go on the same boat 
+            {
+                i++;//take on new person 
+              
+            }
+           boats++;
+            j--;
+        }
+       return boats;
+    }
+};
