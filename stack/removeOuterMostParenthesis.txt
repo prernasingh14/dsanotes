@@ -1,0 +1,49 @@
+1021. Remove Outermost Parentheses
+
+
+Example 1:
+
+Input: "(()())(())"
+Output: "()()()"
+Explanation: 
+The input string is "(()())(())", with primitive decomposition "(()())" + "(())".
+After removing outer parentheses of each part, this is "()()" + "()" = "()()()".
+Example 2:
+
+Input: "(()())(())(()(()))"
+Output: "()()()()(())"
+Explanation: 
+The input string is "(()())(())(()(()))", with primitive decomposition "(()())" + "(())" + "(()(()))".
+After removing outer parentheses of each part, this is "()()" + "()" + "()(())" = "()()()()(())".
+
+
+class Solution {
+public:
+    string removeOuterParentheses(string str) {
+        stack<char>st;string res="";
+        for(int i=0;i<str.size();i++)
+        {
+            if(str[i]=='(')
+            {
+                st.push(str[i]);
+                if(st.size()!=1)//we won't include the outermost ( bracket
+                    res+='(';   
+            }
+            else if(str[i]==')')
+            {
+                if(!st.empty())
+                {
+                    st.pop();
+                }
+                if(!st.empty())  //we won't include the outermost ) bracket 
+                    res+=')';   
+            }
+        }
+        return res;
+    }
+};
+
+
+TC:O(n)
+sC:O(n)
+
