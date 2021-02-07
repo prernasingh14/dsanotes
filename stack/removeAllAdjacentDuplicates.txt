@@ -40,3 +40,22 @@ public:
 
 TC:O(n)
 SC:O(n)
+
+
+
+can be done without using stack too in   O(1) space 
+
+
+string res="";int k=0;
+        for(int i=0;i<str.size();i++)
+        {
+            if(res=="" || res[k-1]!=str[i])
+            {
+                res+=str[i];k++;
+            }
+            else
+            {res.pop_back();k--;//if adjacent duplicate then pop the occurence out 
+            }
+        }
+        return res;
+        
