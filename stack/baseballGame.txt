@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+	stack<int> st;
+	int ans = 0;
+	for(string &s: ops){
+		if(s == "C"){
+			ans -= st.top();
+			st.pop();
+		}else if(s == "D"){
+			ans += 2 * st.top();
+			st.push(2*st.top());
+		}else if(s == "+"){
+			int x = st.top();st.pop();
+			int y = st.top();
+			st.push(x);
+			st.push(x+y);
+			ans += x+y;
+		}else{
+			int x = stoi(s);//to convert string into integer
+			st.push(x);
+			ans += x;
+		}
+	}
+	return ans;
+}
+};
+
+TC:O(n)
+SC:O(n)
