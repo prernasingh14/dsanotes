@@ -90,6 +90,7 @@ vector <long long> nextLargerElement(long long arr[], int n){
 
 
 TC:O(n)
-SC:O(n)
+SC:O(1) as we didn't take any extra space 
+
 
 
