@@ -21,14 +21,16 @@ class Solution {
     public:
     int celebrity(vector<vector<int> >& M, int n) {
         // code here 
-         int people[n]={0};
+         int peoplein[n]={0};
+          int peopleout[n]={0};
          for(int i=0;i<M.size();i++)
          {
              for(int j=0;j<M[i].size();j++)
              {
                  if(M[i][j]==1)
                  {
-                     people[j]++;
+                     peoplein[j]++;
+                     peopleout[i]++;
                  }
              }
          }
@@ -36,7 +38,7 @@ class Solution {
          for(int i=0;i<n;i++)
          {
              
-             if(people[i]==n-1)//if everyone knows i (as n people thus for i to be celebrity its value should be equal to n-1)
+             if(peoplein[i]==n-1 && peopleout[i]==0)//if everyone knows i (as n people thus for i to be celebrity its value should be equal to n-1)
              celebrity=i;
          }
          return celebrity;
@@ -44,7 +46,60 @@ class Solution {
 };
 
 
+
+
+
 TC:O(n*n)
 SC:O(n)
 
 
+Method 2: two point approach 
+
+
+
+see there are n people out there 
+n=4;
+   M={ {0, 0, 1, 0},
+           {0, 0, 1, 0},
+           {0, 0, 0, 0},
+           {0, 0, 1, 0} }
+0 1 2 3   (start from beginning 0 & the second pointer at the last person)
+0 knows 3 then 0 can't be celebrity as celebrity shouln't know anyone thus move forward i.e a++
+if 3 knows 0 then 3 can't be celebrity (b--)
+
+similarly in the end we'll get the person who can be the celebrity 
+
+class Solution {
+    public:
+    int celebrity(vector<vector<int> >& M, int n) {
+        // code here 
+         int celebrity=0;
+         int a=0;int b=n-1;
+         while(a<b)
+         {
+             if(M[a][b]==1)
+             {
+                a++; 
+             }
+             else
+             b--;
+         }
+         //a can be a celebrity 
+         for(int i=0;i<n;i++)
+         {
+             if(i!=a && (M[a][i]==1 || M[i][a]!=1 ))//a knows any other person or i doesn't know a then that means no celeb 
+             {
+                 return -1;
+                 break;
+             }
+         }
+         return a;
+         
+         
+    }
+};
+
+
+
+TC:O(n)
+SC:O(1)
