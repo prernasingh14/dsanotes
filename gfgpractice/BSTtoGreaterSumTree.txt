@@ -1,0 +1,50 @@
+Given a BST, transform it into greater sum tree where each node contains sum of all nodes greater than that node.
+
+Example 1:
+
+Input:
+           2
+         /    \
+        1      6
+              /  \
+             3    7
+Output: 18 16 13 7 0
+Explanation:
+Every node is replaced with the 
+sum of nodes greater than itself. 
+The resultant tree is:
+               16
+             /    \
+           18       7
+                  /   \
+                 13    0
+
+
+
+
+class Solution
+{
+    public:
+    void greaterSumTree(struct Node* root,int  &rt)
+    {
+        if(root==NULL)
+        return ;
+        greaterSumTree(root->right,rt);//sum of values on right
+        int temp=root->data;
+        root->data=rt;//as we don;t need to add root value to it beacuse we want values >root->value
+        rt+=temp;
+        greaterSumTree(root->left,rt);
+    }
+    void transformTree(struct Node *root)
+    {
+        //code here
+        
+        int rt=0;
+        greaterSumTree(root,rt);
+        
+    }
+};
+
+
+TC:O(n)
+sC:O(n)
