@@ -1,0 +1,86 @@
+Given a stack, the task is to sort it such that the top of the stack has the greatest element.
+
+Example 1:
+
+Input:
+Stack: 3 2 1
+Output: 3 2 1
+Example 2:
+
+Input:
+Stack: 11 2 32 3 41
+Output: 41 32 11 3 2
+Your Task: 
+You don't have to read input or print anything. Your task is to complete the function sort() which sorts the elements present in the given stack. (The sorted stack is printed by the driver's code by popping the elements of the stack.)
+
+Expected Time Complexity : O(N*N)
+Expected Auixilliary Space : O(N) recursive.
+
+Constraints:
+1<=N<=100
+
+Note:The Input/Ouput format and Example given are used for system's internal purpose, and should be used by a user for Expected Output only. As it is a function problem, hence a user should not read any input from stdin/console. The task is to complete the function specified, and not to write the full code.
+
+
+
+using recursion:
+
+//first pop out all the elements from the imput stack except the last one and push them in call stack 
+//after that is done , we now have  to push it in original stack but in increasing order 
+//so when we begin inserting ,we need to check that whether the element to be inserted is > top element then simply push it into stack as that would be our increasing 
+//but if the top element is greater than the element to be inserted then we need to pop elements out from it , until we find the right place i.e the element on top is less than the element to be inserted 
+//insert(that element)
+and then push rest of them (those which we popped out ) 
+
+void insert(stack<int>&s,int temp)
+{
+    if(s.empty() || temp>=s.top())
+    {
+        s.push(temp);return ;
+    }
+    int val=s.top();
+    s.pop();
+    insert(s,temp);
+    s.push(val);
+    return ;
+    
+}
+void SortedStack :: sort()
+{
+   //Your code here
+   if(s.size()==1)
+   return ;
+      int temp=s.top();
+       s.pop();
+   sort();
+   insert(s,temp);
+   return ;
+}
+
+
+
+TC:O(n*n)
+SC:O(n)
+
+iterative approach using another stack:
+
+//idea is same as recursive insted of recursion ka call stack we're taking explicit stack 
+void SortedStack :: sort()
+{
+   //Your code here
+   if(s.empty() || s.size()==1)
+   return ;
+      stack<int>st;
+      while(!s.empty())
+      {
+          int temp=s.top();s.pop();
+          while(!st.empty() && st.top()>temp)
+          {
+              s.push(st.top());
+              st.pop();
+          }
+          st.push(temp);
+      }
+      s=st;
+   return ;
+}
