@@ -1,0 +1,83 @@
+Given a collection of Intervals, the task is to merge all of the overlapping Intervals.
+
+Example 1:
+
+Input:
+N = 4
+Intervals = {(1,3),(2,4),(6,8),(9,10)}
+Output: 1 4 6 8 9 10
+Explanation: Given intervals: [1,3],[2,4]
+[6,8],[9,10], we have only two overlapping
+intervals here,[1,3] and [2,4]. Therefore
+we will merge these two and return [1,4],
+[6,8], [9,10].
+Example 2:
+
+Input:
+N = 4
+Intervals = {(6,8),(1,9),(2,4),(4,7)}
+Output: 1 9
+
+method 1: stack based approach :
+
+
+vector<pair<int,int>> overlappedInterval(vector<pair<int,int>> v, int n) {
+    //code here
+    sort(v.begin(),v.end(),compare);
+    vector<pair<int,int> >interval;
+     stack<pair<int,int> >st;
+    st.push(v[0]);
+    for(int i=1;i<v.size();i++)
+    {
+        if(v[i].first<=st.top().second)//if start time of current interval is less than or equal to end time of the previous interval then it is overlapping 
+        {
+            st.top().second=max(st.top().second,v[i].second);
+        }
+        else
+        {
+           st.push(v[i]);//this interval doesn't merge so push it into stack 
+           
+        }
+    }
+   while(!st.empty())
+   {
+       interval.push_back(st.top());
+       st.pop();
+   }
+   reverse(interval.begin(),interval.end());
+    return interval;
+}
+
+TC:O(nlogn)
+SC:O(n)
+
+
+
+method 2: O(1) space approach 
+
+bool compare(pair<int,int>p1,pair<int,int>p2)
+{
+    return p1.first<=p2.first;
+}
+vector<pair<int,int>> overlappedInterval(vector<pair<int,int>> v, int n) {
+    //code here
+    sort(v.begin(),v.end(),compare);
+    vector<pair<int,int> >interval;
+     pair<int,int>temp=v[0];
+    for(int i=0;i<v.size();i++)
+    {
+        if(v[i].first<=temp.second)//if start time of current interval is less than or equal to end time of the previous interval then it is overlapping 
+        {
+            temp.second=max(temp.second,v[i].second);
+        }
+        else
+        {
+            interval.push_back(temp);
+            temp=v[i];
+        }
+    }
+    interval.push_back(temp);
+    return interval;
+}
+
+
