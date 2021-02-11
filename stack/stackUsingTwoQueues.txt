@@ -1,0 +1,145 @@
+Implement a Stack using two queues q1 and q2.
+
+Example 1:
+
+Input:
+push(2)
+push(3)
+pop()
+push(4)
+pop()
+Output: 3 4
+Explanation:
+push(2) the stack will be {2}
+push(3) the stack will be {2 3}
+pop()   poped element will be 3 the 
+        stack will be {2}
+push(4) the stack will be {2 4}
+pop()   poped element will be 4  
+Example 2:
+
+Input:
+push(2)
+pop()
+pop()
+push(3)
+Output: 2 -1
+Your Task:
+
+Since this is a function problem, you don't need to take inputs. You are required to complete the two methods push() which takes an integer 'x' as input denoting the element to be pushed into the stack and pop() which returns the integer poped out from the stack(-1 if the stack is empty).
+
+Expected Time Complexity: O(1) for push() and O(N) for pop() (or vice-versa).
+Expected Auxiliary Space: O(1) for both push() and pop().
+
+Constraints:
+1 <= Number of queries <= 100
+1 <= values of the stack <= 100
+
+
+
+ stack can be implemented using two queues. Let stack to be implemented be ‘s’ and queues used to implement be ‘q1’ and ‘q2’.
+
+
+
+void QueueStack::push(int x)
+{
+    q1.push(x);
+}
+int QueueStack::pop()
+{
+    if (q1.empty()) 
+            return -1; 
+  
+        // Leave one element in q1 and 
+        // push others in q2. 
+        while (q1.size() != 1) { 
+            q2.push(q1.front()); 
+            q1.pop(); 
+        } 
+  
+        // Pop the only left element 
+        // from q1 
+        int r=q1.front();//that would be our element to be returned 
+        q1.pop(); 
+       
+  
+        // swap the names of two queues 
+        queue<int> q = q1; 
+        q1 = q2; 
+        q2 = q; 
+        return r;
+   
+}
+
+
+push O(1)   pop in O(n)
+
+
+
+
+
+
+(By making push operation costly)
+This method makes sure that newly entered element is always at the front of ‘q1’, so that pop operation just dequeues from ‘q1’.
+ ‘q2’ is used to put every new element at front of ‘q1’.
+
+push(s, x) operation’s step are described below:
+Enqueue x to q2
+One by one dequeue everything from q1 and enqueue to q2.
+Swap the names of q1 and q2
+pop(s) operation’s function are described below:
+Dequeue an item from q1 and return it.
+
+class MyStack {
+public:
+    /** Initialize your data structure here. */
+queue<int>q1,q2;
+    int curr_size;
+    MyStack() {
+        curr_size=0;
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) {
+        q2.push(x);
+        curr_size++;
+        while(!q1.empty())
+        {
+            q2.push(q1.front());
+            q1.pop();
+        }
+        //now swap their names
+        queue<int>t=q1;
+        q1=q2;
+        q2=t;
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int q=q1.front();
+        curr_size--;q1.pop();
+      return q;
+    }
+    
+    /** Get the top element. */
+    int top() {
+        return q1.front();
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return curr_size==0;
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
+
+
+ Push in O(n)  pop in O(1)  
