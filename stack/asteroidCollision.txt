@@ -28,6 +28,9 @@ Output: [-2,-1,1,2]
 Explanation: The -2 and -1 are moving left, while the 1 and 2 are moving right. Asteroids moving the same direction never meet, so no asteroids will meet each other.
 
 
+from the left, a negative star will pass through if no positive star on the left;
+keep track of all the positive stars moving to the right, the right most one will be the 1st confront the challenge of any future negative star.
+if it survives, keep going, otherwise, any past positive star will be exposed to the challenge, by being popped out of the stack.
 
 
 class Solution {
@@ -91,5 +94,8 @@ public:
 TC:O(n)
 
 SC:O(n)
+
+
+now we can obviously write a cleaner code lets try 
 
 
