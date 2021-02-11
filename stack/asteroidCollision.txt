@@ -96,6 +96,5 @@ TC:O(n)
 SC:O(n)
 
 
-now we can obviously write a cleaner code lets try 
 
 
