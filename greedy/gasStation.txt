@@ -58,4 +58,9 @@ public:
     }
 };
 
-tc:O(n)
+tc:O(n*n)worst case 
+
+
+
+
+second approach : based on queue
