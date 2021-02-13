@@ -1,0 +1,93 @@
+
+Leetcode 907
+
+
+
+Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+
+ 
+
+Example 1:
+
+Input: arr = [3,1,2,4]
+Output: 17
+Explanation: 
+Subarrays are [3], [1], [2], [4], [3,1], [1,2], [2,4], [3,1,2], [1,2,4], [3,1,2,4]. 
+Minimums are 3, 1, 2, 4, 1, 1, 2, 1, 1, 1.
+Sum is 17.
+Example 2:
+
+Input: arr = [11,81,94,43,3]
+Output: 444
+ 
+
+Constraints:
+
+1 <= arr.length <= 3 * 104
+1 <= arr[i] <= 3 * 104
+
+
+
+method 1: which i can think of is to find all subarrays and then find mininum 
+
+
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+        int n=arr.size();//for subarray of size 1
+        int sum=0;
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i;j<n;j++)
+            {
+                int minn=INT_MAX;
+              for(int k=i;k<=j;k++)
+              {
+                  minn=min(arr[k],minn);
+              }
+                sum+=minn;
+            }
+        }
+        return sum;
+    }
+};
+
+
+TC:O(n*n*n)
+
+
+Method 2:   building subarrays in O(n*n)
+
+
+
+
+ // we'll build subarrays from end so that covers all in O(n*n)
+class Solution {
+public:
+    int sumSubarrayMins(vector<int>& arr) {
+      
+        int sum=0;
+        int minn=INT_MIN;
+        int mod = (int)1e9+7;
+        int n=arr.size();
+        for(int i=0;i<n;i++)
+        {
+            int minn=arr[i];
+            for(int j=i;j>=0;j--)
+            {
+             minn=min(minn,arr[j]);   
+            sum=(sum+minn)%mod;
+            }
+        }
+        return sum;
+        }
+};
+
+
+
+TC:O(n*n)
+
+//////////////////////////////
+Method 3: O(n)
+
+
