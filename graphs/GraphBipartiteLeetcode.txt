@@ -1,0 +1,132 @@
+Given an undirected graph, return true if and only if it is bipartite.
+
+Recall that a graph is bipartite if we can split its set of nodes into two independent subsets A and B, such that every edge in the graph has one node in A and another node in B.
+
+The graph is given in the following form: graph[i] is a list of indexes j for which the edge between nodes i and j exists. Each node is an integer between 0 and graph.length - 1. There are no self edges or parallel edges: graph[i] does not contain i, and it doesn't contain any element twice.
+
+ 
+
+Example 1:
+
+
+Input: graph = [[1,3],[0,2],[1,3],[0,2]]
+Output: true
+Explanation: We can divide the vertices into two groups: {0, 2} and {1, 3}.
+
+Example 2:
+
+
+Input: graph = [[1,2,3],[0,2],[0,1,3],[0,2]]
+Output: false
+Explanation: We cannot find a way to divide the set of nodes into two independent subsets.
+ 
+
+Constraints:
+
+1 <= graph.length <= 100
+0 <= graph[i].length < 100
+0 <= graph[i][j] <= graph.length - 1
+graph[i][j] != i
+All the values of graph[i] are unique.
+The graph is guaranteed to be undirected. 
+
+
+
+
+
+
+
+
+class Solution {
+public:
+    
+    bool isBipartite(vector<vector<int>>& graph) {
+        //we use graph coloring approach to see whether we can group them in two sets so as to avoid any conflicts 
+        //we try to color the graph using two colors in such a way that no adjacent nodes have the same color because that would mean those nodes containing that edge can't be put into different sets because of common edge 
+        //we'll do bfs 
+        int n=graph.size();
+        int color[n];
+        for(int i=0;i<n;i++)
+        color[i]=0;//uncolored
+        queue<int>q;
+        for(int j=0;j<n;j++)//this is for when graph  can be disconenected too 
+        {
+            if(color[j]==0)
+            { 
+                q.push(j);
+                color[j]=1;
+                 while(!q.empty())
+                 {
+                  int curr=q.front();q.pop();
+                  for(int i=0;i<graph[curr].size();i++)
+                  {
+                       if(color[graph[curr][i]]==0)//uncolored
+                       {
+                          color[graph[curr][i]]=-color[curr];
+                          q.push(graph[curr][i]);
+                         }
+                      else if(color[graph[curr][i]]==color[curr])//same colored neighbours 
+                      return false;
+                   }
+                 }
+            }
+        }
+        return true;
+        
+    }
+};
+
+
+TC:O(v+e)
+
+
+
+DFS solution :
+
+
+
+class Solution {
+public:
+    bool dfs(vector<vector<int>>& graph,vector<int> &color,int i,int colorr) {
+        if(color[i]!=0 && color[i]!=colorr)
+            return false;
+        color[i]=colorr;//color that node with that color 
+        bool ans=true;
+        for(int j=0;j<graph[i].size();j++)
+        {
+           if(color[graph[i][j]]==0)//uncolored
+           {
+               ans=ans&dfs(graph,color,graph[i][j],-colorr);
+               
+           }
+            if(color[graph[i][j]]!=0 && color[graph[i][j]]!=-color[i])
+                return false;
+        }
+         if(!ans)
+             return false;
+        return true;
+        
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        //we use graph coloring approach to see whether we can group them in two sets so as to avoid any conflicts 
+        //we try to color the graph using two colors in such a way that no adjacent nodes have the same color because that would mean those nodes containing that edge can't be put into different sets because of common edge 
+        //we'll do bfs 
+        int n=graph.size();
+        vector<int> color(n,0);
+       //uncolored
+        for(int i=0;i<n;i++)
+        {
+            if(color[i]==0)
+            {
+                bool check=dfs(graph,color,i,1);
+            if(check==false)
+                return false;
+            }
+        }
+        return true;
+        
+    }
+};
+
+
+
