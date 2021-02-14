@@ -68,3 +68,41 @@ int main() {
 
 
 TC:O((n*n)+klogk)
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+	//code
+	int t;cin>>t;
+	while(t--)
+	{
+	    int n;cin>>n;
+	    int arr[n];
+	    for(int i=0;i<n;i++)
+	    {
+	        cin>>arr[i];
+	    }
+	   set<int>s;
+	    for(int i=0;i<n;i++)
+	    {
+	        
+	       auto itr=s.lower_bound(arr[i]);
+	       if(itr!=s.begin())
+	        {
+	            --itr;
+	           cout<<*(itr)<<" ";
+	        }
+	       else
+	       cout<<-1<<" ";
+	       s.insert(arr[i]);
+	    }
+	    cout<<"\n";
+	}
+	return 0;
+}
+
+
+nlogn
