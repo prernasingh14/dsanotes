@@ -1,0 +1,131 @@
+In an N by N square grid, each cell is either empty (0) or blocked (1).
+
+A clear path from top-left to bottom-right has length k if and only if it is composed of cells C_1, C_2, ..., C_k such that:
+
+Adjacent cells C_i and C_{i+1} are connected 8-directionally (ie., they are different and share an edge or corner)
+C_1 is at location (0, 0) (ie. has value grid[0][0])
+C_k is at location (N-1, N-1) (ie. has value grid[N-1][N-1])
+If C_i is located at (r, c), then grid[r][c] is empty (ie. grid[r][c] == 0).
+Return the length of the shortest such clear path from top-left to bottom-right.  If such a path does not exist, return -1.
+
+ 
+
+Example 1:
+
+Input: [[0,1],[1,0]]
+
+
+Output: 2
+
+Example 2:
+
+Input: [[0,0,0],[1,1,0],[1,1,0]]
+
+
+Output: 4
+
+ 
+
+Note:
+
+1 <= grid.length == grid[0].length <= 100
+grid[r][c] is 0 or 1
+
+
+
+first approach that I can think of is finding all paths & then finding which of these takes minimum cells 
+
+DFS based approach :
+class Solution {
+public:
+    int minCost=INT_MAX;
+    void dfs(vector<vector<int>>& grid,int pointx,int pointy,int destx,int desty,int n,int cost)
+    {
+         if(pointx<0 || pointy<0 || pointx>=n || pointy>=n || grid[pointx][pointy]==1)
+           return ;
+         else if(pointx==destx && pointy==desty)
+        {
+           
+            minCost=min(minCost,cost);
+             grid[pointx][pointy]=0;
+            return ;
+        }
+      
+          grid[pointx][pointy]=1;//visited
+         dfs(grid,pointx+1,pointy+1,destx,desty,n,cost+1);
+         dfs(grid,pointx+1,pointy-1,destx,desty,n,cost+1);
+         dfs(grid,pointx-1,pointy+1,destx,desty,n,cost+1);
+         dfs(grid,pointx-1,pointy-1,destx,desty,n,cost+1);
+         dfs(grid,pointx+1,pointy,destx,desty,n,cost+1);
+         dfs(grid,pointx-1,pointy,destx,desty,n,cost+1);
+         dfs(grid,pointx,pointy+1,destx,desty,n,cost+1);
+         dfs(grid,pointx,pointy-1,destx,desty,n,cost+1);
+        grid[pointx][pointy]=0;//unvisited;
+        
+        
+    }
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int n=grid.size();
+        if(grid[0][0]==1 || grid[n-1][n-1]==1)
+            return -1;
+        int cost=1;
+        dfs(grid,0,0,n-1,n-1,n,cost);
+        return minCost==INT_MAX?-1:minCost;
+        
+        
+    }
+};
+
+
+TC:O(n*n) thus will cause TLE 
+
+
+Method 2 : bfs based approach 
+ 
+it is used to find only the first possible path 
+Time complexity is O(N^2) because in the worst-case scenario, the BFS has to visit all the cells in the grid when there is no obstacles. The visitedMap makes sure that the algorithm is not visiting a node (being added back to the queue) for a second time.
+Space complexity is O(N^2) because of the visitedMap.
+
+
+class Solution {
+    private:
+    struct Cell{
+        int x;//x coordinate
+        int y;//y coordinate
+        int dist;//distance from source
+        
+    };
+public:
+    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
+        int n=grid.size();
+        if(grid[0][0]==1 || grid[n-1][n-1]==1)
+            return -1;
+       queue<Cell>q;
+       bool visited[n][n];
+       memset(visited,false,sizeof(visited));
+        q.push({0,0,1});
+        while(!q.empty())
+        {
+           Cell c=q.front();
+            q.pop();
+            if(c.x<0 || c.x>=n || c.y<0 || c.y>=n || grid[c.x][c.y]==1 || visited[c.x][c.y]==true)
+                continue;//go back
+            else if(c.x==n-1 && c.y==n-1)//reached that destination
+                return c.dist;//number of cells in between from source to dest 
+               q.push({c.x+1,c.y+1,c.dist+1});
+               q.push({c.x+1,c.y-1,c.dist+1});
+               q.push({c.x-1,c.y+1,c.dist+1});
+               q.push({c.x-1,c.y-1,c.dist+1});
+               q.push({c.x+1,c.y,c.dist+1});
+               q.push({c.x-1,c.y,c.dist+1});
+               q.push({c.x,c.y+1,c.dist+1});
+               q.push({c.x,c.y-1,c.dist+1});
+               visited[c.x][c.y]=true;//visited
+            
+        }
+        return -1;//no path exists 
+        
+        
+    }
+};
+
