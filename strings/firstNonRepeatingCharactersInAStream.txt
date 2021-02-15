@@ -66,4 +66,5 @@ class Solution {
 };
 
 
+TC:O(n)
 
