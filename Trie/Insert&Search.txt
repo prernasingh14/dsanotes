@@ -1,0 +1,109 @@
+Trie is an efficient information retrieval data structure. Use this data structure to store Strings and search strings. Your task is to use TRIE data structure and search the given string A. If found print 1 else 0.
+
+Example 1:
+
+Input:
+N = 8
+key[] = {the,a,there,answer,any,by,
+         bye,their}
+search = the
+Output: 1
+Explanation: the is present in the given
+string "the a there answer any by bye
+their"
+Example 2:
+
+Input:
+N = 8
+key[] = {the,a,there,answer,any,by,
+         bye,their}
+search = geeks
+Output: 0
+Explanation: geeks is not present in the
+given string "the a there answer any by
+bye their"
+Your Task:
+Complete insert and search function and return true if key is present in the formed trie else false in the search function. (In case of true, 1 is printed and false, 0 is printed by the driver's code.
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(N).
+N = length of the string
+
+Constraints:
+1 <= N <= 104
+1 <= |input strings|, |A| <= 100
+
+#include <bits/stdc++.h> 
+using namespace std; 
+  
+const int ALPHABET_SIZE = 26; 
+  
+// trie node 
+struct TrieNode 
+{ 
+    struct TrieNode *children[ALPHABET_SIZE]; 
+  
+    // isEndOfWord is true if the node represents 
+    // end of a word 
+    bool isEndOfWord; 
+}; 
+  
+// Returns new trie node (initialized to NULLs) 
+struct TrieNode *getNode(void) 
+{ 
+    struct TrieNode *pNode =  new TrieNode; 
+  
+    pNode->isEndOfWord = false; 
+  
+    for (int i = 0; i < ALPHABET_SIZE; i++) 
+        pNode->children[i] = NULL; 
+  
+    return pNode; 
+} 
+
+
+
+
+
+void insert(struct TrieNode *root, string key) {
+    // code here
+    TrieNode* pTravel=root;
+    for(int i=0;i<key.size();i++)
+    {
+         int index=key[i]-'a';
+       if(pTravel->children[index]==NULL)//create a new node if the path doesn't exist 
+       {
+           pTravel->children[index]=getNode();
+       }
+       pTravel=pTravel->children[index];//go to the next node 
+    }
+    pTravel->isLeaf=true;//last node of the key is made a leaf node as it marks the end of the string 
+}
+
+// root : root node of the trie
+// key : string to search in the trie
+// Returns true if key presents in trie, else false
+
+bool search(struct TrieNode *root, string key) {
+    // code here 
+    TrieNode* pTravel=root;
+    for(int i=0;i<key.size();i++)
+    {
+        int index=key[i]-'a';
+       if(pTravel->children[index]==NULL)//if pointer to that character is NULL then it doesn't exist 
+       {
+           return false;
+       }
+           
+       pTravel=pTravel->children[index];
+       }
+    
+    
+   return  pTravel!=NULL && pTravel->isLeaf==true;
+    
+}
+
+
+
+
+
