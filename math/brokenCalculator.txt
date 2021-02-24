@@ -33,6 +33,12 @@ Input: X = 3, Y = 10
 Output: 3
 Explanation:  Use double, decrement and double {3 -> 6 -> 5 -> 10}
 
+To get minimum operations we have to use doubling as much as possible and decrementing as few as possible.
+
+if y is odd there's no way I can reach it by doubling a number, I have to reach y+1 and decrement it by one, to reach y+1 i have to reach (y+1)/2 in minimum steps
+-- if y is even I can reach it by doubling a number, so it boils down to reaching y/2 in minimum steps.
+
+
 
 
 class Solution {
