@@ -1,0 +1,98 @@
+Write an efficient algorithm that searches for a target value in an m x n integer matrix. The matrix has the following properties:
+
+Integers in each row are sorted in ascending from left to right.
+Integers in each column are sorted in ascending from top to bottom.
+
+
+
+Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+Output: true
+
+Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
+Output: false
+
+Brute force : traverse the matrix and check whether matrix[i][j] ==target or not 
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int n=matrix.size();
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<matrix[i].size();j++)
+            {
+                if(matrix[i][j]==target)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+};
+
+
+TC:O(n*m)
+
+Better approach :
+since we are given that matrix is row wise sorted in ascending order & column wise too 
+so we know that binary search is very useful in sorted list , so we'll think of using that 
+
+
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int n=matrix.size();
+        int m=matrix[0].size();
+        //we should begin from the top right corner of the matrix as that way we can keep on discarding ways 
+        //like if target is < matrix[i][j] then we can discard that column and move left 
+        //if greater than we can discard that row and move down 
+        int i=0;int j=m-1;
+        while((i<n && i>=0) && (j<m && j>=0))
+        {
+            if(matrix[i][j]==target)
+                return true;
+            else if(matrix[i][j]>target)
+            {
+                j--;
+            }
+            else
+                i++;
+        }
+        return false;
+    }
+};
+
+
+TC:O(n+m)
+
+
+
+similar recursive approach :
+
+
+bool findTarget(vector<vector<int>>& mat, int i, int j, int target){
+    int m = mat.size(), n = mat[0].size();
+	
+	//CASE1 :- Base Condition to return false if program goes out of bound
+    if((i>=m)||(j<0))
+        return false;
+	
+	//CASE 2 :- if( curr_element < target ) we move down one arrow
+    if(mat[i][j]<target)
+        return findTarget(mat, i+1, j, target);
+	//CASE 3 :- if( curr_element > target ) we move to previous column
+    else if(mat[i][j]>target)
+        return findTarget(mat, i, j-1, target);
+	//CASE 4 :- if( curr_element == target ) return true 
+    else
+        return true;
+}
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+	   //START program with top-right corner
+       return findTarget( matrix, 0, matrix[0].size()-1 , target );
+    }
+};
