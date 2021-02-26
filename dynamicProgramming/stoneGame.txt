@@ -27,6 +27,39 @@ piles.length is even.
 1 <= piles[i] <= 500
 sum(piles) is odd.
 
+
+
+deque approach :
+
+class Solution {
+public:
+
+    bool stoneGame(vector<int>& piles) {
+       int n=piles.size();
+        deque<int>stones;
+        int alice=0;int lee=0;
+        for(int i=0;i<piles.size();i++)
+        {
+            stones.push_back(piles[i]);
+        }
+       for(int i=0;i<stones.size();i++)
+       {
+           alice+=max(stones.front(),stones.back());//alice moves first so he'll take max
+           lee+=min(stones.front(),stones.back());//min will be taken by lee
+           stones.pop_front();
+           stones.pop_back();
+       }
+        return alice>lee;
+       
+    }
+};
+
+TC:O(n)
+
+
+
+
+
 Recurive approach:
 
 
