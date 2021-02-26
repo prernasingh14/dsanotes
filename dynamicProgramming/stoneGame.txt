@@ -1,0 +1,117 @@
+Alex and Lee play a game with piles of stones.  There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
+
+The objective of the game is to end with the most stones.  The total number of stones is odd, so there are no ties.
+
+Alex and Lee take turns, with Alex starting first.  Each turn, a player takes the entire pile of stones from either the beginning or the end of the row.  This continues until there are no more piles left, at which point the person with the most stones wins.
+
+Assuming Alex and Lee play optimally, return True if and only if Alex wins the game.
+
+ 
+
+Example 1:
+
+Input: piles = [5,3,4,5]
+Output: true
+Explanation: 
+Alex starts first, and can only take the first 5 or the last 5.
+Say he takes the first 5, so that the row becomes [3, 4, 5].
+If Lee takes 3, then the board is [4, 5], and Alex takes 5 to win with 10 points.
+If Lee takes the last 5, then the board is [3, 4], and Alex takes 4 to win with 9 points.
+This demonstrated that taking the first 5 was a winning move for Alex, so we return true.
+ 
+
+Constraints:
+
+2 <= piles.length <= 500
+piles.length is even.
+1 <= piles[i] <= 500
+sum(piles) is odd.
+
+Recurive approach:
+
+
+class Solution {
+public:
+    int stones(vector<int>&piles,int start,int end,bool chance)
+    {
+        if(start>end)
+            return 0;
+        if(chance)//alex's turn
+        {
+            // then we will find the max number of stones we can get by either consuming the first pile from the piles or by consuming the last pile
+            //Alex will always try to increase his score 
+            int left=stones(piles,start+1,end,false)+piles[start];
+            int right=stones(piles,start,end-1,false)+piles[end];
+            return max(left,right);//thus we take max
+        }
+        else
+        {
+            //then we will find the min number of stones we can get by decreasing the amount of the Alex's score.
+            //lee will always try to decrease Alex's score 
+            int left=stones(piles,start+1,end,true)-piles[start];//substract whatever he chose from Alex's score
+            int right=stones(piles,start,end-1,true)-piles[end];
+            return min(left,right);//Lee will always return Alex minimum number of stones 
+        }
+    }
+    bool stoneGame(vector<int>& piles) {
+       int n=piles.size();
+        bool chance=true;
+        int alex=stones(piles,0,n-1,chance);
+        cout<<alex;
+        return alex>0;
+    }
+};
+Tc:exponential 
+thus TLE
+
+
+Method 2: efficient method is by not calling recursive function again & again blindly for same indexes
+thus we do recursion with memoization
+Top down:
+
+
+class Solution {
+public:
+    int stones(vector<int>&piles,int start,int end,bool chance,vector<vector<int>>&dp)
+    {
+        if(start>end)
+            return 0;
+        if(dp[start][end]!=-1)
+            return dp[start][end];
+        if(chance)//alex's turn
+        {
+            // then we will find the max number of stones we can get by either consuming the first pile from the piles or by consuming the last pile
+            //Alex will always try to increase his score 
+            int left=stones(piles,start+1,end,false,dp)+piles[start];
+            int right=stones(piles,start,end-1,false,dp)+piles[end];
+            return dp[start][end]=max(left,right);//thus we take max
+        }
+        else
+        {
+            //then we will find the min number of stones we can get by decreasing the amount of the Alex's score.
+            //lee will always try to decrease Alex's score 
+            int left=stones(piles,start+1,end,true,dp)-piles[start];//substract whatever he chose from Alex's score
+            int right=stones(piles,start,end-1,true,dp)-piles[end];
+            return dp[start][end]=min(left,right);//Lee will always return Alex minimum number of stones 
+        }
+    }
+    bool stoneGame(vector<int>& piles) {
+       int n=piles.size();
+        bool chance=true;
+         vector<vector<int>> dp(n,vector<int>(n, -1)); 
+        int alex=stones(piles,0,n-1,chance,dp);
+        cout<<alex;
+        return alex>0;
+    }
+};
+
+TC:(n*n)
+SC:O(n*n)
+
+but it uses stack space 
+
+so a more efficient method is bottom up dp 
+
+
+Bottom Up Dp:
+
