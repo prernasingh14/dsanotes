@@ -43,6 +43,44 @@ no extra data structure used therefire O(1) extra space
 but we need to optimise the time complexity so that we do not blindly call recursion 
 thus we use 
 memoization with recursion top down approach 
+
+
+
+
+
+class Solution {
+public:
+    int minCoins(vector<int>&coins,int amount,int index,vector<vector<int> >&dp)
+    {
+        if(dp[index][amount]!=-1)
+            return dp[index][amount];
+        if(index>=coins.size())
+            return 10005;
+        if(amount==0)
+            return 0;
+        
+        if(coins[index]<=amount)//we have two choices take it or don't 
+        {
+           int include=1+minCoins(coins,amount-coins[index],index,dp);
+           int exclude=minCoins(coins,amount,index+1,dp);
+            return dp[index][amount]=min(include,exclude);
+        }
+        else
+            return dp[index][amount]=minCoins(coins,amount,index+1,dp);
+        
+    }
+    int coinChange(vector<int>& coins, int amount) {
+        //we have option to either choose any coin or reject that
+        int n=coins.size();
+        vector<vector<int> >dp(coins.size()+5,vector<int>(amount+5,-1));
+        for(int i=0;i<=n;i++)
+            dp[i][0]=0;
+        int answer=minCoins(coins,amount,0,dp);
+        return answer==10005?-1:answer;
+    }
+};
+
+
 ////////////////////-----------------/////////////
 Bottom up approach : tc:O(n*amount)
 sc:O(n*amount)
@@ -70,3 +108,5 @@ public:
         return dp[n][amount]==INT_MAX-1?-1:dp[n][amount];
     }
 };
+
+
