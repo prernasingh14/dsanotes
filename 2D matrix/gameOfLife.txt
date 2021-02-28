@@ -1,0 +1,172 @@
+According to Wikipedia's article: "The Game of Life, also known simply as Life, is a cellular automaton devised by the British mathematician John Horton Conway in 1970."
+
+The board is made up of an m x n grid of cells, where each cell has an initial state: live (represented by a 1) or dead (represented by a 0). Each cell interacts with its eight neighbors (horizontal, vertical, diagonal) using the following four rules (taken from the above Wikipedia article):
+
+Any live cell with fewer than two live neighbors dies as if caused by under-population.
+Any live cell with two or three live neighbors lives on to the next generation.
+Any live cell with more than three live neighbors dies, as if by over-population.
+Any dead cell with exactly three live neighbors becomes a live cell, as if by reproduction.
+The next state is created by applying the above rules simultaneously to every cell in the current state, where births and deaths occur simultaneously. Given the current state of the m x n grid board, return the next state.
+
+ 
+
+Example 1:
+
+
+Input: board = [[0,1,0],[0,0,1],[1,1,1],[0,0,0]]
+Output: [[0,0,0],[1,0,1],[0,1,1],[0,1,0]]
+Example 2:
+
+
+Input: board = [[1,1],[1,0]]
+Output: [[1,1],[1,1]]
+
+
+did as stated in the question 
+
+class Solution {
+public:
+    
+    void gameOfLife(vector<vector<int>>& b) {
+        int m=b.size();
+        int n=b[0].size();
+        vector<vector<int> >life(m,vector<int>(n,0));//next state board
+        for(int i=0;i<m;i++)
+        {
+             for(int j=0;j<n;j++)
+             {
+                 int live=0;
+                 if(b[i][j]==1)//live cell
+                 {
+                     if(i+1<m && b[i+1][j]==1)
+                      live++;
+                     if(i-1>=0 && b[i-1][j]==1)
+                         live++;
+                      if(i-1>=0 && j+1<n && b[i-1][j+1]==1)
+                         live++;
+                      if(i-1>=0 && j-1>=0 &&  b[i-1][j-1]==1)
+                         live++;
+                      if(i+1<m && j+1<n && b[i+1][j+1]==1)
+                         live++;
+                       if(i+1<m && j-1>=0 && b[i+1][j-1]==1)
+                         live++;
+                      if(j+1<n && b[i][j+1]==1)
+                         live++;
+                      if(j-1>=0 && b[i][j-1]==1)
+                         live++;
+                     if(live>=2 && live<=3)
+                         life[i][j]=1;
+                     if(live<2 || live>3)
+                         life[i][j]=0;
+                 }
+                 else//dead cell
+                 {
+                     if(i+1<m && b[i+1][j]==1)
+                      live++;
+                     if(i-1>=0 && b[i-1][j]==1)
+                         live++;
+                      if(i-1>=0 && j+1<n && b[i-1][j+1]==1)
+                         live++;
+                      if(i-1>=0 && j-1>=0 && b[i-1][j-1]==1)
+                         live++;
+                      if(i+1<m && j+1<n &&  b[i+1][j+1]==1)
+                         live++;
+                       if(i+1<m && j-1>=0 && b[i+1][j-1]==1)
+                         live++;
+                      if(j+1<n && b[i][j+1]==1)
+                         live++;
+                      if(j-1>=0 && b[i][j-1]==1)
+                         live++;
+                     if(live==3)
+                         life[i][j]=1;//becomes live cell
+                 }
+             }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                b[i][j]=life[i][j];
+            }
+        }
+        
+        
+    }
+};
+
+
+
+
+TC:O(n*m)
+sc:O(n*m)
+
+
+
+////////////////////////////////////////////////
+
+
+
+better representation
+
+
+
+class Solution {
+public:
+    bool valid(int x,int y,int m,int n)
+    {
+        return x>=0 && x<m && y>=0 && y<n;
+    }
+    void gameOfLife(vector<vector<int>>& b) {
+        int m=b.size();
+        int n=b[0].size();
+        vector<vector<int> >life(m,vector<int>(n,0));//next state board
+        //we need to check in 8 directions 
+        int dx[]={-1,-1,0,+1,+1,+1,0,-1};
+        int dy[]={0,+1,+1,+1,0,-1,-1,-1};
+        for(int i=0;i<m;i++)
+        {
+             for(int j=0;j<n;j++)
+             {
+                 int live=0;
+                 if(b[i][j]==1)//live cell
+                 {
+                   for(int k=0;k<8;k++)
+                   {
+                       if(valid(i+dx[k],j+dy[k],m,n) && b[i+dx[k]][j+dy[k]]==1)
+                           live++;
+                   }
+                     if(live>=2 && live<=3)
+                         life[i][j]=1;
+                     else if(live<2 || live>3)
+                         life[i][j]=0;
+                 }
+                 else
+                 {
+                   for(int k=0;k<8;k++)
+                   {
+                       if(valid(i+dx[k],j+dy[k],m,n) && b[i+dx[k]][j+dy[k]]==1)
+                           live++;
+                   }
+                     if(live==3)
+                         life[i][j]=1;
+                     
+                 }
+             }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                b[i][j]=life[i][j];
+            }
+        }
+        
+        
+    }
+};
+
+
+
+TC:O(n*m)
+sc:O(n*m)
+
