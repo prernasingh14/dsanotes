@@ -33,6 +33,9 @@ Output: [[1,1]]
 
 
 what i can think here is that every element has to be either included or excluded to make upto that target
+Since the problem is to get all the possible results, not the best or the number of result,
+ thus we don't need to consider DP(dynamic programming), recursion is needed to handle it.
+
 
 
 class Solution {
