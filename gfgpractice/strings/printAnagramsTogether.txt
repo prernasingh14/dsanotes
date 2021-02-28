@@ -53,3 +53,48 @@ TC:O(mlogm *n )  n is the number of strings in vector ,m is the length of string
 
 sc:O(n*k)
 
+
+
+
+better time complexity :
+
+
+
+
+
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        map<vector<int>,vector<string> >mp;//the freq of each character should be same in anagrams thus we can take freq array 
+        //lets see without sorting 
+        vector<vector<string> >answer;
+        for(int i=0;i<strs.size();i++)
+        {
+            string s=strs[i];
+            vector<int>charac(26,0);
+            for(int k=0;k<s.size();k++)
+            {
+              charac[s[k]-'a']++;  
+            }
+            mp[charac].push_back(strs[i]);
+        }
+        for(auto i:mp)
+        {
+             vector<string>temp;
+            if(i.second.size()>0)//means something there
+            {
+                temp=i.second;
+            }
+            answer.push_back(temp);
+        }
+        return answer;
+    }
+};
+
+
+
+TC:O(n*k)
+SC:O(n)
+
+
