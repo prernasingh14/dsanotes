@@ -1,0 +1,77 @@
+Given a non negative integer number num. For every numbers i in the range 0 ≤ i ≤ num calculate the number of 1's in their binary representation and return them as an array.
+
+Example 1:
+
+Input: 2
+Output: [0,1,1]
+Example 2:
+
+Input: 5
+Output: [0,1,1,2,1,2]
+Follow up:
+
+It is very easy to come up with a solution with run time O(n*sizeof(integer)). But can you do it in linear time O(n) /possibly in a single pass?
+Space complexity should be O(n).
+Can you do it like a boss? Do it without using any builtin function like __builtin_popcount in c++ or in any other language.
+
+brute force basic approach is to:
+  
+
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int>bits;
+        for(int i=0;i<=num;i++)
+        {
+            int c=0;int temp=i;
+            while(temp!=0)
+            {
+               c+=temp&1;
+                temp=temp>>1;
+               
+            }
+            bits.push_back(c);
+        }
+        return bits;
+    }
+};
+
+Tc:O(num*32)
+
+remember for an even number the last bit is always 0 
+
+An even number is twice of another number, that is what makes it even. 
+In binary, multipying by 2 is the same as a shift left by one, 
+eg- 10 is 1010
+while 20 is 10100 (thus shifting to left )
+which adds in a zero to left hand side of the bits (i.e. n*2 === n << 1 (as long as overflow does not occur))
+ We can leverage this, because that means an even number will have the same amount of 1's as half of it's value, and this value will already be defined in our array.
+If half of an even number is even, well half of that half will be defined, etc. etc. until it reaches a base case of 0 or 1.
+So from this our code for even numbers if bits[n] = bits[n/2]
+
+
+
+
+eg -  10 is 1010
+11 is 1011 (thus 1 extra bit than the previous even number )
+an odd number will always be equal to the number before it, which is even, + 1. In binary, even numbers always end in 0, so from this,
+we can deduce that for an odd number n, it will have bits[n] = bits[n-1] + 1 amount of 1's. 
+This covers the case for all odd numbers.
+
+
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int>bits(num+1,0);
+        for(int i=1;i<=num;i++)
+        {
+           bits[i]=bits[i/2]+i%2;//if its odd then we just need to add one bit more 
+           
+        }
+        return bits;
+    }
+};
+
+
+TC:O(num)
+SC:(1))
