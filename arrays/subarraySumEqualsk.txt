@@ -53,3 +53,32 @@ SC:O(1)
 better method :
 
 
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int subarray=0;int n=nums.size();
+        int count=0;
+        for(int i=0;i<n;i++)
+        {
+            int sum=0;
+            for(int j=i;j<n;j++)
+            { 
+                 sum+=nums[j];//cumulative approach 
+                cout<<sum<<" ";
+                if(sum==k)
+                    count++;
+            }
+        }
+        return count;
+    }
+};
+
+TC:O(n*n)
+
+which again causes TLE for higher values
+
+efficient approach :
+
+
+
+
