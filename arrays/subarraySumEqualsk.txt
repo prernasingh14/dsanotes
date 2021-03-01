@@ -1,0 +1,55 @@
+Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,1], k = 2
+Output: 2
+Example 2:
+
+Input: nums = [1,2,3], k = 3
+Output: 2
+ 
+
+Constraints:
+
+1 <= nums.length <= 2 * 104
+-1000 <= nums[i] <= 1000
+-107 <= k <= 107
+
+
+
+brute force method is to find all subarrays and then check wether its sum equals to k or not 
+
+
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        int subarray=0;int n=nums.size();
+        for(int i=0;i<n;i++)
+        {
+            
+            for(int j=0;j<n;j++)
+            { 
+                int sum=0;
+                for(int l=i;l<=j;l++)//for every subarray 
+                 sum+=nums[l];  
+                if(sum==k)
+                subarray++;
+            }
+        }
+        return subarray;
+    }
+};
+
+TC:O(n*n*n)
+obviously will cause TLE for larger values 
+
+SC:O(1)
+
+
+
+better method :
+
+
