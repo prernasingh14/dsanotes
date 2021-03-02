@@ -1,0 +1,96 @@
+Given a string, sort it in decreasing order based on the frequency of characters.
+
+Example 1:
+
+Input:
+"tree"
+
+Output:
+"eert"
+
+Explanation:
+'e' appears twice while 'r' and 't' both appear once.
+So 'e' must appear before both 'r' and 't'. Therefore "eetr" is also a valid answer.
+Example 2:
+
+Input:
+"cccaaa"
+
+Output:
+"cccaaa"
+
+Explanation:
+Both 'c' and 'a' appear three times, so "aaaccc" is also a valid answer.
+Note that "cacaca" is incorrect, as the same characters must be together.
+Example 3:
+
+Input:
+"Aabb"
+
+Output:
+"bbAa"
+
+Explanation:
+"bbaA" is also a valid answer, but "Aabb" is incorrect.
+Note that 'A' and 'a' are treated as two different characters.
+
+
+
+class Solution {
+public:
+    static bool compare(pair<int,char>&a,pair<int,char>&b)
+    {
+        if(a.first==b.first)//if freq same 
+            return a.second>b.second;
+        return a.first>b.first;
+    }
+    string frequencySort(string s) {
+        unordered_map<char,int>m;
+        for(int i=0;i<s.size();i++)
+            m[s[i]]++;
+        vector<pair<int,char>>pp;
+        for(int i=0;i<s.size();i++)
+        {
+            pp.push_back({m[s[i]],s[i]});
+         }
+        sort(pp.begin(),pp.end(),compare);
+        for(int i=0;i<pp.size();i++)
+        {
+            s[i]=pp[i].second;
+        }
+        return s;
+    }
+};
+
+
+TC:O(nlogn)//as sorting
+SC:O(n)
+
+
+
+
+efficient way using priority queue:
+
+
+string frequencySort( string s ) {
+	unordered_map<char, int> m;
+	for( auto c : s )
+		++m[c];
+        priority_queue<pair<int,char> >pq;//max heap
+        for(auto i:m)
+        {
+            pq.push({i.second,i.first});
+        }
+        string result="";
+        while(!pq.empty())
+        {
+           auto occur=pq.top(); 
+           pq.pop();
+           while(occur.first--)
+           result+=occur.second;
+        }
+        return result;
+}
+Time Complexity: O(nlogk), where k is the number of distinct character.
+Space Complexity: O(n)
+
