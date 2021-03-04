@@ -98,3 +98,36 @@ vector <int> countDistinct (int arr[], int n, int k)
 
 TC:O(n)
 sc:O(n)
+
+
+
+without using inki queue:
+
+
+vector <int> countDistinct (int arr[], int n, int k)
+{
+    //code here.
+    unordered_map<int,int>m;
+    vector<int>v;
+    //push in first window first 
+    int distinct=0;
+    for(int i=0;i<k;i++)
+    {
+        m[arr[i]]++;
+    }
+    v.push_back(m.size());
+    for(int i=k;i<n;i++)
+    {
+       m[arr[i-k]]--;
+       if(m[start]==0)//gone from the window 
+       m.erase(arr[i-k]);
+       m[arr[i]]++;
+       v.push_back(m.size());
+    }
+    return v;
+}
+
+TC:O(n)
+SC:O(n)
+
+
