@@ -1,0 +1,77 @@
+Given a pattern and a string s, find if s follows the same pattern.
+
+Here follow means a full match, such that there is a bijection between a letter in pattern and a non-empty word in s.
+
+ 
+
+Example 1:
+
+Input: pattern = "abba", s = "dog cat cat dog"
+Output: true
+Example 2:
+
+Input: pattern = "abba", s = "dog cat cat fish"
+Output: false
+Example 3:
+
+Input: pattern = "aaaa", s = "dog cat cat dog"
+Output: false
+Example 4:
+
+Input: pattern = "abba", s = "dog dog dog dog"
+Output: false
+ 
+
+Constraints:
+
+1 <= pattern.length <= 300
+pattern contains only lower-case English letters.
+1 <= s.length <= 3000
+s contains only lower-case English letters and spaces ' '.
+s does not contain any leading or trailing spaces.
+All the words in s are separated by a single space.
+
+
+
+
+
+class Solution {
+public:
+    bool wordPattern(string pattern, string s) {
+        //first we need to extract every word from string 
+        unordered_map<string,char>m;//to store mapping of every word to the corresponding character in pattern 
+         unordered_map<char,string>mp;//to store mapping of every character to the corresponding word in string 
+        s+=" ";int count=-1;string word="";
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]!=' ')
+                word+=s[i];
+            else//we got a space thus got  our word 
+            {
+                count++;//to get the corresponding position in pattern 
+              if(m.find(word)==m.end() && mp.find(pattern[count])==mp.end())//if encountered for the first time
+              {
+                 m[word]=pattern[count];
+                  mp[pattern[count]]=word;
+              }
+                else//if word has been encountered once 
+                {
+                    char key=m[word];//the character stored by the word 
+                    string wd=mp[pattern[count]];//the string stored by the character 
+                  //we need to see whether that is same as the pattern or not
+                   if(pattern[count]!=key && wd!=word)//both should match
+                       return false;
+                }
+                word="";
+            }
+        }
+        return count==pattern.size()-1;//edge case need to be covered i.e check whether pattern matches i.e all characters in the pattern have been matched 
+    }
+};
+
+
+TC:O(n)  //string length 
+
+SC:O(n)
+
+
