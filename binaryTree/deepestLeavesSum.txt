@@ -60,3 +60,80 @@ Time complexity of this method is O(n) where n is number of nodes in given binar
 SC:O(n) as in worst case height of tree can be n
 
 
+
+Second method:
+
+without using any extra space 
+
+
+
+class Solution {
+public:
+    int totalLevels(TreeNode* root)
+    {
+        if(root==NULL)
+            return 0;
+        int l=totalLevels(root->left);
+        int r=totalLevels(root->right);
+        return max(l,r)+1;
+    }
+   void deepest(TreeNode* root,int level,int maxLevels,int &sum)
+   {
+       if(root==NULL)
+           return ;
+       if(level==maxLevels)
+       {
+          sum+=root->val; 
+       }
+       deepest(root->left,level+1,maxLevels,sum);
+       deepest(root->right,level+1,maxLevels,sum);
+   }
+    int deepestLeavesSum(TreeNode* root) {
+        // sum of nodes on last level
+        int sum=0;
+        if(root==NULL)
+            return sum;
+        int deepestSum=0;
+        int maxLevels=totalLevels(root);
+        deepest(root,1,maxLevels,deepestSum);
+       return deepestSum;
+    }
+};
+
+we are using recursion stack space only here.
+
+
+Better:  DO IT W/O WRITING ANY EXTRA FUNCTION FOR HEIGHT CALCULATION
+
+
+class Solution {
+public:
+    int deepestSum=0;
+   void deepest(TreeNode* root,int level,int &maxLevels)
+   {
+       if(root==NULL)
+           return ;
+        if(level>maxLevels)//FIRST NODE OF THE LEVEL WILL HAVE LEVEL>MAX_LEVEL
+       {
+             deepestSum=root->val; 
+             maxLevels=level;
+       }
+        else if(level==maxLevels)//LAST LEVEL 
+       {
+          deepestSum+=root->val; 
+       }
+       deepest(root->left,level+1,maxLevels);
+       deepest(root->right,level+1,maxLevels);
+   }
+    int deepestLeavesSum(TreeNode* root) {
+        // sum of nodes on last level
+        
+        if(root==NULL)
+            return 0; 
+        int maxLevels=INT_MIN;
+        deepest(root,0,maxLevels);
+       return deepestSum;
+    }
+};
+
+
