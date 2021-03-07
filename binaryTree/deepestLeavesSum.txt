@@ -61,6 +61,37 @@ SC:O(n) as in worst case height of tree can be n
 
 
 
+
+better approach which I couldn't think of foolishly 
+there is no need of height calculation just a sum variable required
+class Solution {
+public:
+    int deepestLeavesSum(TreeNode* root) {
+        // sum of nodes on last level
+        int sum=0;
+        if(root==NULL)
+            return sum;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty())
+        {
+          int sz=q.size();
+            sum=0;
+            while(sz--)
+            {
+                TreeNode* temp=q.front();
+                sum+=temp->val;
+                q.pop();
+                if(temp->left)
+                    q.push(temp->left);
+                if(temp->right)
+                    q.push(temp->right);
+            }
+        }
+        return sum;
+    }
+};
+
 Second method:
 
 without using any extra space 
