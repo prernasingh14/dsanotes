@@ -1,0 +1,98 @@
+Given two arrays, write a function to compute their intersection.
+
+Example 1:
+
+Input: nums1 = [1,2,2,1], nums2 = [2,2]
+Output: [2,2]
+Example 2:
+
+Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+Output: [4,9]
+Note:
+
+Each element in the result should appear as many times as it shows in both arrays.
+The result can be in any order.
+Follow up:
+
+What if the given array is already sorted? How would you optimize your algorithm?
+What if nums1's size is small compared to nums2's size? Which algorithm is better?
+What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+
+
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        //each element should occur as many times as it shows in both the arrays
+        unordered_map<int,int>m;
+        for(int i=0;i<nums1.size();i++)
+        {
+            m[nums1[i]]++;
+        }
+        vector<int>ans;
+        for(int i=0;i<nums2.size();i++)
+        {
+            if(m[nums2[i]]>0)
+            {
+                ans.push_back(nums2[i]);
+                m[nums2[i]]--;
+            }
+        }
+        return ans;
+    }
+};
+
+
+TC:O(n+m)
+
+SC:O(n)
+
+
+
+Q. What if the given array is already sorted? How would you optimize your algorithm?
+
+If both arrays are sorted, I would use two pointers to iterate, which somehow resembles the merge process in merge sort.
+Use two pointers. At start two pointers point to the first element of each array. If it is equal, push it to the answer then move both pointers to next position. 
+Otherwise, move the one with less value to the next position.
+Probably two pointers is better? Consider len(nums1) = m, len(nums2) = n, (m > n). Although time complexity for both methods are O(m + n), space complexity for hash method is O(n), two pointer space complexity is O(1). Also, two pointer method can avoid some edge cases when lists are sorted(ex: nums1 = [1,4], nums2 = [1,2,....,100], we just iterate through nums1 and while loop ended before we reach the end of nums2, whereas in hash method, we need to iterate both lists).
+
+Q. What if nums1's size is small compared to nums2's size? Which algorithm is better?
+
+Suppose lengths of two arrays are N and M, the time complexity of my solution is O(N+M) and the space complexity if O(N) considering the hash. So it's better to use the smaller array to construct the counter hash.
+
+Well, as we are calculating the intersection of two arrays, the order of array doesn't matter. We are totally free to swap to arrays.
+
+Q. What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+
+Divide and conquer. Repeat the process frequently: Slice nums2 to fit into memory, process (calculate intersections), and write partial results to memory.
+
+two pointer approach for sorted array :
+
+
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        //each element should occur as many times as it shows in both the arrays
+       int i=0;int j=0;
+        int n=nums1.size();
+        int m=nums2.size();
+        vector<int>ans;
+        while(i<n && j<m)
+        {
+         if(nums1[i]==nums2[j])
+         {
+             ans.push_back(nums1[i]);
+             i++;
+             j++;
+         }
+            else if(nums1[i]<nums2[j])
+                i++;
+            else
+                j++;
+        }
+        return ans;
+    }
+};
+
+TC:O(n+m)
+SC:O(1)
+
