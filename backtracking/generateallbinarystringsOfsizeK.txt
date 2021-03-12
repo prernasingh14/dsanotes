@@ -1,0 +1,31 @@
+
+
+Input: 2
+Output:
+00
+01
+10
+11
+
+
+
+
+void generate(vector<string>&v,int i,int k,string str)
+    {
+      if(i>=k)//we reached end now push back
+      {
+          cout<<str<<" ";
+          v.push_back(str);
+          return ;
+      }
+        str[i]='0';
+        generate(v,i+1,k,str);
+        str[i]='1';
+        generate(v,i+1,k,str);  
+    }
+
+
+    TC:O(2^k)
+    as every position has two choices either to fill it with 1 or 0
+    
+
