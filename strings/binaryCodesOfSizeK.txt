@@ -1,0 +1,119 @@
+Given a binary string s and an integer k.
+
+Return True if every binary code of length k is a substring of s. Otherwise, return False.
+
+ 
+
+Example 1:
+
+Input: s = "00110110", k = 2
+Output: true
+Explanation: The binary codes of length 2 are "00", "01", "10" and "11". They can be all found as substrings at indicies 0, 1, 3 and 2 respectively.
+Example 2:
+
+Input: s = "00110", k = 2
+Output: true
+Example 3:
+
+Input: s = "0110", k = 1
+Output: true
+Explanation: The binary codes of length 1 are "0" and "1", it is clear that both exist as a substring. 
+Example 4:
+
+Input: s = "0110", k = 2
+Output: false
+Explanation: The binary code "00" is of length 2 and doesn't exist in the array.
+Example 5:
+
+Input: s = "0000000001011100", k = 4
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length <= 5 * 10^5
+s consists of 0's and 1's only.
+1 <= k <= 20
+
+
+
+first solution that I can think of is:
+
+generate all poosible binary strings of size k 
+and then check whether that is present in string s or not 
+
+class Solution {
+public:
+    //first we need to generate all codes with backtracking 
+    void generate(vector<string>&v,int i,int k,string str)
+    {
+      if(i>=k)//we reached end now push back
+      {
+          cout<<str<<" ";
+          v.push_back(str);
+          return ;
+      }
+        str[i]='0';
+        generate(v,i+1,k,str);
+        str[i]='1';
+        generate(v,i+1,k,str);  
+    }
+    bool hasAllCodes(string s, int k) {
+        if(k>=s.size())
+            return false;
+        if(s.size()==0)
+            return false;
+        vector<string>v;
+        string str(k,'0');
+        generate(v,0,k,str);
+        //get all substrings
+        unordered_set<string>sub;
+        for(int i=0;i<=s.size()-k;i++)
+        {
+            cout<<s.substr(i,k)<<" ";
+            sub.insert(s.substr(i,k));
+        }
+        for(int i=0;i<v.size();i++)
+        {
+            if(sub.find(v[i])==sub.end())
+                return false;
+        }
+        return true;
+    }
+};
+
+
+tC:O(2^n)
+thus TLE
+
+
+
+//////////////////////////////////
+
+
+
+for every string of size k there are 2^k distinct binary strings permutations possible thus 
+
+
+simply find every subtsring in s and put them in a set and finally check whether that set has size ==2^k(denoting every possible combination of binary string of size k)
+
+class Solution {
+public:
+    bool hasAllCodes(string s, int k) {
+        if(k>=s.size())
+            return false;
+        if(s.size()==0)
+            return false;
+        //get all substrings
+        unordered_set<string>sub;
+        for(int i=0;i<=s.size()-k;i++)
+        {
+            //cout<<s.substr(i,k)<<" ";
+            sub.insert(s.substr(i,k));
+        }
+        return sub.size()==1<<k;
+    }
+};
+
+
+TC:O(n) n is size of string s
