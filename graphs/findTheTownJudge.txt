@@ -50,13 +50,14 @@ public:
 };
 
 
+
+
 Method 2:
 class Solution {
 public:
     int findJudge(int n, vector<vector<int>>& trust) {
-       
-        unordered_map<int,int>incoming;
-        unordered_map<int,int>outgoing;
+        int incoming[N+1]={0};
+        int outgoing[N+1]={0};
         int townJudge=-1;
         for(int i=0;i<trust.size();i++)
         {
@@ -74,25 +75,44 @@ public:
     }
 };
 
+TC:O(n)
+SC:O(n+n)
+
+a little space optimisation :
+
 Method 3:
+
+just only using one array 
+
 class Solution {
 public:
-    int findJudge(int n, vector<vector<int>>& trust) {
-        int incoming[1001]={0};
-        int outgoing[1001]={0};
-        int townJudge=-1;
+    int findJudge(int N, vector<vector<int>>& trust) {
+        //the node having 0 outgoing edges
+        //the node having n-1 incoming edges
+        int people[N+1];
+        memset(people,0,sizeof(people));
         for(int i=0;i<trust.size();i++)
         {
-            int src=trust[i][0];
-            int dest=trust[i][1];
-            incoming[dest]++;
-            outgoing[src]++;
+            int in=trust[i][0];
+            int out=trust[i][1];
+            people[in]--;//for edges coming out of that person means that he trusts someone else
+            people[out]++;//incoming edges to this person mean someone else trusts him
         }
-     for(int i=1;i<=n;i++)
-     {
-        if(outgoing[i]==0 && incoming[i]==n-1)
-            townJudge=i;
-      }
-        return townJudge;
+        int count=0;int judge=0;
+        for(int i=1;i<=N;i++)
+        {
+            if(people[i]==N-1)
+            {
+                judge=i;
+                count++;
+            }
+        }
+       return count==1?judge:-1;   
     }
 };
+
+
+TC:O(n)
+SC:O(n)
+
+
