@@ -1,0 +1,75 @@
+Given a string S, check if the letters can be rearranged so that two characters that are adjacent to each other are not the same.
+
+If possible, output any possible result.  If not possible, return the empty string.
+
+Example 1:
+
+Input: S = "aab"
+Output: "aba"
+Example 2:
+
+Input: S = "aaab"
+Output: ""
+Note:
+
+S will consist of lowercase letters and have length in range [1, 500].
+ 
+
+ class Solution {
+public:
+    static bool compare(pair<int,char>&p1,pair<int,char>&p2)
+    {
+        return p1.first>=p2.first;
+    }
+    string reorganizeString(string s) {
+        if(s.size()==1)
+            return s;
+        unordered_map<char,int>m;//to count freq of each letter 
+        for(int i=0;i<s.size();i++)
+        {
+            m[s[i]]++;
+        }
+        vector<pair<int,char>>letter;
+        for(auto i:m)
+        {
+            if(i.second>0)
+            {
+                letter.push_back({i.second,i.first});
+            }
+        }
+        sort(letter.begin(),letter.end(),compare);//sort according to freq
+        int l=0;
+        //make string s with characters according to the highest frequencies like 'ccccaaazz'
+        //so that we fill in those first 
+        for(int i=0;i<letter.size();i++)
+        {
+            while(letter[i].first>0)
+            {
+                s[l]=letter[i].second;
+                l++;
+                letter[i].first--;
+            }
+        }
+        string str(s.size(),'A');//if its already filled 
+        int k=0;
+        int n=s.size();
+        for(int i=0;i<s.size();i++)
+        {
+            if(str[k%n]!='A')//if already occupied
+                k++;
+             str[k%n]=s[i%n];
+            k=k+2;
+        }
+        cout<<str;
+        for(int i=0;i<str.size()-1;i++)
+        {
+            if(str[i]==str[i+1])
+                return "";
+        }
+        return str;
+    }
+};
+
+
+TC:O(nlogn)
+for sorting 
