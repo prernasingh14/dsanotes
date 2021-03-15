@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+
+
+void heapify(int arr[],int n,int i)
+{
+    int parent=i;
+    int left=2*i+1;
+    int right=2*i+2;
+    if(left<n && arr[left]<=arr[parent])
+    parent=left;
+    if(right<n && arr[right]<=arr[parent])
+    parent=right;
+    if(parent!=i)
+    {
+       swap(arr[parent],arr[i]);
+       heapify(arr,n,parent);
+    }
+    
+}
+void buildHeap(int arr[], int n) 
+{ 
+    // Index of last non-leaf node 
+    int startIdx = n/2-1; 
+  
+    // Perform reverse level order traversal 
+    // from last non-leaf node and heapify 
+    // each node 
+    for (int i = startIdx; i >= 0; i--) { 
+        heapify(arr, n, i); 
+    } 
+} 
+int main()
+{
+    int n;cin>>n;
+    int arr[n];
+    for(int i=0;i<n;i++)
+    {
+        cin>>arr[i];
+    }
+    buildHeap(arr,n);
+    for(int i=0;i<n;i++)
+    cout<<arr[i]<<" ";
+    
+    return  0;
+    
+}
+
+input:
+
+10
+35 33 42 10 14 19 27 44 26 31
+output:
+
+10 14 19 26 31 42 27 44 33 35 
+
+
