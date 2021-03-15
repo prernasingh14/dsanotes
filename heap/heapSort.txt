@@ -1,5 +1,6 @@
 Heap sort is a comparison based sorting technique based on Binary Heap data structure. 
-It is similar to selection sort where we first find the maximum element and place the maximum element at the end. We repeat the same process for the remaining elements.
+It is similar to selection sort where we first find the maximum element and place the maximum element at the end. 
+We repeat the same process for the remaining elements.
 #include <bits/stdc++.h>
 using namespace std;
 #define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
@@ -9,11 +10,11 @@ using namespace std;
 #define ll long long 
 void heapify_down(int arr[],int n,int i)
 {
-    int largest=i;
+    int largest=i;//the node to be heapified 
     int left=2*i+1;int right=2*i+2;
-    if(left<n && arr[left]>arr[largest])
+    if(left<n && arr[left]>=arr[largest])
     largest=left;
-    if(right<n && arr[right]>arr[largest])
+    if(right<n && arr[right]>=arr[largest])
     largest=right;
     if(largest!=i)
     {
@@ -31,7 +32,7 @@ void buildHeap(int arr[],int n)
     //now that we've built our max heap ,we'll extract the last element one by one as the minimum elemnet is at the last position in max heap
     for(int i=n-1;i>0;i--)
     {
-      swap(arr[0],arr[i]);  //as the last element is our minimum element thus swap it with root
+      swap(arr[0],arr[i]);  //as the last element is our minimum element thus swap it with root which is the maximum
       heapify_down(arr,i,0);//reduce the size of heap now 
     }
 }
@@ -52,3 +53,14 @@ int main()
   
   TC:O(N*LOG N)
   SC:O(1)
+
+input:
+
+10
+35 33 42 10 14 19 27 44 26 31
+
+
+output:
+10 14 19 26 27 31 33 35 42 44 (thus using maxheap , we get output sorted in ascending order)
+
+https://practice.geeksforgeeks.org/problems/heap-sort/1
