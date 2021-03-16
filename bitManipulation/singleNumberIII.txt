@@ -1,0 +1,98 @@
+Given an integer array nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once. You can return the answer in any order.
+
+Follow up: Your algorithm should run in linear runtime complexity. Could you implement it using only constant space complexity?
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,1,3,2,5]
+Output: [3,5]
+Explanation:  [5, 3] is also a valid answer.
+Example 2:
+
+Input: nums = [-1,0]
+Output: [-1,0]
+Example 3:
+
+Input: nums = [0,1]
+Output: [1,0]
+ 
+
+Constraints:
+
+2 <= nums.length <= 3 * 104
+-231 <= nums[i] <= 231 - 1
+Each integer in nums will appear twice, only two integers will appear once.
+
+
+
+Brute force:
+
+using hashmap
+TC:O(n)
+SC:O(n)
+
+
+efficient way using bit manipulation:
+
+
+The simple way to explain here is that when you do a^b then only those bit positions are set that have different values in a from b. So if you group elements in the array with their values at particular set bit in a^b then a and b will be in separate groups as xor-ing the group will cancel out others and the result of two groups will be a and b.
+
+Example :-
+
+a = 4 
+b = 6 
+a^b = 2
+
+Set_bit_pos = 1
+
+Arr = [1,1,4,5,5,6]
+
+Grouping according to bit no 1 
+
+x = [6] where bit1 is 1 
+
+y = [4,1,1,5,5] where bit1 is 0
+
+Xoring 
+
+x = 6 
+
+y = 4^1^1^5^5 = 4
+
+
+
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+       int single1=0;int single2=0;
+        // when you do a^b then only those bit positions are set that have different values in a from b.
+        //So if you group elements in the array with their values at particular set bit in a^b then a and b will be in separate groups as xor-ing the group will cancel out others and the result of two groups will be a and b.
+        int x=0;//stores xor of all numbers
+        for(int i=0;i<nums.size();i++)
+        {
+            x=x^nums[i];//only numbers which are only once will contribute to xor
+        }
+        //now find rightmost set bit 
+        long long set_bit;cout<<x;
+         if(x == INT_MIN) set_bit = 0;
+         else 
+        set_bit = x & (-x);
+    
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i] & set_bit)//if same bit then put it in set 1 else in set 2
+             single1 = single1 ^ nums[i]; /*XOR of first set */
+            else
+                single2=single2^nums[i];/*XOR of second set*/
+        }
+        vector<int>ans={single1,single2};
+        return ans;
+    }
+};
+
+
+
+TC:O(n)
+SC:O(1)
