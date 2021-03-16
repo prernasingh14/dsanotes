@@ -1,0 +1,78 @@
+Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
+
+ 
+
+Example 1:
+
+Input: nums = [2,2,3,2]
+Output: 3
+Example 2:
+
+Input: nums = [0,1,0,1,0,1,99]
+Output: 99
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+-231 <= nums[i] <= 231 - 1
+Each element in nums appears exactly three times except for one element which appears once.
+ 
+
+Follow up: Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory?
+
+brute force :
+using map-
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        unordered_map<int,int>m;
+        for(int i=0;i<nums.size();i++)
+        {
+            m[nums[i]]++;
+        }
+      int single=0;
+        for(auto i:m)
+        {
+            if(i.second==1)
+                single=i.first;
+        }
+        return single;
+    }
+};
+
+TC:O(n)
+SC:O(n)
+
+
+efficient method :
+
+
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+       //the numbers occuring three times will make sum at any index a multiple of 3
+        int n=nums.size();
+        vector<int> arr(32);//for storing sum at every index
+        int ans=0;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<32;j++){//every number can be only 32 bits 
+                  if((nums[i]>>j)&1)//if nums[i] has j'th bit 
+                      arr[j]++;
+              }  
+        }
+        //convert it into number
+        for(int j=0;j<32;j++){
+             if(arr[j]%3==1)//not a multiple of three
+                 ans+=(1<<j);//(pow(2,j))
+        }
+        return ans;
+    }
+
+};
+
+TC:O(n*32)~O(n)
+
+SC:O(1) as 32 bits only required thus constant space
+
