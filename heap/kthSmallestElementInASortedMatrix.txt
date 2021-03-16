@@ -103,3 +103,40 @@ public:
         return pq.top();
     }
 };
+
+
+efficient way using min-heap :
+
+
+class Solution {
+    #define ppi pair<int,pair<int,int>>
+public:
+    
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n=matrix.size();
+        priority_queue<ppi,vector<ppi>,greater<ppi>>pq;
+        for(int i=0;i<n;i++)
+        {
+            pq.push({matrix[i][0],{i,0}});//n elements pushed thus to build heap takes logn time
+        }
+        int val=0;
+        while(k--)
+        {
+            ppi temp=pq.top();
+            val=temp.first;
+            int row=temp.second.first;
+            int col=temp.second.second;
+            pq.pop();
+            if(col+1<n)//push in a number greater than it 
+            {
+                pq.push({matrix[row][col+1],{row,col+1}});
+            }
+            
+        }
+        return val;
+        //TC:O(klogn)
+    }
+};
+
+
+TC:O(klogn)
