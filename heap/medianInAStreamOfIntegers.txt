@@ -1,0 +1,130 @@
+The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value and the median is the mean of the two middle values.
+
+For example, for arr = [2,3,4], the median is 3.
+For example, for arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+Implement the MedianFinder class:
+
+MedianFinder() initializes the MedianFinder object.
+void addNum(int num) adds the integer num from the data stream to the data structure.
+double findMedian() returns the median of all elements so far. Answers within 10-5 of the actual answer will be accepted.
+ 
+
+Example 1:
+
+Input
+["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
+[[], [1], [2], [], [3], []]
+Output
+[null, null, null, 1.5, null, 2.0]
+
+Explanation
+MedianFinder medianFinder = new MedianFinder();
+medianFinder.addNum(1);    // arr = [1]
+medianFinder.addNum(2);    // arr = [1, 2]
+medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
+medianFinder.addNum(3);    // arr[1, 2, 3]
+medianFinder.findMedian(); // return 2.0
+ 
+
+Constraints:
+
+-105 <= num <= 105
+There will be at least one element in the data structure before calling findMedian.
+At most 5 * 104 calls will be made to addNum and findMedian.
+ 
+
+Follow up:
+
+If all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
+If 99% of all integer numbers from the stream are in the range [0, 100], how would you optimize your solution?
+
+
+
+Approach: The idea is to use max heap and min heap to store the elements of higher half and lower half. Max heap and min heap can be implemented using priority_queue in C++ STL. Below is the step by step algorithm to solve this problem.
+Algorithm: 
+ 
+
+Create two heaps. 
+One max heap to maintain elements of lower half and one min heap to maintain elements of higher half at any point of time..
+Take initial value of median as 0.
+For every newly read element, insert it into either max heap or min-heap and calculate the median based on the following conditions: 
+If the size of max heap is greater than the size of min-heap and the element is less than the previous median then -
+pop the top element from max heap and insert into min-heap and insert the new element to max heap else insert the new element to min-heap.
+ Calculate the new median as the average of top of elements of both max and min heap.
+
+
+
+If the size of max heap is less than the size of min-heap and the element is greater than the previous median then -
+pop the top element from min-heap and insert into the max heap and insert the new element to min heap else insert the new element to the max heap.
+ Calculate the new median as the average of top of elements of both max and min heap.
+
+
+If the size of both heaps is the same then-
+ check if the current is less than the previous median or not.
+  If the current element is less than the previous median then insert it to the max heap and a new median will be equal to the top element of max heap. 
+  If the current element is greater than the previous median then insert it to min-heap and new median will be equal to the top element of min heap.
+
+
+
+
+  for better understanding watch Keerti Purswani's video -
+  https://www.google.co.in/url?sa=t&rct=j&q=&esrc=s&source=video&cd=&cad=rja&uact=8&ved=2ahUKEwiM5YzatbfvAhV9yDgGHduaD-sQtwIwA3oECAAQAw&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DEcNbRjEcb14&usg=AOvVaw2DKE1-z6-ogf-ZsgCDhZEq
+
+class MedianFinder {
+public:
+    priority_queue<int>maxh;
+    priority_queue<int,vector<int>,greater<int>>minh;
+    /** initialize your data structure here. */
+    MedianFinder() {
+        
+    }
+    
+    void addNum(int num) {
+        if(maxh.size()==0 || maxh.top()>num)
+            maxh.push(num);
+        else
+            minh.push(num);
+        //now see if disbalanced
+        if(maxh.size()>minh.size()+1)
+        {
+            minh.push(maxh.top());
+            maxh.pop();
+        }
+        else if(minh.size()>maxh.size()+1)
+        {
+             maxh.push(minh.top());
+             minh.pop();
+        }
+        
+    }
+    
+    double findMedian() {
+        if(maxh.size()==minh.size())
+            return (maxh.top()+minh.top())/2.0;
+        else if(maxh.size()>minh.size())
+            return maxh.top();
+        else
+            return minh.top();
+    }
+};
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder* obj = new MedianFinder();
+ * obj->addNum(num);
+ * double param_2 = obj->findMedian();
+ */
+
+Follow-ups:
+
+If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+bucket sort, create an array of bucket of length 101, keep the count of numbers in each bucket, and the count of overall numbers, then it's easy to locate the bucket where the median number resides and find the median by looping through the array-> O(1)
+If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+99% of all integer numbers lie in [0,100] means the median is definitely inside [0,100]. Besides the bucket range [0,100] as mentioned above, we just need to keep the count of all numbers, numbers smaller than 0, and numbers larger than 100, and adjust the index of the median element in our buckets of range [0,100].
+For example, if we have 100 numbers streamed, and one of the number is smaller than 0, that means the median's index moved forward by 1, we just need to find the 49th element in our buckets in a sorted manner.
+
+
+
+
+
+
