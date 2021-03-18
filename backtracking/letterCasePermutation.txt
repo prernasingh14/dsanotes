@@ -58,8 +58,6 @@ if(i==s.length()){
 }
 At the end of the recursion return ans.
 
-
-
 class Solution {
 public:
     //every letter has two options - smaller or capital form
@@ -72,19 +70,18 @@ public:
         }
         if(s[i]>='0' && s[i]<='9')
         {
-            str.push_back(s[i]);
-            recur(s,i+1,n,str,ans);
+            recur(s,i+1,n,str+s[i],ans);//no change in case
         }
-        else 
+        else if(s[i]>='a' && s[i]<='z')
         {
-             string s1=str;
-            s1.push_back(tolower(s[i]));
-            recur(s,i+1,n,s1,ans);
-            
-            //sub case 2, considering upper case
-            string s2=str;
-            s2.push_back(toupper(s[i]));
-            recur(s,i+1,n,s2,ans);
+           char ch=s[i]-32;//upper case 
+            recur(s,i+1,n,str+ch,ans);//change the case
+            recur(s,i+1,n,str+s[i],ans);//no change in case
+        }
+        else{
+          char ch=s[i]+32;
+            recur(s,i+1,n,str+s[i],ans);//no change in case
+            recur(s,i+1,n,str+ch,ans);//change the case
             
         }
     }
@@ -97,9 +94,80 @@ public:
 };
 
 
+lesser recursive calls
+
+
 
 TIME COMPLEXITY
 O(2^n) [From recursion tree, at each level nodes are increasing by power of 2]
 
 SPACE COMPLEXITY
 O(n) [Maximum depth of recursion tree]
+
+///////////////////////////////////////////////
+
+
+
+
+backtracking approach :
+
+
+
+class Solution {
+public:
+    vector<string> letterCasePermutation(string S) {
+        
+        vector<string>sol;
+        string temp="";
+        int i=0;
+        bc(S,sol,temp,i);
+        return sol;
+    }
+    
+    void bc(string s, vector<string>& sol, string temp, int j)
+    {
+	   //push the answer to result set when you have completed iterating over the whole string
+        if(temp.size()==s.size())
+        {
+            sol.push_back(temp);
+            return;
+        }
+        else
+        {
+		      // if the string char is a digit you just need to push it to your temp string and move ahead
+                if(s[j]>='0' && s[j]<='9')
+                {
+                    temp.push_back(s[j]);
+                    bc(s,sol,temp,j+1);
+                    temp.pop_back();
+                }
+				//if string char is a letter you need to explore both upper and lower case possibilities.
+                else
+                
+                    temp.push_back(toupper(s[j]));
+                    bc(s,sol,temp,j+1);
+                    temp.pop_back();
+                    temp.push_back(tolower(s[j]));
+                    bc(s,sol,temp,j+1);
+                    temp.pop_back();   
+                }
+                return;
+        } 
+    }
+};
+
+
+
+
+
+
+
+//////////////////////////////////////
+
+
+
+since we can see a tree like structure another approach that comes to our mind is BFS-
+
+
+
+not very intuitive but 
