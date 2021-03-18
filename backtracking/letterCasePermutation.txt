@@ -170,4 +170,68 @@ since we can see a tree like structure another approach that comes to our mind i
 
 
 
-not very intuitive but 
+Create a queue and insert an empty string into it along with pos = 0.
+Begin the BFS traversal.
+Pop a string and position index ( = pos) from the queue.
+to this string, append lowercase and uppercase of str[pos] if the str[pos] is a character.
+Add both the versions of the string obtained above into the queue.
+Else, if str[pos] is numeric, simply append the numeric to the string.
+Add the string to the queue.
+The traversal should go on till all the characters of the input string have been processed. i.e. pos = str.length()-1 .
+After the traversal is over, out all the strings from the queue.
+
+
+
+class Solution {
+public:
+    //every letter has two options - smaller or capital form
+    //since we get a tree like structure thus using bfs we can make it into iterative form 
+    vector<string> letterCasePermutation(string s) {
+        vector<string>ans;
+        string str="";
+        int n=s.size();
+       queue<pair<string,int>>q;
+        q.push({s,0});//starting index is 0
+        ans.push_back(s);
+        while(!q.empty())
+        {
+           string str=q.front().first;
+            int pos=q.front().second;//the position in string we are at currently
+            q.pop();
+            if(pos==n)//we reached the end of the string i.e traversed all
+            {
+                break;
+            }
+            if(str[pos]>='0' && str[pos]<='9')//if its a digit 
+            {
+                //then simply push it w/o changing any case
+                q.push({str,pos+1});
+            }
+            else if(str[pos]>='a' && str[pos]<='z')
+            {
+                q.push({str,pos+1});//first insert as it is 
+                //we need to change cases
+                str[pos]=str[pos]-32;
+                q.push({str,pos+1});
+            }
+            else
+            {
+                q.push({str,pos+1});//first insert as it is 
+                //we need to change cases
+                str[pos]=str[pos]+32;
+                q.push({str,pos+1}); 
+            }
+        }
+        while(!q.empty())
+        {
+            ans.push_back(q.front().first);
+            q.pop();
+        }
+        return ans;
+    }
+};
+
+T(n) = O(2^n), n = length of the input string, we generate 2n combinations in the worst case when all the string characters are alphabets.
+A(n) = O(2^n), queue used to store all the string combinations.
+
+
