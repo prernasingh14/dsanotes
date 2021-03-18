@@ -1,0 +1,105 @@
+Given a string S, we can transform every letter individually to be lowercase or uppercase to create another string.
+
+Return a list of all possible strings we could create. You can return the output in any order.
+
+ 
+
+Example 1:
+
+Input: S = "a1b2"
+Output: ["a1b2","a1B2","A1b2","A1B2"]
+Example 2:
+
+Input: S = "3z4"
+Output: ["3z4","3Z4"]
+Example 3:
+
+Input: S = "12345"
+Output: ["12345"]
+Example 4:
+
+Input: S = "0"
+Output: ["0"]
+ Constraints:
+
+S will be a string with length between 1 and 12.
+S will consist only of letters or digits.
+
+
+
+There are two main cases which needs to be solved recursively:
+
+The element at the given index is a digit
+
+Append the digit to the end of curr and go to next index(i+1).
+
+curr.push_back(s[i]);
+solve(curr,s,i+1);
+The element at the given index is an alphabet, this case has two sub cases:
+
+Append tolower(s[i]) to curr and go to next index (i+1).
+
+//sub case 1, considering lower case
+string c1=curr;
+c1.push_back(tolower(s[i]));
+solve(c1,s,i+1);
+Append toupper(s[i]) to curr and go to next index (i+1).
+
+//sub case 2, considering upper case
+string c2=curr;
+c2.push_back(toupper(s[i]));
+solve(c2,s,i+1);
+If at any function call, the index = S.length(), then curr string has one of our output, so save it in ans vector,
+
+// if end of the string is reached
+if(i==s.length()){
+	ans.push_back(curr); // push the current "curr" string to ans
+	return;
+}
+At the end of the recursion return ans.
+
+
+
+class Solution {
+public:
+    //every letter has two options - smaller or capital form
+    void recur(string s,int i,int n,string str,vector<string>&ans)
+    {
+        if(i==n)//we reached the end 
+        {
+            ans.push_back(str);
+            return ;
+        }
+        if(s[i]>='0' && s[i]<='9')
+        {
+            str.push_back(s[i]);
+            recur(s,i+1,n,str,ans);
+        }
+        else 
+        {
+             string s1=str;
+            s1.push_back(tolower(s[i]));
+            recur(s,i+1,n,s1,ans);
+            
+            //sub case 2, considering upper case
+            string s2=str;
+            s2.push_back(toupper(s[i]));
+            recur(s,i+1,n,s2,ans);
+            
+        }
+    }
+    vector<string> letterCasePermutation(string s) {
+        vector<string>ans;
+        string str="";int n=s.size();
+        recur(s,0,n,str,ans);
+        return ans;
+    }
+};
+
+
+
+TIME COMPLEXITY
+O(2^n) [From recursion tree, at each level nodes are increasing by power of 2]
+
+SPACE COMPLEXITY
+O(n) [Maximum depth of recursion tree]
