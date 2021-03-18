@@ -1,0 +1,139 @@
+You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
+
+We define the range [a, b] is smaller than range [c, d] if b - a < d - c or a < c if b - a == d - c.
+
+ 
+
+Example 1:
+
+Input: nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]]
+Output: [20,24]
+Explanation: 
+List 1: [4, 10, 15, 24,26], 24 is in range [20,24].
+List 2: [0, 9, 12, 20], 20 is in range [20,24].
+List 3: [5, 18, 22, 30], 22 is in range [20,24].
+Example 2:
+
+Input: nums = [[1,2,3],[1,2,3],[1,2,3]]
+Output: [1,1]
+Example 3:
+
+Input: nums = [[10,10],[11,11]]
+Output: [10,11]
+Example 4:
+
+Input: nums = [[10],[11]]
+Output: [10,11]
+Example 5:
+
+Input: nums = [[1],[2],[3],[4],[5],[6],[7]]
+Output: [1,7]
+ 
+
+Constraints:
+
+nums.length == k
+1 <= k <= 3500
+1 <= nums[i].length <= 50
+-105 <= nums[i][j] <= 105
+nums[i] is sorted in non-decreasing order.
+
+
+
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        int minV=0;int maxV=0;int minele=0;int maxele=0;
+        int minIndex=0;bool flag=true;int minRange=INT_MAX;
+        int k=nums.size();
+        int ptr[k];
+        for(int i=0;i<k;i++)
+        {
+            ptr[i]=0;
+        }
+        while(true)
+        {
+            flag=true;
+            minV=INT_MAX;
+            maxV=INT_MIN;
+            for(int i=0;i<k;i++)
+            {
+                if(ptr[i]>=nums[i].size())
+                {
+                    flag=false;
+                    break;
+                }
+                if(ptr[i]<nums[i].size() && nums[i][ptr[i]]<minV)
+                {
+                    minV=nums[i][ptr[i]];
+                    minIndex=i;
+                }
+                if(ptr[i]<nums[i].size() && nums[i][ptr[i]]>maxV)
+                {
+                    maxV=nums[i][ptr[i]];
+                    
+                }
+            }
+            if(flag==false)
+                break;
+            ptr[minIndex]++;
+            if(maxV-minV<minRange)
+            {
+                minRange=maxV-minV;
+                minele=minV;
+                maxele=maxV;
+            }
+        }
+        return {minele,maxele};
+        
+    }
+};
+
+TC:O(n*k*k)
+SC:O(k)
+
+TLE 
+
+
+efficient method:
+
+using priority queue
+
+typedef pair<int, pair<int, int>> ppi;
+class Solution {
+public:
+    vector<int> smallestRange(vector<vector<int>>& nums) {
+        int n = nums.size();
+        priority_queue<ppi, vector<ppi>, greater<ppi>> pq;
+        int minVal = INT_MAX, maxVal = INT_MIN, minRange = INT_MAX;
+        for (int i=0; i<n; i++) {
+            pq.push({nums[i][0], {i, 0}});
+            minVal = min(minVal, nums[i][0]);
+            maxVal = max(maxVal, nums[i][0]);
+        }
+        int a = minVal, b = maxVal;
+        while (!pq.empty()) {
+            ppi curr = pq.top();
+            pq.pop();
+            //cout<<curr.first<<" "<<curr.second.first<<" "<<curr.second.second<<endl;
+            if (curr.second.second + 1 < nums[curr.second.first].size()) {
+                int row = curr.second.first, col = curr.second.second + 1;
+                pq.push({nums[row][col], {row, col}});
+                minVal = pq.top().first;
+                maxVal = max(maxVal, nums[row][col]);
+                if ( maxVal-minVal<(b-a)) {
+                    a = minVal;
+                    b = maxVal;
+                }
+            } else {
+                break;
+            }
+        }
+        return {a, b};
+    }
+};
+
+
+TC:O(nklogk)
+
+
