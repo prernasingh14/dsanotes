@@ -1,0 +1,127 @@
+Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3]
+Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+Example 2:
+
+Input: nums = [0,1]
+Output: [[0,1],[1,0]]
+Example 3:
+
+Input: nums = [1]
+Output: [[1]]
+ 
+
+Constraints:
+
+1 <= nums.length <= 6
+-10 <= nums[i] <= 10
+All the integers of nums are unique.
+
+
+Found a helpful post on leetcode---
+
+First, it helps to recognize that this is problem can be solved with recursion. The key buzzwords that should set off recursion in your head as viable approaches include: combinations, permutations, subsets, and all possible X's.
+Because I think visually, it helps me to draw a diagram of a tree and walk through the different recursive calls to get an intuition for what tools I will need. With our intitial input, we break down the different way we split (each branch) at each recursive level (rows). The array to our left represents what we have taken as temp , and the right array represents what is left to be taken as nums
+initial input
+
+Visualize
+
+													[],[1,2,3]
+											/         |             \
+								[1],[2,3]        [2],[1,3]       [3],[1,2]
+							/    \                /    \               /  \
+				[1,2],[3]   [1,3],[2]   [2,1],[3]  [2,3],[1]  [3,1],[2]   [3,2],[1]
+			/                  /           /             \         \           \
+		[1,2,3],[]    [1,3,2],[]        [2,1,3],[]    [2,3,1],[]    [3,1,2],[]  [3,2,1],[]
+See in the chart above, the bottom row actually depicts the result that we want:
+
+[ [ 1, 2, 3 ],
+  [ 1, 3, 2 ],
+  [ 2, 1, 3 ],
+  [ 2, 3, 1 ],
+  [ 3, 1, 2 ],
+  [ 3, 2, 1 ] ]
+As you see at each recursive level, we need to iterate over the nums to select different nums to pick out. It's also important that we leave in the rest of the nums so we can pick them later. This iteration is a key component we will use to build our algorithm.
+
+for (var i = 0; i < nums.length; i++) {
+// pick a different number
+// do some recursive call
+}
+Can you find the base case here? Notice that all the nums (right arrays) are all empty. We'll use that as an indicator that we are done.
+
+if (!nums.length) {
+// we found a solution!
+// return
+}
+
+
+
+now solution:
+
+class Solution {
+public:
+    void permute( vector<vector<int>>&combo,vector<int>comb,vector<int>&nums,int n){
+        if(comb.size()==n){
+            //tried one set of all possible combo
+            combo.push_back(comb);
+            return ;
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(count(comb.begin(),comb.end(),nums[i])==0)
+            {
+                comb.push_back(nums[i]);
+               permute(combo,comb,nums,n);
+               comb.pop_back();
+            }
+        }
+        
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>>combo;
+        int n=nums.size();
+        vector<int>comb;//starting with an empty array 
+        permute(combo,comb,nums,n);
+        return combo;
+    }
+};
+
+
+////////////////////////////////////////////////
+
+
+DFS based backtracking solution :
+class Solution {
+public:
+    void permute( vector<vector<int>>&combo,vector<int>&nums,int start,int n){
+        if(start>=n){
+            //tried one set of all possible combo
+            combo.push_back(nums);
+            return ;
+        }
+        for(int i=start;i<n;i++)
+        {
+            swap(nums[start],nums[i]);
+            permute(combo,nums,start+1,n);
+            cout<<start<<" "<<i<<" ";
+            swap(nums[start],nums[i]);
+        }
+        
+    }
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>>combo;
+        int start=0;
+        int n=nums.size();
+        permute(combo,nums,start,n);
+        return combo;
+    }
+};
+
+
+TC:O(n!)
+
