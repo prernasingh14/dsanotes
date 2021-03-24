@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+int numberOfP;
+void permute(int boxes[],int n,int start,int end){
+    if(start>end)
+    {
+        numberOfP++;
+        for(int i=0;i<n;i++){
+            cout<<boxes[i]<<" ";
+        }
+        cout<<"\n";
+        return ;
+    }
+       
+        for(int i=0;i<n;i++)
+        {
+            if(boxes[i]==0){
+               
+                boxes[i]=start;
+                permute(boxes,n,start+1,end);
+                boxes[i]=0;
+            }
+        }
+    
+}
+int main()
+{
+   
+  int n;cin>>n;
+  int arr[n];
+  for(int i=0;i<n;i++){
+      arr[i]=0;
+  }
+   permute(arr,n,1,n);
+   cout<<"the number of permutaions are "<<numberOfP<<"\n";
+	return 0;
+}
+
+
+
+
