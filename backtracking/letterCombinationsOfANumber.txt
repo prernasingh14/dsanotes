@@ -1,0 +1,72 @@
+Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+
+
+ 
+
+Example 1:
+
+Input: digits = "23"
+Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
+Example 2:
+
+Input: digits = ""
+Output: []
+Example 3:
+
+Input: digits = "2"
+Output: ["a","b","c"]
+ 
+
+Constraints:
+
+0 <= digits.length <= 4
+digits[i] is a digit in the range ['2', '9'].
+
+
+
+
+class Solution {
+public:
+    void backtrack(int pos,string s,string digits,unordered_map<char, string>&m,vector<string>& ans){
+        if(s.size()==digits.size()){//if we get the string size equal to the size of numbers -it is one of our combo
+            ans.push_back(s);
+            return ;
+        }
+        //iterate through every of the digit pressed
+        for(int i=pos;i<digits.size();i++)
+        {
+            char dig=digits[i];
+            //now iterate through every letter that the chosen digit can represent
+            for(int j=0;j<m[dig].size();j++)
+            {
+               char ch=m[dig][j];
+            //push that in our string as will form one of our combos
+                s.push_back(ch);
+                backtrack(i+1,s,digits,m,ans);
+                s.pop_back();//now pop out characters one by one to take in new combos
+            }
+        }  
+    }
+    vector<string> letterCombinations(string digits) {
+         vector<string> ans;
+        string s="";
+         unordered_map<char, string> m;
+         m['2']="abc";m['3']="def";m['4']="ghi";m['5']="jkl";m['6']="mno";m['7']="pqrs";
+         m['8']="tuv";m['9']="wxyz";
+        if(digits.size()==0)
+            return ans;
+        //start position =0;
+        backtrack(0, s, digits,m,ans);
+        return ans;
+        
+    }
+};
+
+
+Each digit of a number has 3 or 4 alphabets, so it can be said that each digit has 4 alphabets as options. If there are n digits then there are 4 options for the first digit and for each alphabet of the first digit there are 4 options in the second digit, i.e for every recursion 4 more recursions are called (if it does not match the base case).
+ So the time complexity is O(4^n).
+
+ 
