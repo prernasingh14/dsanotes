@@ -21,6 +21,35 @@ Constraints:
 found  a nice Explanation- https://youtu.be/N-3fyoKD8-k
 
 
+following the approach given in the video -
+class Solution {
+public:
+    void backtrack(int open, int close, string s, int n,vector<string>&ans){
+        if(s.size()==2*n){ // if the size of string is twice of length that means we have our answer
+            ans.push_back(s);
+            return;
+        }
+        if(open<n){ // if no. of open brackets is less than n, we are going to recursively add open brackets
+            backtrack(open+1, close, s+'(', n,ans);  
+        }
+        if(close<open){ // if no. of closed brackets is less than open brackets, we are going to recursively add closed brackets
+            backtrack(open, close+1, s+')', n,ans);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        string s="";
+        vector<string>ans;
+        backtrack(0,0,s,n,ans);
+        return ans;
+    }
+};
+
+
+
+
+//////////////////////////////////////////
+
+
 To form all the sequences of balanced bracket subsequences with n pairs.
  So there are n opening brackets and n closing brackets. 
 So the subsequence will be of length 2*n.
@@ -57,4 +86,7 @@ Time Complexity: O(2^n).
 For every index there can be two options ‘{‘ or ‘}’.
 
 SC:O(n)
+
+
+
 
