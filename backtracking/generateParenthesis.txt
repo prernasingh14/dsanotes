@@ -1,0 +1,60 @@
+Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+ 
+
+Example 1:
+
+Input: n = 3
+Output: ["((()))","(()())","(())()","()(())","()()()"]
+Example 2:
+
+Input: n = 1
+Output: ["()"]
+ 
+
+Constraints:
+
+1 <= n <= 8
+
+
+
+found  a nice Explanation- https://youtu.be/N-3fyoKD8-k
+
+
+To form all the sequences of balanced bracket subsequences with n pairs.
+ So there are n opening brackets and n closing brackets. 
+So the subsequence will be of length 2*n.
+ There is a simple idea, the i’th character can be ‘{‘ if and only if the count of ‘{‘ till i’th is less than n and i’th character can be ‘}’ if and only if the count of ‘{‘ is greater than the count of ‘}’ till index i. 
+ If these two cases are followed then the resulting subsequence will always be balanced. 
+
+class Solution {
+public:
+    void backtrack(int open, int close, string s, int n,vector<string>&ans){
+        if(s.size()==2*n){ // if the size of string is twice of length that means we have our answer
+            ans.push_back(s);
+            return;
+        }
+        if(open<n){ // if no. of open brackets is less than n, we are going to recursively add open brackets and then pop them
+            s.push_back('(');
+            backtrack(open+1, close, s, n,ans);
+            s.pop_back();
+        }
+        if(close<open){ // if no. of closed brackets is less than open brackets, we are going to recursively add closed brackets and then pop them 
+            s.push_back(')');
+            backtrack(open, close+1, s, n,ans);
+            s.pop_back();
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        string s="";
+        vector<string>ans;
+        backtrack(0,0,s,n,ans);
+        return ans;
+    }
+};
+
+Time Complexity: O(2^n). 
+For every index there can be two options ‘{‘ or ‘}’.
+
+SC:O(n)
+
