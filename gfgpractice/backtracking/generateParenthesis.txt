@@ -1,0 +1,54 @@
+Given an integer N representing the number of pairs of parentheses, the task is to generate all combinations of well-formed(balanced) parentheses.
+
+
+Example 1:
+
+Input:
+N = 3
+Output:
+((()))
+(()())
+(())()
+()(())
+()()()
+Example 2:
+Input:
+N = 1
+Output:
+()
+
+Your Task:  
+You don't need to read input or print anything. Complete the function AllParenthesis() which takes N as input parameter and returns the list of balanced parenthesis.
+
+Expected Time Complexity: O(2N).
+Expected Auxiliary Space: O(2*N*X), X = Number of valid Parenthesis.
+
+
+class Solution
+{
+    public:
+    void backtrack(int open,int close,string s,int n,vector<string>&ans){
+        if(s.size()==2*n){//we formed a combo
+            ans.push_back(s);
+            return ;
+        }
+        if(open<n)//as every balanced set can have only n open parenthesis 
+        {
+            backtrack(open+1,close,s+'(',n,ans);
+        }
+        if(close<open){//as close can nevefr exceed the number of opens 
+            backtrack(open,close+1,s+')',n,ans);
+        }
+        
+    }
+    vector<string> AllParenthesis(int n) 
+    {
+        // Your code goes here 
+        vector<string>ans;
+        string s="";
+        backtrack(0,0,s,n,ans);
+        return ans;
+    }
+};
+
+
