@@ -73,3 +73,96 @@ The largest number of elements in a combination sum would be [min, min, min ...]
 Therefore, the complexity should be: len(candidates)^ (target/min(candidates))
 
 
+Real backtracking approaches :
+
+
+
+class Solution {
+public:
+    void backtrack(vector<int>temp,vector<int>&nums,int target,int i,vector<vector<int>>&ans,int n){
+        if(i>=n || target<0){
+            return ;
+        }
+        if(target==0){
+            ans.push_back(temp);
+            return ;
+        }
+        //iterate through every number for different combo 
+         temp.push_back(nums[i]);
+         backtrack(temp,nums,target-nums[i],i,ans,n); 
+         temp.pop_back();//remove the last included
+         backtrack(temp,nums,target,i+1,ans,n);//go to next 
+    }
+    vector<vector<int>> combinationSum(vector<int>&nums, int target) {
+        vector<vector<int>>ans;
+        int sum=0;
+        vector<int>temp;
+        int n=nums.size();
+        backtrack(temp,nums,target,0,ans,n);
+        return ans;
+    }
+};
+
+
+
+
+
+
+class Solution {
+public:
+    void backtrack(vector<int>temp,vector<int>&nums,int target,int sum,int i,vector<vector<int>>&ans,int n){
+        if(i>=n || sum>target){
+            return ;
+        }
+        if(sum==target){
+            ans.push_back(temp);
+            return ;
+        }
+         temp.push_back(nums[i]);
+         backtrack(temp,nums,target,sum+nums[i],i,ans,n); //jaise hi our sum becomes greater than target we return and pop out the last added number 
+         temp.pop_back();//remove the last included
+         backtrack(temp,nums,target,sum,i+1,ans,n);//go to next 
+    }
+    vector<vector<int>> combinationSum(vector<int>&nums, int target) {
+        vector<vector<int>>ans;
+        int sum=0;
+        vector<int>temp;
+        int n=nums.size();
+        backtrack(temp,nums,target,sum,0,ans,n);
+        return ans;
+    }
+};
+
+
+//////////////////////////////////////////////////
+
+
+
+
+
+class Solution {
+public:
+    void backtrack(vector<int>temp,vector<int>&nums,int target,int sum,int i,vector<vector<int>>&ans,int n){
+        if(i>=n || sum>target){
+            return ;
+        }
+        if(sum==target){
+            ans.push_back(temp);
+            return ;
+        }
+        // we need to iterate through every number to ensure that it can be included in our set 
+        for(int j=i;j<n;j++){
+         temp.push_back(nums[j]);
+         backtrack(temp,nums,target,sum+nums[j],j,ans,n); //jaise hi our sum becomes greater than target we return and pop out the last added number 
+         temp.pop_back();//remove the last included 
+    }
+ }
+    vector<vector<int>> combinationSum(vector<int>&nums, int target) {
+        vector<vector<int>>ans;
+        int sum=0;
+        vector<int>temp;
+        int n=nums.size();
+        backtrack(temp,nums,target,sum,0,ans,n);
+        return ans;
+    }
+};
