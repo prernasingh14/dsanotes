@@ -1,0 +1,61 @@
+Given two integers n and k, return all possible combinations of k numbers out of 1 ... n.
+
+You may return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: n = 4, k = 2
+Output:
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+Example 2:
+
+Input: n = 1, k = 1
+Output: [[1]]
+ 
+
+Constraints:
+
+1 <= n <= 20
+1 <= k <= n
+
+
+
+
+class Solution {
+public:
+    void backtrack(vector<vector<int>>&ans,vector<int>&temp,int n,int k,int start,vector<int>&nums){
+        if(temp.size()==k){//we got in k numbers in a set 
+            ans.push_back(temp);
+            return ;
+        }
+        for(int i=start;i<n;i++)
+        {
+            temp.push_back(nums[i]);
+            backtrack(ans,temp,n,k,i+1,nums);
+            temp.pop_back();
+        }
+        
+    }
+    vector<vector<int>> combine(int n, int k) {
+         vector<vector<int>>ans;
+         vector<int>temp;
+        vector<int>nums(n,0);
+        for(int i=0;i<n;i++)
+        {
+            nums[i]=i+1;
+        }
+        backtrack(ans,temp,n,k,0,nums);
+        return ans ;
+    }
+};
+
+
