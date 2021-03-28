@@ -1,0 +1,141 @@
+Leetcode 1641-
+
+
+Given an integer n, return the number of strings of length n that consist only of vowels (a, e, i, o, u) and are lexicographically sorted.
+
+A string s is lexicographically sorted if for all valid i, s[i] is the same as or comes before s[i+1] in the alphabet.
+
+ 
+
+Example 1:
+
+Input: n = 1
+Output: 5
+Explanation: The 5 sorted strings that consist of vowels only are ["a","e","i","o","u"].
+Example 2:
+
+Input: n = 2
+Output: 15
+Explanation: The 15 sorted strings that consist of vowels only are
+["aa","ae","ai","ao","au","ee","ei","eo","eu","ii","io","iu","oo","ou","uu"].
+Note that "ea" is not a valid string since 'e' comes after 'a' in the alphabet.
+Example 3:
+
+Input: n = 33
+Output: 66045
+ 
+
+Constraints:
+
+1 <= n <= 50 
+
+
+
+
+class Solution {
+public:
+    void backtrack(int n,vector<string>&ans,string s,int start,string &vowels){
+        if(s.size()==n){
+           for(int j=0;j<s.size()-1;j++)
+           {
+               if(s[j]>s[j+1])
+                   return;
+           }
+            cout<<s<<" ";
+            ans.push_back(s);
+            return ;
+        }
+        //now we need to start from every character 
+        for(int i=start;i<5;i++)
+        {
+            s.push_back(vowels[i]);
+            backtrack(n,ans,s,start,vowels);
+            s.pop_back();
+        }
+    }
+    int countVowelStrings(int n) {
+        vector<string>ans;
+        string s="";
+        string vowels="aeiou";
+        backtrack(n,ans,s,0,vowels);
+        return ans.size();
+        
+    }
+};
+
+/////////////////////////////////////////
+
+
+
+
+by just simply taking the count variable 
+
+
+class Solution {
+public:
+    void backtrack(int n,int &count,string s,int start,string &vowels){
+        if(s.size()==n){
+           for(int j=0;j<s.size()-1;j++)
+           {
+               if(s[j]>s[j+1])
+                   return;
+           }
+            // cout<<s<<" ";
+            count++;
+            return ;
+        }
+        //now we need to start from every character 
+        for(int i=start;i<5;i++)
+        {
+            s.push_back(vowels[i]);
+            backtrack(n,count,s,start,vowels);
+            s.pop_back();
+        }
+    }
+    int countVowelStrings(int n) {
+        int count=0;
+        string s="";
+        string vowels="aeiou";
+        backtrack(n,count,s,0,vowels);
+        return count;
+        
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+class Solution {
+public:
+    void backtrack(int n,int &count,string &s,int start,string &vowels){
+        if(s.size()==n){
+            // cout<<s<<" ";
+            count++;
+            return ;
+        }
+        //now we need to start from every character 
+        for(int i=start;i<5;i++)
+        {
+                s.push_back(vowels[i]);
+            backtrack(n,count,s,i,vowels);//by changing start to i-> it will never come backwards 
+            s.pop_back();
+            }
+    }
+    int countVowelStrings(int n) {
+        int count=0;
+        string s="";
+        string vowels="aeiou";
+        backtrack(n,count,s,0,vowels);
+        return count;
+        
+    }
+};
+
+
+
+
