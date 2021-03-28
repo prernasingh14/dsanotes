@@ -1,0 +1,114 @@
+You have n  tiles, where each tile has one letter tiles[i] printed on it.
+
+Return the number of possible non-empty sequences of letters you can make using the letters printed on those tiles.
+
+ 
+
+Example 1:
+
+Input: tiles = "AAB"
+Output: 8
+Explanation: The possible sequences are "A", "B", "AA", "AB", "BA", "AAB", "ABA", "BAA".
+Example 2:
+
+Input: tiles = "AAABBC"
+Output: 188
+Example 3:
+
+Input: tiles = "V"
+Output: 1
+ 
+
+Constraints:
+
+1 <= tiles.length <= 7
+tiles consists of uppercase English letters.
+
+
+
+class Solution {
+public:
+    unordered_map<string,int>m;
+    void backtrack(string tiles,int start,vector<string>&ans,string s,int n){
+        if(start==n){
+            if(m[s]==0)//to maintain uniqueness such that no strings get repeated 
+            {
+                ans.push_back(s);
+                m[s]++;
+            }
+            return ;
+        }
+        for(int i=start;i<n;i++)
+        {
+            swap(tiles[i],tiles[start]);
+            s.push_back(tiles[start]);
+            if(m[s]==0)
+            ans.push_back(s);
+            m[s]++;
+            backtrack(tiles,start+1,ans,s,n);
+            swap(tiles[i],tiles[start]);
+            s.pop_back();
+        }
+    }
+    int numTilePossibilities(string tiles) {
+        int count=0;
+        vector<string>ans;
+        string s="";int n=tiles.size();
+        backtrack(tiles,0,ans,s,n);
+        // for(int i=0;i<ans.size();i++)
+        // {
+        //     cout<<ans[i]<<" ";
+        // }
+        return ans.size();
+    }
+};
+
+
+
+////////////////////////////////
+
+
+
+one slight improvisation is to just count instead of maintaining an ans vector
+
+
+class Solution {
+public:
+    unordered_map<string,int>m;
+    void backtrack(string tiles,int start,int &count,string s,int n){
+        if(start==n){
+            if(m[s]==0)//to maintain uniqueness such that no strings get repeated 
+            {
+                count++;
+                m[s]++;
+            }
+            return ;
+        }
+        for(int i=start;i<n;i++)
+        {
+            swap(tiles[i],tiles[start]);
+            s.push_back(tiles[start]);
+            if(m[s]==0)
+                count++;
+            m[s]++;
+            backtrack(tiles,start+1,count,s,n);
+            swap(tiles[i],tiles[start]);
+            s.pop_back();
+        }
+    }
+    int numTilePossibilities(string tiles) {
+        int count=0;
+        string s="";int n=tiles.size();
+        backtrack(tiles,0,count,s,n);
+         for(int i=0;i<ans.size();i++)
+        {
+            cout<<ans[i]<<" ";
+        }
+        return count;
+    }
+};
+
+
+
+
+
