@@ -1,0 +1,73 @@
+
+Given a set of n integers, divide the set in two subsets of n/2 sizes each such that the difference of the sum of two subsets is as minimum as possible. If n is even, then sizes of two subsets must be strictly n/2 and if n is odd, then size of one subset must be (n-1)/2 and size of other subset must be (n+1)/2.
+
+For example, let given set be {3, 4, 5, -3, 100, 1, 89, 54, 23, 20}, the size of set is 10. Output for this set should be {4, 100, 1, 23, 20} and {3, 5, -3, 89, 54}. Both output subsets are of size 5 and sum of elements in both subsets is same (148 and 148).
+Let us consider another example where n is odd. Let given set be {23, 45, -34, 12, 0, 98, -99, 4, 189, -1, 4}. The output subsets should be {45, -34, 12, 98, -1} and {23, 0, -99, 4, 189, 4}. The sums of elements in two subsets are 120 and 121 respectively.
+
+The following solution tries every possible subset of half size. If one subset of half size is formed, the remaining elements form the other subset. We initialize current set as empty and one by one build it. There are two possibilities for every element, either it is part of current set, or it is part of the remaining elements (other subset). We consider both possibilities for every element. When the size of current set becomes n/2, we check whether this solutions is better than the best solution available so far. If it is, then we update the best solution.
+
+
+watch pepcoding video for better understanding -
+
+thus the basic approach follows backtracking :
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+void backtrack( vector<vector<int>>&ans, vector<int>&set1,vector<int>&set2,int i,vector<int>&nums,int n,int sum1,int sum2,int &diff){
+  //if checked choices for all nunbers 
+  if(i==n){
+      if(abs(sum1-sum2)<diff){
+          diff=abs(sum1-sum2);
+          if(ans.size()==2)
+          {
+          ans.pop_back();
+          ans.pop_back();
+          }
+           ans.push_back(set1);
+           ans.push_back(set2);
+      }
+      return ;
+  }
+  if(set1.size()==(n+1)/2)//if we have already pushed req count of elements in set1
+   return ;
+  set1.push_back(nums[i]);
+  backtrack(ans,set1,set2,i+1,nums,n,sum1+nums[i],sum2,diff);
+  set1.pop_back();
+  if(set2.size()==(n+1)/2)//if we have already pushed req count of elements in set2
+  return ;
+  set2.push_back(nums[i]);
+  backtrack(ans,set1,set2,i+1,nums,n,sum1,sum2+nums[i],diff);
+  set2.pop_back();
+  
+}
+int main(){
+    int n;cin>>n;
+    vector<int>nums;
+    int num;
+    for(int i=0;i<n;i++)
+    {
+        cin>>num;
+        nums.push_back(num);
+    }
+    vector<vector<int>>ans;
+    vector<int>set1,set2;
+    int diff=INT_MAX;
+    backtrack(ans,set1,set2,0,nums,n,0,0,diff);
+    for(int i=0;i<ans.size();i++)
+    {
+       for(int j=0;j<ans[i].size();j++)
+       {
+           cout<<ans[i][j]<<" ";
+       }
+       cout<<"\n";
+    }
+    return 0;
+    
+}
+
