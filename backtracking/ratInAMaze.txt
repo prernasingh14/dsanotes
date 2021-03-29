@@ -1,0 +1,134 @@
+A Maze is given as N*N binary matrix of blocks where source block is the upper left most block i.e., maze[0][0] and destination block is lower rightmost block i.e., maze[N-1][N-1]. A rat starts from source and has to reach the destination. The rat can move only in two directions: forward and down. 
+
+In the maze matrix, 0 means the block is a dead end and 1 means the block can be used in the path from source to destination. Note that this is a simple version of the typical Maze problem. For example, a more complex version can be that the rat can move in 4 directions and a more complex version can be with a limited number of moves.
+
+Following is an example maze.  
+
+ 
+
+Following is a binary matrix representation of the above maze. 
+
+{1, 0, 0, 0}
+{1, 1, 0, 1}
+{0, 1, 0, 0}
+{1, 1, 1, 1}
+
+
+Following is the solution matrix (output of program) for the above input matrix. 
+
+{1, 0, 0, 0}
+{1, 1, 0, 0}
+{0, 1, 0, 0}
+{0, 1, 1, 1}
+All enteries in solution path are marked as 1.
+
+
+
+
+basic approach : using a 2D visited array - 
+backtracking is applied as we want all possible paths 
+
+
+class Solution{
+    public:
+    void backtrack(vector<vector<int>> &grid,vector<vector<int>> &visited,int n,vector<string>&ans,int destx,int desty,int i,int j,string s){
+        if(i==destx && j==desty){//we reached our destination 
+            ans.push_back(s);
+            return ;
+        }
+        if(i>=n || j>=n || i<0 || j<0 || grid[i][j]==0 || visited[i][j]==1)//dead end 
+        return;
+        visited[i][j]=1;//mark that cell visited 
+        backtrack(grid,visited,n,ans,destx,desty,i+1,j,s+'D');//down
+        backtrack(grid,visited,n,ans,destx,desty,i-1,j,s+'U');//up
+        backtrack(grid,visited,n,ans,destx,desty,i,j-1,s+'L');//left
+        backtrack(grid,visited,n,ans,destx,desty,i,j+1,s+'R');//right 
+        visited[i][j]=0;//since we want all possible paths , we unvisit it so that it can be used for other paththat can be taken
+        
+    }
+    vector<string> findPath(vector<vector<int>> &grid, int n) {
+        // Your code goes here
+        vector<string>ans;
+        string s="";
+        if(grid[n-1][n-1]==0)
+        return ans;
+        vector<vector<int>> visited(n,vector<int>(n,0));
+        backtrack(grid,visited,n,ans,n-1,n-1,0,0,s);
+        sort(ans.begin(),ans.end());//as we want the answer in sorted fashion 
+        return ans;
+    }
+};
+
+
+
+space optimized w/o using extra space:
+we can mark gird[i][j]=0 ( after visiting it ) so that in furthur path we don't include ir again
+
+then after getting one path , we again make it as grid[i][j]=1 so that can be imcluded in different upcoming paths possible 
+
+class Solution{
+    public:
+    void backtrack(vector<vector<int>> &grid,int n,vector<string>&ans,int destx,int desty,int i,int j,string s){
+        if(i>=n || j>=n || i<0 || j<0 || grid[i][j]==0 )//dead end 
+        return;
+        if(i==destx && j==desty){//we reached our destination 
+            ans.push_back(s);
+            return ;
+        }
+        grid[i][j]=0;
+        backtrack(grid,n,ans,destx,desty,i+1,j,s+'D');//down
+        backtrack(grid,n,ans,destx,desty,i-1,j,s+'U');//up
+        backtrack(grid,n,ans,destx,desty,i,j-1,s+'L');//left
+        backtrack(grid,n,ans,destx,desty,i,j+1,s+'R');//right 
+        grid[i][j]=1;
+        
+    }
+    vector<string> findPath(vector<vector<int>> &grid, int n) {
+        // Your code goes here
+        vector<string>ans;
+        string s="";
+        if(grid[n-1][n-1]==0)
+        return ans;
+        backtrack(grid,n,ans,n-1,n-1,0,0,s);
+        sort(ans.begin(),ans.end());//as we want the answer in sorted fashion as given in the problem statement 
+        return ans;
+    }
+};
+
+
+TC:O((N^2)^4+ klogk). k is the number of paths in ans 
+
+
+
+instead of sorting we can simply traverse the paths in lexicographic manner ,i.e  DLRU 
+
+class Solution{
+    public:
+    void backtrack(vector<vector<int>> &grid,int n,vector<string>&ans,int destx,int desty,int i,int j,string s){
+        if(i>=n || j>=n || i<0 || j<0 || grid[i][j]==0 )//dead end 
+        return;
+        if(i==destx && j==desty){//we reached our destination 
+            ans.push_back(s);
+            return ;
+        }
+        grid[i][j]=0;
+        backtrack(grid,n,ans,destx,desty,i+1,j,s+'D');//down
+        backtrack(grid,n,ans,destx,desty,i,j-1,s+'L');//left
+        backtrack(grid,n,ans,destx,desty,i,j+1,s+'R');//right
+        backtrack(grid,n,ans,destx,desty,i-1,j,s+'U');//up 
+        grid[i][j]=1;
+        
+    }
+    vector<string> findPath(vector<vector<int>> &grid, int n) {
+        // Your code goes here
+        vector<string>ans;
+        string s="";
+        if(grid[n-1][n-1]==0)
+        return ans;
+        backtrack(grid,n,ans,n-1,n-1,0,0,s);
+        //sort(ans.begin(),ans.end());//as we want the answer in sorted fashion 
+        return ans;
+    }
+};
+
+
