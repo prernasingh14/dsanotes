@@ -1,0 +1,367 @@
+
+
+Given a path in the form of a rectangular matrix having few landmines arbitrarily placed (marked as 0), 
+calculate length of the shortest safe route possible from any cell in the first column to any cell in the last column of the matrix. 
+We have to avoid landmines and their four adjacent cells (left, right, above and below) as they are also unsafe.
+ We are allowed to move to only adjacent cells which are not landmines. i.e. the route cannot contains any diagonal moves.
+
+
+
+
+input -
+mat[][] = {
+   {1, 1, 0, 1},
+   {1, 1, 0, 1},
+   {1, 1, 1, 1},
+   {1, 1, 1, 1}
+}
+Output
+length of shortest safe path is 7
+
+
+Explanation
+{
+   {1, 1, 0, 1},
+   {1, 1, 0, 1},
+   {1, 1, 1, 1},
+   {1, 1, 1, 1}
+}
+
+
+
+backtracking based solution:
+
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+void btrack(vector<vector<int>>&grid,int i,int j,int desty,int path,int &minPath,int m,int n,vector<vector<bool>>&visited)
+{
+    if(i>=m || j>=n || i<0 || j<0 || grid[i][j]==0 || visited[i][j]==true){
+        return ;
+    }
+    if(j==n-1){//we reached the last column 
+      //cout<<path<<" ";
+        minPath=min(minPath,path);
+        return ;
+    }
+    if(path>minPath)
+    return ;
+    visited[i][j]=true;//visited
+    btrack(grid,i+1,j,desty,path+1,minPath,m,n,visited);
+    btrack(grid,i-1,j,desty,path+1,minPath,m,n,visited);
+    btrack(grid,i,j+1,desty,path+1,minPath,m,n,visited);
+    btrack(grid,i,j-1,desty,path+1,minPath,m,n,visited);
+    visited[i][j]=false;//unvisit
+}
+int main(){
+    int n,m;cin>>m>>n;
+    vector<vector<int>>grid(m,vector<int>(n,-2));
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int x;
+            cin>>x;
+            grid[i][j]=x;
+        }
+    }
+    vector<vector<bool>>visited(m,vector<bool>(n,false));
+    for(int i=0;i<m;i++)
+    {
+    for(int j=0;j<n;j++)
+    {
+            if(grid[i][j]==0){//make its adjacent cells as unsafe
+              if(i+1<m && grid[i+1][j]==1)
+            {
+                grid[i+1][j]=-1;
+            }//down
+            if(i-1>=0 && grid[i-1][j]==1)
+            {
+                grid[i-1][j]=-1;//up
+            }
+            if(j+1<n &&  grid[i][j+1]==1)
+            {
+                grid[i][j+1]=-1;//right
+                
+            }
+            if(j-1>=0 && grid[i][j-1]==1)
+            {
+                 grid[i][j-1]=-1;//left
+               
+            }
+        }
+       
+    }
+  
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(grid[i][j]==-1)
+            grid[i][j]=0;
+        }
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+          cout<<grid[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    int minPath=INT_MAX;
+    //now we need to find the shortest path from cell in first column to cell in last column
+    //for every cell in firt column 
+    for(int i=0;i<m;i++)
+    {
+        if(grid[i][0]==1)
+        {
+            btrack(grid,i,0,n-1,0,minPath,m,n,visited);
+            // cout<<i<<" "<<"row"<<" "<<minPath<<" ";
+        }
+    }
+    cout<<"THE shortest path is "<<minPath<<"\n";
+    return 0;
+   
+    
+}
+
+
+we can also do it without using the visited array 
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+void btrack(vector<vector<int>>&grid,int i,int j,int desty,int path,int &minPath,int m,int n)
+{
+    if(i>=m || j>=n || i<0 || j<0 || grid[i][j]==0){
+        return ;
+    }
+    if(j==n-1){//we reached the last column 
+      //cout<<path<<" ";
+        minPath=min(minPath,path);
+        return ;
+    }
+    if(path>minPath)
+    return ;
+    grid[i][j]=0;//visited
+    btrack(grid,i+1,j,desty,path+1,minPath,m,n);
+    btrack(grid,i-1,j,desty,path+1,minPath,m,n);
+    btrack(grid,i,j+1,desty,path+1,minPath,m,n);
+    btrack(grid,i,j-1,desty,path+1,minPath,m,n);
+    grid[i][j]=1;//unvisit
+}
+int main(){
+    int n,m;cin>>m>>n;
+    vector<vector<int>>grid(m,vector<int>(n,-2));
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int x;
+            cin>>x;
+            grid[i][j]=x;
+        }
+    }
+    vector<vector<bool>>visited(m,vector<bool>(n,false));
+    for(int i=0;i<m;i++)
+    {
+    for(int j=0;j<n;j++)
+    {
+            if(grid[i][j]==0){//make its adjacent cells as unsafe
+              if(i+1<m && grid[i+1][j]==1)
+            {
+                grid[i+1][j]=-1;
+            }//down
+            if(i-1>=0 && grid[i-1][j]==1)
+            {
+                grid[i-1][j]=-1;//up
+            }
+            if(j+1<n &&  grid[i][j+1]==1)
+            {
+                grid[i][j+1]=-1;//right
+                
+            }
+            if(j-1>=0 && grid[i][j-1]==1)
+            {
+                 grid[i][j-1]=-1;//left
+               
+            }
+        }
+       
+    }
+  
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(grid[i][j]==-1)
+            grid[i][j]=0;
+        }
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+          cout<<grid[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    int minPath=INT_MAX;
+    //now we need to find the shortest path from cell in first column to cell in last column
+    //for every cell in firt column 
+    for(int i=0;i<m;i++)
+    {
+        if(grid[i][0]==1)
+        {
+            btrack(grid,i,0,n-1,0,minPath,m,n);
+            // cout<<i<<" "<<"row"<<" "<<minPath<<" ";
+        }
+    }
+    cout<<"THE shortest path is "<<minPath<<"\n";
+    return 0;
+   
+    
+}
+
+
+Another method: 
+
+
+since we are asked about shortest path here , we can definitely think of BFS here.
+
+
+It can be solved in polynomial time with the help of Breadth First Search. 
+Enqueue the cells with 1 value in the queue with the distance as 0.
+ As the BFS proceeds, shortest path to each cell from the first column is computed.
+  Finally for the reachable cells in the last column, output the minimum distance.
+
+
+
+
+  BFS based solution:
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+#define imp() ios_base::sync_with_stdio(false);cin.tie(0);cout.tie(0)
+#define pb push_back
+#define endl "\n"
+#define lli long long int 
+#define ll long long 
+bool isValid(int x,int y,int m,int n)
+{
+    if(x>=m || y>=n || x<0 || y<0)
+    return false;
+    return true;
+}
+int main(){
+    int n,m;cin>>m>>n;
+    vector<vector<int>>grid(m,vector<int>(n,-2));
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            int x;
+            cin>>x;
+            grid[i][j]=x;
+        }
+    }
+    vector<vector<int>>dist(m,vector<int>(n,-1));
+    for(int i=0;i<m;i++)
+    {
+    for(int j=0;j<n;j++)
+    {
+            if(grid[i][j]==0){//make its adjacent cells as unsafe
+              if(i+1<m && grid[i+1][j]==1)
+            {
+                grid[i+1][j]=-1;
+            }//down
+            if(i-1>=0 && grid[i-1][j]==1)
+            {
+                grid[i-1][j]=-1;//up
+            }
+            if(j+1<n &&  grid[i][j+1]==1)
+            {
+                grid[i][j+1]=-1;//right
+                
+            }
+            if(j-1>=0 && grid[i][j-1]==1)
+            {
+                 grid[i][j-1]=-1;//left
+               
+            }
+        }
+       
+    }
+  
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+            if(grid[i][j]==-1)
+            grid[i][j]=0;
+        }
+    }
+    for(int i=0;i<m;i++)
+    {
+        for(int j=0;j<n;j++)
+        {
+          cout<<grid[i][j]<<" ";
+        }
+        cout<<"\n";
+    }
+    int dx[]={-1,0,1,0};
+    int dy[]={0,1,0,-1};
+    int minPath=INT_MAX;
+    queue<pair<int,int>>q;
+    //now we need to find the shortest path from cell in first column to cell in last column
+    //for every cell in firt column 
+    for(int i=0;i<m;i++)
+    {
+        if(grid[i][0]==1)
+        {
+          q.push({i,0});
+          dist[i][0]=0;
+        }
+    }
+    while(!q.empty()){
+        pair<int,int> p=q.front();
+        q.pop();
+        int x=p.first;int y=p.second;
+        int d=dist[p.first][p.second];
+        for(int k=0;k<4;k++)
+        {
+            if(isValid(x+dx[k],y+dy[k],m,n) && dist[x+dx[k]][y+dy[k]]==-1 && grid[x+dx[k]][y+dy[k]]==1) {
+                dist[x+dx[k]][y+dy[k]]=d+1;
+                q.push({x+dx[k],y+dy[k]});
+                
+            }
+        }
+        
+    }
+    for(int i=0;i<m;i++)
+    {
+     if(grid[i][n-1]==1 && dist[i][n-1]!=-1)//we were able to reach 
+     minPath=min(minPath,dist[i][n-1]);
+    }
+    cout<<"THE shortest path is "<<minPath<<"\n";
+    return 0;
+   
+    
+}
+
+
