@@ -1,0 +1,61 @@
+Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+ 
+
+Example 1:
+
+Input: s = "catsanddog", wordDict = ["cat","cats","and","sand","dog"]
+Output: ["cats and dog","cat sand dog"]
+Example 2:
+
+Input: s = "pineapplepenapple", wordDict = ["apple","pen","applepen","pine","pineapple"]
+Output: ["pine apple pen apple","pineapple pen apple","pine applepen apple"]
+Explanation: Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: []
+ 
+
+Constraints:
+
+1 <= s.length <= 20
+1 <= wordDict.length <= 1000
+1 <= wordDict[i].length <= 10
+s and wordDict[i] consist of only lowercase English letters.
+All the strings of wordDict are unique.
+
+
+
+class Solution {
+public:
+    //we need to generate all prefixes and check whether they exist 
+    void backtrack(string s,vector<string>&ans,string str,unordered_map<string,int>&m,int n){
+        for(int i=1;i<=n;i++)
+        {
+            string prefix=s.substr(0,i);
+            if(m[prefix]){
+                if(i==n){
+                    str+=prefix;//last string 
+                    ans.push_back(str);
+                    return;
+                }
+                backtrack(s.substr(i,n-i),ans,str+prefix+" ",m,n-i);
+            }
+        }
+    }
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+         vector<string>ans;
+        unordered_map<string,int>m;
+        for(int i=0;i<wordDict.size();i++)
+        {
+            m[wordDict[i]]++;
+        }
+        backtrack(s,ans,"",m,s.size());
+        return ans;
+        
+    }
+};
+
