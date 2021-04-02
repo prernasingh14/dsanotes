@@ -1,0 +1,86 @@
+Given a 2D binary matrix A(0-based index) of dimensions NxM. Find the minimum number of steps required to reach from (0,0) to (X, Y).
+Note: You can only move left, right, up and down, and only through cells that contain 1.
+
+Example 1:
+
+Input:
+N=3
+M=4
+A=[[1,0,0,0], 
+[1,1,0,1],[0,1,1,1]]
+X=2
+Y=3 
+Output:
+5
+Explanation:
+The shortest path is as follows:
+(0,0)->(1,0)->(1,1)->(2,1)->(2,2)->(2,3).
+Example 2:
+
+Input:
+N=3
+M=4
+A=[[1,1,1,1],
+[0,0,0,1],[0,0,0,1]]
+X=0
+Y=3
+Output:
+3
+Explanation:
+The shortest path is as follows:
+(0,0)->(0,1)->(0,2)->(0,3).
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function shortestDistance() which takes the integer N, M, X, Y, and the 2D binary matrix A as input parameters and returns the minimum number of steps required to go from (0,0) to (X, Y).If it is impossible to go from (0,0) to (X, Y),then function returns -1. If value of the cell (0,0) is 0 (i.e  A[0][0]=0) then return -1.
+
+
+Expected Time Complexity:O(N*M)
+Expected Auxillary Space:O(N*M)
+
+ 
+
+Constraints:
+1 <= N,M <= 250
+
+0 <= X < N
+
+0 <= Y < M
+0 <= A[i][j] <= 1
+
+BFS to find shortest path :
+
+
+int shortestDistance(int n, int m, vector<vector<int>> grid, int x, int y) {
+        // code here
+        vector<vector<bool>>visited(n,vector<bool>(m,false));
+        int startx=0;int starty=0;
+        if(grid[0][0]==0)
+        return -1;
+        queue<pair<int,pair<int,int>>>q;
+        q.push({0,{0,0}});
+        int steps=0;
+        int dx[]={-1,0,1,0};
+        int dy[]={0,1,0,-1};
+        while(!q.empty()){
+            pair<int,pair<int,int>>p=q.front();
+            q.pop();
+            int ct=p.first;
+            int i=p.second.first;
+            int j=p.second.second;
+            if(i==x && j==y){
+                return ct;
+            }
+            for(int k=0;k<4;k++)
+            {
+                int ix=i+dx[k];
+                int iy=j+dy[k];
+                if(ix>=n || iy>=m || ix<0 || iy<0 || visited[ix][iy] || grid[ix][iy]==0)
+                continue;
+                visited[ix][iy]=true;
+                q.push({1+ct,{ix,iy}});
+            }
+        }
+        return -1;
+    }
+
+
