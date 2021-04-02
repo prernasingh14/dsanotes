@@ -47,6 +47,18 @@ Constraints:
 0 <= Y < M
 0 <= A[i][j] <= 1
 
+
+
+DFS does not guarantee that if node 1 is visited before another node 2 starting from a source vertex, then node 1 is closer to the source than node 2.
+
+This can be easily seen from recursive nature of DFS. It visits the 'deeper' nodes or you can say farther from source nodes first. It goes as far as it can from the source vertex and then returns back to unvisited adjacent nodes of visited vertices.
+
+On the other hand BFS always visits nodes in increasing order of their distance from the source. It first visits all nodes at same 'level' of the graph and then goes on to the next level.
+
+BFS can only be used to find shortest distance in an unweighted graph. For a weighed graph you may need Dijkstra's algorithm or Bellmann-Ford's algorithm.
+
+
+
 BFS to find shortest path :
 
 
