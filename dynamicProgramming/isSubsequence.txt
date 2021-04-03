@@ -1,0 +1,124 @@
+Given two strings s and t, check if s is a subsequence of t.
+
+A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+
+ 
+
+Example 1:
+
+Input: s = "abc", t = "ahbgdc"
+Output: true
+Example 2:
+
+Input: s = "axc", t = "ahbgdc"
+Output: false
+ 
+
+Constraints:
+
+0 <= s.length <= 100
+0 <= t.length <= 104
+s and t consist only of lowercase English letters.
+ 
+
+Follow up: If there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to see if t has its subsequence. In this scenario, how would you change your code?
+
+
+Recursive approach:
+
+is to match one by one 
+class Solution {
+public:
+    bool recur(string s,string t,int i,int j,int sn,int tn){
+        if(i==sn)//we reached end 
+            return true;
+        if(j>=tn)//we reached end of t , still we couldn't find subsequence
+            return false;
+        if(s[i]==t[j]){//if matches then shift both by one character
+            return recur(s,t,i+1,j+1,sn,tn);
+        }
+        else//if doesn't match then go to next index of t 
+            return recur(s,t,i,j+1,sn,tn);
+        
+    }
+    bool isSubsequence(string s, string t) {
+        int sn=s.size();
+        int tn=t.size();
+        if(sn>tn)
+            return false;
+        return recur(s,t,0,0,sn,tn);
+        
+    }
+};
+
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+dynamic programming based approach :
+
+
+is based on the concept of finding Least common Subsequence of both strings and then checking whether the LCS length is =to s.size()
+
+
+class Solution {
+public:
+    //dynamic approach
+    bool isSubsequence(string s, string t) {
+        int sn= s.size();
+        int tn = t.size();
+        int dp[sn+1][tn+1];
+        for(int i = 0; i<=sn; i++)// if t is null(i.e size is 0)
+            dp[i][0]=0;
+        for(int i = 0; i<=tn; i++)//if s is  null
+            dp[0][i]=0;
+        for(int i = 1; i<=sn; i++){
+            for(int j = 1; j<=tn; j++){
+                if(s[i-1]==t[j-1]){//if matches then add 1 to its length
+                    dp[i][j]=1+dp[i-1][j-1];
+                }else{
+                    dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        int length=dp[sn][tn];//LCS length
+        return length==sn;
+        
+    }
+};
+
+
+
+
+//////////////////////////////////////////////////////////
+
+
+
+
+Two pointer approach :
+
+
+class Solution {
+public:
+    //two pointer approach 
+    bool isSubsequence(string s, string t) {
+        int sn=s.size();
+        int tn=t.size();
+        if(sn>tn)
+            return false;
+        int i=0;int j=0;
+        while(i<sn && j<tn){
+            if(s[i]==t[j]){//if match then move both forward 
+                i++;
+                j++;
+            }
+            else
+                j++;//else move t forward 
+        }
+        return i==sn;
+        
+    }
+};
+
