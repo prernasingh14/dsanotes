@@ -1,0 +1,122 @@
+In a country popular for train travel, you have planned some train travelling one year in advance.  The days of the year that you will travel is given as an array days.  Each day is an integer from 1 to 365.
+
+Train tickets are sold in 3 different ways:
+
+a 1-day pass is sold for costs[0] dollars;
+a 7-day pass is sold for costs[1] dollars;
+a 30-day pass is sold for costs[2] dollars.
+The passes allow that many days of consecutive travel.  For example, if we get a 7-day pass on day 2, then we can travel for 7 days: day 2, 3, 4, 5, 6, 7, and 8.
+
+Return the minimum number of dollars you need to travel every day in the given list of days.
+
+ 
+
+Example 1:
+
+Input: days = [1,4,6,7,8,20], costs = [2,7,15]
+Output: 11
+Explanation: 
+For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 1-day pass for costs[0] = $2, which covered day 1.
+On day 3, you bought a 7-day pass for costs[1] = $7, which covered days 3, 4, ..., 9.
+On day 20, you bought a 1-day pass for costs[0] = $2, which covered day 20.
+In total you spent $11 and covered all the days of your travel.
+Example 2:
+
+Input: days = [1,2,3,4,5,6,7,8,9,10,30,31], costs = [2,7,15]
+Output: 17
+Explanation: 
+For example, here is one way to buy passes that lets you travel your travel plan:
+On day 1, you bought a 30-day pass for costs[2] = $15 which covered days 1, 2, ..., 30.
+On day 31, you bought a 1-day pass for costs[0] = $2 which covered day 31.
+In total you spent $17 and covered all the days of your travel.
+ 
+
+Note:
+
+1 <= days.length <= 365
+1 <= days[i] <= 365
+days is in strictly increasing order.
+costs.length == 3
+1 <= costs[i] <= 1000
+
+
+
+
+what we can analyse is that :
+
+
+every day :
+
+1. no cost to travel that day (As this day is included in previously npught pass)
+2. buy a one day pass to travel that day  but can't cover any furthur days
+3. buy a 7 day pass to travel that day as well as can travel 6 more consecutive days with it 
+4. buy a 30 days pass to travel that day as well as can travel 29(30-1) more consecutive days with it 
+
+
+thus we see that every day which doesn't fall inside a covered range has 3 options to decide from 
+
+
+
+so we can maintain a variable called coveredDay which will tell whether or not days[i] falls under that range of bought pass
+
+
+
+class Solution {
+public:
+    int dfsdays(vector<int>&days,vector<int>&costs,int i,int coveredDay){
+        if(i==days.size()){
+            return 0;   
+        }
+        if(days[i]<=coveredDay){
+            return dfsdays(days,costs,i+1,coveredDay);
+        }
+        int oneDay=costs[0]+dfsdays(days,costs,i+1,days[i]);//can take in no more day
+        int sevenDay=costs[1]+dfsdays(days,costs,i+1,days[i]+6);//can take in 6 days more as it was a 7 day pass
+        int thirtyDay=costs[2]+dfsdays(days,costs,i+1,days[i]+29);//can take in 29 days more 
+        return min(oneDay,min(sevenDay,thirtyDay)); 
+    }
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        //this is a very good question for building bigger question from smaller solutions step by step
+        return dfsdays(days,costs,0,0);
+    }
+};
+
+
+
+
+gives TLE
+
+
+
+Recursion with memoization:
+
+
+
+
+
+class Solution {
+public:
+    int dfsdays(vector<int>&days,vector<int>&costs,int i,int coveredDay,vector<int>&dp){
+        if(i==days.size()){
+            return 0;   
+        }
+        if(days[i]<=coveredDay){
+            return dfsdays(days,costs,i+1,coveredDay,dp);
+        }
+          if(dp[i]!=-1)
+            return dp[i];
+        int oneDay=costs[0]+dfsdays(days,costs,i+1,days[i],dp);//can take in no more day
+        int sevenDay=costs[1]+dfsdays(days,costs,i+1,days[i]+6,dp);//can take in 6 days more as it was a 7 day pass
+        int thirtyDay=costs[2]+dfsdays(days,costs,i+1,days[i]+29,dp);//can take in 29 days more 
+        return dp[i]=min(oneDay,min(sevenDay,thirtyDay)); 
+    }
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        //this is a very good question for building bigger question from smaller solutions step by step
+        vector<int>dp(days.size(),-1);
+        return dfsdays(days,costs,0,0,dp);
+    }
+};
+
+
+
