@@ -118,5 +118,38 @@ public:
     }
 };
 
+////////////////////////////////////////////////////////////////////////////
 
 
+
+
+
+we can as well make a new function to find the index of the next day to be chosen 
+
+
+
+class Solution {
+public:
+    int nextDay(vector<int>&days,int i,int end){
+        while(i<days.size() && days[i]<=end){
+            i++;
+        }
+        return i;
+    }
+    int dfsdays(vector<int>&days,vector<int>&costs,int i,vector<int>&dp){
+        if(i==days.size()){
+            return 0;   
+        }
+          if(dp[i]!=-1)
+            return dp[i];
+        int oneDay=costs[0]+dfsdays(days,costs,nextDay(days,i,days[i]),dp);//can take in no more day
+        int sevenDay=costs[1]+dfsdays(days,costs,nextDay(days,i,days[i]+6),dp);//can take in 6 days more as it was a 7 day pass
+        int thirtyDay=costs[2]+dfsdays(days,costs,nextDay(days,i,days[i]+29),dp);//can take in 29 days more 
+        return dp[i]=min(oneDay,min(sevenDay,thirtyDay)); 
+    }
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        //this is a very good question for building bigger question from smaller solutions step by step
+        vector<int>dp(days.size(),-1);
+        return dfsdays(days,costs,0,dp);
+    }
+};
