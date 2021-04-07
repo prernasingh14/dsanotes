@@ -153,3 +153,50 @@ public:
         return dfsdays(days,costs,0,dp);
     }
 };
+
+
+
+
+
+bottom up approach :
+
+
+dp[i] means up to i-th day the minimum cost of the tickets. The size of the dp array depends on the last travel day, so we don't need an array length to be 365.
+
+We do need a boolean array to mark the travel days, the reason is if it is not a travel day we don't need a ticket. However, if it is a travel day, we consider three scenarios (with three types of tickects):
+
+If a 1-day ticket on day i, dp[i] = dp[i - 1] + cost[0]
+If a 7-day ticket ending on day i, dp[i] = min(dp[i - 7], dp[i - 6] ... dp[i - 1]) + cost[1]
+If a 30-day ticket ending on day i, dp[i] = min(dp[i - 30], dp[i - 29] ... dp[i - 1]) + cost[2]
+
+But since the value of dp array is increasing, therefore:
+For a 7-day ticket ending on day i, dp[i] = dp[i - 7] + cost[1]
+For a 30-day ticket ending on day i, dp[i] = dp[i - 30] + cost[2]
+
+
+
+
+class Solution {
+public:
+    
+    int mincostTickets(vector<int>& days, vector<int>& cost) {
+        //this is a very good question for building bigger question from smaller solutions step by step
+       
+        unordered_map<int,bool>m;
+        for(int i=0;i<days.size();i++){
+            m[days[i]]=true;//he's traveling that day
+        }
+        int lastDayOfTravel=days[days.size()-1];
+         vector<int>dp(lastDayOfTravel+1,0);//assume initialy isn't traveling 
+        for(int i=1;i<=lastDayOfTravel;i++){
+            if(!m[i]){
+                dp[i]=dp[i-1];//if he's not traveling on day i then the cost is same as previous day
+            }
+            else{
+                dp[i]=min(dp[i-1]+cost[0],min(dp[max(0,i-7)]+cost[1],dp[max(0,i-30)]+cost[2]));
+            }
+        }
+        return dp[lastDayOfTravel];
+    }
+};
+
