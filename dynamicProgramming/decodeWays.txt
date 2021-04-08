@@ -131,6 +131,35 @@ to improve the space complexity
 
 
 
+class Solution {
+public:
+    //bottom up approach 
+    int numDecodings(string s) {
+        int n=s.size();
+        //dp[i] = number of ways to decode the string of length i
+         vector<int>dp(n+1);
+        dp[0]=1;
+        if(s[0]=='0')
+            dp[1]=0;
+        else
+            dp[1]=1;
+        for(int i=2;i<=n;i++){
+            int way1,way2;
+            if(s[i-1]=='0'){
+                way1=0;
+            }
+            else
+                way1=dp[i-1];//taking alone
+            if(s[i-2]=='1' || (s[i-2]=='2' && s[i-1]<'7'))
+                way2=dp[i-2];//taking pairs
+            else
+                way2=0;
+                dp[i]=way1+way2;
+        }
+        return dp[n];
+    }
+};
+
 
 
 
