@@ -15,6 +15,8 @@ Given a string s containing only digits, return the number of ways to decode it.
 The answer is guaranteed to fit in a 32-bit integer.
 
  
+ for reference :
+ https://leetcode.com/problems/decode-ways/discuss/740182/C++-Recursion-or-Recursion-with-memoization-or-DP-Explained
 
 Example 1:
 
@@ -86,4 +88,75 @@ public:
 TLE
 
 recursion with memoization :
+
+
+
+class Solution {
+public:
+    int ways(string s,int i,vector<int>&dp){
+         if(i==s.size())
+            return 1;
+        if(s[i]=='0')//no mapping can begin with zero
+            return 0;
+        if(dp[i]!=-1)
+            return dp[i];
+        if(i==s.size()-1)//we successfully reached the end thus found one way
+            return 1;
+        int way1=ways(s,i+1,dp);
+        int way2=0;
+        if(s[i]=='1' || (s[i]=='2' && s[i+1]<'7')){
+            way2=ways(s,i+2,dp);
+        }
+        return dp[i]=way1+way2;
+    }
+    int numDecodings(string s) {
+        int n=s.size();
+         vector<int>dp(n,-1);//to avoid recalculating for the same subproblems 
+        return ways(s,0,dp);
+    }
+};
+
+
+
+
+
+TC:O(n)
+SC:O(n)
+///////////////////////////////////
+
+
+
+Bottom up approach :
+to improve the space complexity 
+
+
+
+
+
+
+class Solution {
+public:
+    //bottom up approach 
+    int numDecodings(string s) {
+        int n=s.size();
+        //dp[i] = number of ways to decode the string of length i
+         vector<int>dp(n+1);
+        dp[0]=1;
+        if(s[0]=='0')
+            dp[1]=0;
+        else
+            dp[1]=1;
+        for(int i=2;i<=n;i++){
+            int one=stoi(s.substr(i-1,1));
+            int two=stoi(s.substr(i-2,2));
+            if(one>=1)
+                dp[i]=dp[i]+dp[i-1];
+            if(two>=10 && two<=26)
+                dp[i]=dp[i]+dp[i-2];
+        }
+        return dp[n];
+    }
+};
+TC:O(n)
+SC:O(n)
 
