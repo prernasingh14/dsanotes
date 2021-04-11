@@ -1,0 +1,107 @@
+You are given n pairs of numbers. In every pair, the first number is always smaller than the second number.
+
+Now, we define a pair (c, d) can follow another pair (a, b) if and only if b < c. Chain of pairs can be formed in this fashion.
+
+Given a set of pairs, find the length longest chain which can be formed. You needn't use up all the given pairs. You can select pairs in any order.
+
+Example 1:
+
+Input: [[1,2], [2,3], [3,4]]
+Output: 2
+Explanation: The longest chain is [1,2] -> [3,4]
+Note:
+
+The number of given pairs will be in the range [1, 1000].
+
+
+
+recursive approach :
+
+
+class Solution {
+public:
+    static bool cmp(vector<int>& a, vector<int>& b){
+        return a[0]<=b[0];
+    }
+    //each pair will get included or excluded
+    int recur(vector<vector<int>>& pairs,int index,int n){
+        int maxlen=1;
+        for(int i=index+1;i<n;i++){
+        if(pairs[index][1]<pairs[i][0])
+            maxlen=max(maxlen,1+recur(pairs,i,n));
+        }
+        return maxlen;
+    }
+    int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(),pairs.end(),cmp);
+        int maxlen=1;
+        int n=pairs.size();
+        //we can start from any index & compare
+        for(int i=0;i<n;i++){
+            maxlen=max(maxlen,recur(pairs,i,n));
+        }
+        return maxlen;
+    }
+};
+
+
+
+memoization:
+
+
+class Solution {
+public:
+    static bool cmp(vector<int>& a, vector<int>& b){
+        return a[0]<b[0];
+    }
+    //each pair will get included or excluded
+    int recur(vector<vector<int>>& pairs,int index,int n,vector<int>&dp){
+        if(dp[index]!=-1)
+            return dp[index];
+        int maxlen=1;
+        for(int i=index+1;i<n;i++){
+        if(pairs[index][1]<pairs[i][0])
+            maxlen=max(maxlen,1+recur(pairs,i,n,dp));
+        }
+        return dp[index]=maxlen;
+    }
+    int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(),pairs.end(),cmp);
+        int maxlen=1;
+        int n=pairs.size();
+        vector<int>dp(n+1,-1);
+        //we can start from any index & compare
+        for(int i=0;i<n;i++){
+            maxlen=max(maxlen,recur(pairs,i,n,dp));
+        }
+        return maxlen;
+    }
+};
+
+
+
+bottom up:
+
+
+int findLongestChain(vector<vector<int>>& pairs) {
+        sort(pairs.begin(),pairs.end(),cmp);
+        int maxlen=1;
+        int n=pairs.size();
+        vector<int>dp(n+1,1);
+        //we can start from any index & compare
+        for(int i=1;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(pairs[j][1]<pairs[i][0] && dp[i]<dp[j]+1)
+                {
+                    dp[i]=dp[j]+1;
+                    maxlen=max(maxlen,dp[i]);
+                }
+            }
+           
+        }
+        return maxlen;
+    }
+};
+
+
+
