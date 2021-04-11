@@ -96,6 +96,8 @@ public:
 
 Bottom Up approach :
 
+//the approach is similar to like in LIS 
+
 
 class Solution {
 public:
