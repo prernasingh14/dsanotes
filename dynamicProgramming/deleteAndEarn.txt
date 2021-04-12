@@ -1,0 +1,116 @@
+Given an array nums of integers, you can perform operations on the array.
+
+In each operation, you pick any nums[i] and delete it to earn nums[i] points. After, you must delete every element equal to nums[i] - 1 or nums[i] + 1.
+
+You start with 0 points. Return the maximum number of points you can earn by applying such operations.
+
+ 
+
+Example 1:
+
+Input: nums = [3,4,2]
+Output: 6
+Explanation: Delete 4 to earn 4 points, consequently 3 is also deleted.
+Then, delete 2 to earn 2 points.
+6 total points are earned.
+Example 2:
+
+Input: nums = [2,2,3,3,3,4]
+Output: 9
+Explanation: Delete 3 to earn 3 points, deleting both 2's and the 4.
+Then, delete 3 again to earn 3 points, and 3 again to earn 3 points.
+9 total points are earned.
+ 
+
+Constraints:
+
+1 <= nums.length <= 2 * 104
+1 <= nums[i] <= 104
+
+recursive solution:
+
+
+class Solution {
+public:
+    //its like house robber problem , you can't take money from adjacent rooms 
+    int recur(int maxR,int i,vector<int>count){
+        if(i>maxR)
+            return 0;
+        int include=0;
+        int exclude=0;
+        include=count[i]*i+recur(maxR,i+2,count);
+        exclude=recur(maxR,i+1,count);
+        return max(include,exclude);
+    }
+    int deleteAndEarn(vector<int>& nums) {
+       vector<int>count(10001,0);
+        int maxR=-1;
+        for(auto i:nums){
+            count[i]++;
+           maxR=max(maxR,i);
+        }cout<<maxR;
+        return recur(maxR,1,count);
+        
+    }
+};
+
+TC:O(2^maxR)
+
+
+
+recursive + memoization:
+
+
+class Solution {
+public:
+    //its like house robber problem , you can't take money from adjacent rooms 
+    int recur(int maxR,int i,vector<int>count,vector<int>&dp){
+        if(i>maxR)
+            return 0;
+        if(dp[i]!=-1)
+            return dp[i];
+        int include=0;
+        int exclude=0;
+        include=count[i]*i+recur(maxR,i+2,count,dp);
+        exclude=recur(maxR,i+1,count,dp);
+        return dp[i]=max(include,exclude);
+    }
+    int deleteAndEarn(vector<int>& nums) {
+       vector<int>count(10001,0);
+        vector<int>dp(10001,-1);
+        int maxR=-1;
+        for(auto i:nums){
+            count[i]++;
+           maxR=max(maxR,i);
+        }
+        return recur(maxR,1,count,dp);
+        
+    }
+};
+
+TC:O(maxR)
+
+
+Bottom up DP:
+
+
+ int deleteAndEarn(vector<int>& nums) {
+       vector<int>count(10001,0);
+        vector<int>dp(10001,-1);
+        int maxR=-1;
+        for(auto i:nums){
+            count[i]++;
+           maxR=max(maxR,i);
+        }
+        dp[0]=0;
+        dp[1]=count[1];
+        for(int i=2;i<=maxR;i++){
+            dp[i]=max(count[i]*i+dp[i-2],dp[i-1]);
+        }
+        return dp[maxR];
+        
+    }
+
+
+
+    TC:O(maxR)
