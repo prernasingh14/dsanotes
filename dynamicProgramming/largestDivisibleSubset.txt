@@ -25,6 +25,11 @@ All the integers in nums are unique.
 
 Approach similar to LIS:
 
+
+
+Recursive approach:
+
+of finding just the length of LDS-
 class Solution {
 public:
     int lis(vector<int>&nums,int curr,int prev){
@@ -36,6 +41,10 @@ public:
         exclude=lis(nums,curr+1,prev);
         return max(include,exclude);
     }
+
+
+    Bottom up:
+
     vector<int> largestDivisibleSubset(vector<int>& nums) {
         
         int n=nums.size(); sort(nums.begin(),nums.end());
