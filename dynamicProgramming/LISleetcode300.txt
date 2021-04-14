@@ -33,7 +33,8 @@ Follow up:
 Could you come up with the O(n2) solution?
 Could you improve it to O(n log(n)) time complexity?
 
-
+helpful video-
+https://youtu.be/mouCn3CFpgg
 
 Recursive solution :
 
@@ -158,6 +159,62 @@ public:
                 ans=max(ans,dp[i]);
             }
         }
+        return ans;
+    }
+};
+
+
+If asked to print the LIS:
+
+in the dp[n] array go to the index having maximum value that will be our end of LIS , store its dp[i]as curr i.e curr=dp[i]
+and iterate backwards from it adding elemnets whose value=curr-1 and so on and so forth 
+
+
+
+
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        int ans=INT_MIN;
+        int index=0;int n=nums.size();
+        vector<int>dp(n,1);//as each element alone is a LIS
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<i;j++){
+                //if previous number is smaller then add it 
+                if(nums[j]<nums[i] && dp[i]<dp[j]+1)
+                {
+                    dp[i]=dp[j]+1;
+                    if(dp[i]>ans){
+                        ans=dp[i];
+                        index=i;
+                    }
+                }
+            }
+            ans=max(dp[i],ans);
+        }
+        // //code to print the LIS
+        // if(ans==1)
+        //     cout<<nums[index]<<" ";
+        // else{
+        // int prev=ans-1;
+        // vector<int>lis(ans,0);
+        // lis[ans-1]=nums[index];
+        // for(int i=index-1;i>=0;i--){
+        //     if(dp[i]==prev){
+        //         lis[prev-1]=nums[i];
+        //         prev=prev-1;
+        //     }
+        // }
+        // for(int i=0;i<lis.size();i++)
+        //     cout<<lis[i]<<" ";
+        // }
         return ans;
     }
 };
