@@ -1,0 +1,89 @@
+Initially on a notepad only one character 'A' is present. You can perform two operations on this notepad for each step:
+
+Copy All: You can copy all the characters present on the notepad (partial copy is not allowed).
+Paste: You can paste the characters which are copied last time.
+ 
+
+Given a number n. You have to get exactly n 'A' on the notepad by performing the minimum number of steps permitted. Output the minimum number of steps to get n 'A'.
+
+Example 1:
+
+Input: 3
+Output: 3
+Explanation:
+Intitally, we have one character 'A'.
+In step 1, we use Copy All operation.
+In step 2, we use Paste operation to get 'AA'.
+In step 3, we use Paste operation to get 'AAA'.
+ 
+
+Note:
+
+The n will be in the range [1, 1000].
+
+
+Recursive approach:
+
+class Solution {
+public:
+
+    int recur(int n,int currstr,int prevstr){
+        if(currstr>n){
+            return 100000;
+        }
+        if(currstr==n)
+            return 0;
+        int copy=0;int paste=0;
+        copy=2+recur(n,currstr+currstr,currstr);
+        paste=1+recur(n,currstr+prevstr,prevstr);
+        return min(copy,paste);
+    
+    }
+    int minSteps(int n) {
+        if(n==1)
+            return 0;
+        //curr string length is 1 ("A")
+        //prev string length is also 1("A") assuming that we've copied 
+        //thus steps initially is 1 (due to one copy of "A")
+        return 1+recur(n,1,1);
+    }
+};
+
+TC:O(2^n)
+
+
+
+Recursive with memoization:
+
+
+class Solution {
+public:
+    //currstr is the length of the original string 
+    //prevstr is the length of the string before copying 
+    int recur(int n,int currstr,int prevstr,vector<vector<int>>&dp){
+        if(currstr>n){
+            return 100000;
+        }
+        if(currstr==n)
+            return 0;
+        if(dp[currstr][prevstr]!=-1)
+            return dp[currstr][prevstr];
+        int copy=0;int paste=0;
+        copy=2+recur(n,currstr+currstr,currstr,dp);//copy then paste hoga hi thus 2 steps 
+        paste=1+recur(n,currstr+prevstr,prevstr,dp);//paste is one step operation
+        return dp[currstr][prevstr]=min(copy,paste);
+    
+    }
+    int minSteps(int n) {
+        if(n==1)
+            return 0;
+        vector<vector<int>>dp(2*n,vector<int>(2*n,-1));
+        //curr string length is 1 ("A")
+        //prev string length is also 1("A") assuming that we've copied 
+        //thus steps initially is 1 (due to one copy of "A")
+        return 1+recur(n,1,1,dp);
+    }
+};
+
+
+TC:O(n)

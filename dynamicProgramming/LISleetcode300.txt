@@ -1,0 +1,171 @@
+ 14/04/21
+
+
+Given an integer array nums, return the length of the longest strictly increasing subsequence.
+
+A subsequence is a sequence that can be derived from an array by deleting some or no elements without changing the order of the remaining elements. For example, [3,6,2,7] is a subsequence of the array [0,3,1,6,2,2,7].
+
+ 
+
+Example 1:
+
+Input: nums = [10,9,2,5,3,7,101,18]
+Output: 4
+Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+Example 2:
+
+Input: nums = [0,1,0,3,2,3]
+Output: 4
+Example 3:
+
+Input: nums = [7,7,7,7,7,7,7]
+Output: 1
+ 
+
+Constraints:
+
+1 <= nums.length <= 2500
+-104 <= nums[i] <= 104
+ 
+
+Follow up:
+
+Could you come up with the O(n2) solution?
+Could you improve it to O(n log(n)) time complexity?
+
+
+
+Recursive solution :
+
+
+
+class Solution {
+public:
+    int lis(vector<int>&nums,int i,int prev,int n){
+        if(i==n)
+            return 0;
+           int include=0;int exclude=0;
+         if(nums[i]>prev)//can either exclude or include that number 
+         {
+             include=1+lis(nums,i+1,nums[i],n); 
+             exclude=lis(nums,i+1,prev,n);
+         }
+        else
+         exclude=lis(nums,i+1,prev,n);
+        return max(include,exclude);
+    }
+       
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        return lis(nums,0,INT_MIN,nums.size());
+    }
+};
+
+
+
+or other way we can maintain previous indexes
+
+class Solution {
+public:
+    int lis(vector<int>&nums,int i,int prev,int n){
+        if(i==n)
+            return 0;
+           int include=0;int exclude=0;
+          exclude=lis(nums,i+1,prev,n);
+         if(prev==-1 || nums[i]>nums[prev])//can either exclude or include that number 
+         {
+             include=1+lis(nums,i+1,i,n); 
+         }
+       return max(include,exclude);
+    }
+       
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        int n=nums.size();
+        return lis(nums,0,-1,nums.size());
+    }
+};
+TC:O(2^n)
+
+
+
+
+Recursion with memoization:
+
+
+now we need 2D array since two parameters are changing 
+class Solution {
+public:
+    int lis(vector<int>&nums,int i,int prev,int n,vector<vector<int>>&dp){
+        if(i==n)
+            return 0;
+        if(prev!=-1 && dp[i][prev]!=-1)
+            return dp[i][prev];
+           int include=0;int exclude=0;
+          exclude=lis(nums,i+1,prev,n,dp);
+         if(prev==-1 || nums[i]>nums[prev])//can either exclude or include that number 
+         {
+             include=1+lis(nums,i+1,i,n,dp); 
+         }
+        if(prev!=-1)
+        return dp[i][prev]=max(include,exclude);
+        else
+            return max(include,exclude);
+    }
+       
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        int n=nums.size();
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+        return lis(nums,0,-1,nums.size(),dp);
+    }
+};
+
+
+
+Bottom up approach:
+
+TC:O(n*n)
+SC:O(n)
+
+we will maintain only 1D vector 
+dp[i]=length of longest increasing subsequence till index it
+
+
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        if(nums.size()==1)
+            return 1;
+        int n=nums.size();
+        int ans=INT_MIN;
+        vector<int>dp(n+1,1);//every number alone will form a LIS 
+        for(int i=0;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(nums[j]<nums[i] && dp[j]+1>dp[i])
+                   dp[i]=dp[j]+1;
+                ans=max(ans,dp[i]);
+            }
+        }
+        return ans;
+    }
+};
+
+
+
+
+Binary search approach:
+
+couldn't really understand why
+
