@@ -28,6 +28,61 @@ Constraints:
 1 <= nums[i] <= 104
 
 recursive solution:
+each element if satisfies the condition then we have option to earn and delete or don't earn
+
+class Solution {
+public:
+    int recur(vector<int>&nums,int i,int more){
+        if(i==nums.size())
+            return 0;
+        int del=0;int leave=0;
+        if(nums[i]!=more)//then two choice 
+        {
+             del=nums[i]+recur(nums,i+1,nums[i]+1);
+             leave=recur(nums,i+1,more);
+        }
+         leave=recur(nums,i+1,more);//else only leave can't earn 
+        return max(del,leave);
+    }
+    int deleteAndEarn(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        return recur(nums,0,-1);
+    }
+};
+
+
+
+Recursion with memoization:
+
+
+class Solution {
+public:
+    int recur(vector<int>&nums,int i,int more,vector<vector<int>>&dp){
+        if(i==nums.size())
+            return 0;
+        if(dp[i][more]!=-1)
+            return dp[i][more];
+        int del=0;int leave=0;
+        if(nums[i]!=more){
+             del=nums[i]+recur(nums,i+1,nums[i]+1,dp);
+             leave=recur(nums,i+1,more,dp);
+        }
+         leave=recur(nums,i+1,more,dp);
+        return dp[i][more]=max(del,leave);
+    }
+    int deleteAndEarn(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int n=nums.size();int maxx=-1;
+        for(int i=0;i<n;i++)
+            maxx=max(nums[i],maxx);
+        vector<vector<int>>dp(n,vector<int>(maxx+2,-1));
+        return recur(nums,0,0,dp);
+    }
+};
+
+
+//////////
+Approach 2: we can treat this question as house robber question 
 
 
 class Solution {

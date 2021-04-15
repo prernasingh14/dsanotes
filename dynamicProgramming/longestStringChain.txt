@@ -1,0 +1,70 @@
+Given a list of words, each word consists of English lowercase letters.
+
+Let's say word1 is a predecessor of word2 if and only if we can add exactly one letter anywhere in word1 to make it equal to word2.  For example, "abc" is a predecessor of "abac".
+
+A word chain is a sequence of words [word_1, word_2, ..., word_k] with k >= 1, where word_1 is a predecessor of word_2, word_2 is a predecessor of word_3, and so on.
+
+Return the longest possible length of a word chain with words chosen from the given list of words.
+
+ 
+
+Example 1:
+
+Input: words = ["a","b","ba","bca","bda","bdca"]
+Output: 4
+Explanation: One of the longest word chain is "a","ba","bda","bdca".
+Example 2:
+
+Input: words = ["xbc","pcxbcf","xb","cxbc","pcxbc"]
+Output: 5
+ 
+
+Constraints:
+
+1 <= words.length <= 1000
+1 <= words[i].length <= 16
+words[i] only consists of English lowercase letters.
+
+
+
+the approach is similar to LIS
+
+Bottom up solution :
+
+class Solution {
+public:
+       static bool cmp(string s1,string s2)
+       {
+           return s1.size()<s2.size();
+       }
+    bool match(string s1,string s2){//check whether it is predecessor or not 
+        int j=0;
+       for(int i = 0; i < s1.size(); i++) {
+            if(s2[j] == s1[i]) {
+                j++;
+            }
+            if(j == s2.size()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    int longestStrChain(vector<string>& words) {
+        //let me first sort them according to their length
+        vector<int>dp(words.size(),1);
+        int maxlen=0;
+        sort(words.begin(),words.end(),cmp);
+        for(int i=1;i<words.size();i++)
+        {
+            for(int j=0;j<i;j++) {
+                if(words[i].size()==words[j].size()+1 && dp[i]<dp[j]+1 && match(words[i],words[j])){
+                    dp[i]=dp[j]+1;
+                }
+            }
+                 maxlen=max(maxlen,dp[i]);
+            }
+        return maxlen;
+    }
+};
+//["xbc","pcxbcf","xb","cxbc","pcxbc","kinki","vhinki"]
+
