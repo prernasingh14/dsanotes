@@ -1,0 +1,133 @@
+Given two strings s1, s2, find the lowest ASCII sum of deleted characters to make two strings equal.
+
+Example 1:
+
+Input: s1 = "sea", s2 = "eat"
+Output: 231
+Explanation: Deleting "s" from "sea" adds the ASCII value of "s" (115) to the sum.
+Deleting "t" from "eat" adds 116 to the sum.
+At the end, both strings are equal, and 115 + 116 = 231 is the minimum sum possible to achieve this.
+Example 2:
+
+Input: s1 = "delete", s2 = "leet"
+Output: 403
+Explanation: Deleting "dee" from "delete" to turn the string into "let",
+adds 100[d]+101[e]+101[e] to the sum.  Deleting "e" from "leet" adds 101[e] to the sum.
+At the end, both strings are equal to "let", and the answer is 100+101+101+101 = 403.
+If instead we turned both strings into "lee" or "eet", we would get answers of 433 or 417, which are higher.
+Note:
+
+0 < s1.length, s2.length <= 1000.
+All elements of each string will have an ASCII value in [97, 122].
+
+
+
+Recursive method :
+
+
+ we will find Longest common subsequence since that will save us from the cost of deleting it 
+
+class Solution {
+public:
+    int calcASCII(string s,int index){
+        //calculate the sum of ASCII value of string 
+        int sum=0;
+        for(int i=index;i>=0;i--)
+            sum+=s[i];
+        return sum;
+        
+    }
+    int lcs(string s1,string s2,int m,int n){
+        if(m<0)//n is still left to be deleted 
+            return calcASCII(s2,n);
+        if(n<0)//string s1 still has characters left to be deleted 
+            return calcASCII(s1,m);
+        if(m<0 && n<0)
+            return 0;
+        if(s1[m]==s2[n])//then we'll inlcude it as a part of LCS (saves us from deleting)
+            return lcs(s1,s2,m-1,n-1);
+        else//we'll try to delete characters and see which give minimum ascii sum 
+            return min((s1[m])+lcs(s1,s2,m-1,n),(s2[n])+lcs(s1,s2,m,n-1));
+    }
+    int minimumDeleteSum(string s1, string s2) {
+        int m=s1.size();int n=s2.size();
+           return lcs(s1,s2,m-1,n-1);
+    }
+};
+
+
+TC:O(2^n)
+
+
+
+
+
+Recursion with memoization:
+
+class Solution {
+public:
+    int calcASCII(string s,int index){
+        //calculate the sum of ASCII value of string 
+        int sum=0;
+        for(int i=index;i>=0;i--)
+            sum+=s[i];
+        return sum;
+        
+    }
+    int lcs(string s1,string s2,int m,int n,vector<vector<int>>&dp){
+        if(m<0)//n is stil left to be deleted 
+            return calcASCII(s2,n);
+        if(n<0)//string s1 still has characters left to be deleted 
+            return calcASCII(s1,m);
+        if(m<0 && n<0)
+            return 0;
+        if(dp[m][n]!=-1)
+            return dp[m][n];
+        if(s1[m]==s2[n])//then we'll inlcude it as a part of LCS 
+            return dp[m][n]=lcs(s1,s2,m-1,n-1,dp);
+        else//we'll try to delete characters and see which give minimum ascii sum 
+            return dp[m][n]=min((s1[m])+lcs(s1,s2,m-1,n,dp),(s2[n])+lcs(s1,s2,m,n-1,dp));
+    }
+    int minimumDeleteSum(string s1, string s2) {
+        int m=s1.size();int n=s2.size();
+         vector<vector<int>>dp(m+1,vector<int>(n+1,-1));
+           return lcs(s1,s2,m-1,n-1,dp);
+    }
+};
+
+
+
+
+
+Bottom Up DP:
+
+
+
+class Solution {
+public:
+    int minimumDeleteSum(string s1, string s2) {
+        int m=s1.size();int n=s2.size();
+         vector<vector<int>>dp(m+1,vector<int>(n+1,0));
+          dp[0][0]=0;
+          //since string s2 is empty 
+        for(int i=1;i<=m;i++){
+            dp[i][0]=dp[i-1][0]+s1[i-1];//sum of all previous deleted charcaters
+        }
+        //since string s1 is empty 
+        for(int j=1;j<=n;j++){
+            dp[0][j]=dp[0][j-1]+s2[j-1];//sum of all previous deleted charcaters
+        }
+             for(int i=1;i<=m;i++){
+                  for(int j=1;j<=n;j++){
+                        if(s1[i-1]==s2[j-1]){//match don't delete
+                         dp[i][j]=dp[i-1][j-1];
+                               }
+                        else
+                         dp[i][j]=min(s1[i-1]+dp[i-1][j],s2[j-1]+dp[i][j-1]);
+                             }
+                       }
+           return dp[m][n];
+    }
+};
+
+
