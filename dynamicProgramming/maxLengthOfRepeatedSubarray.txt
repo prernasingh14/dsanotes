@@ -1,0 +1,89 @@
+Given two integer arrays nums1 and nums2, return the maximum length of a subarray that appears in both arrays.
+
+ 
+
+Example 1:
+
+Input: nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
+Output: 3
+Explanation: The repeated subarray with maximum length is [3,2,1].
+Example 2:
+
+Input: nums1 = [0,0,0,0,0], nums2 = [0,0,0,0,0]
+Output: 5
+ 
+
+Constraints:
+
+1 <= nums1.length, nums2.length <= 1000
+0 <= nums1[i], nums2[i] <= 100
+
+
+brute force is to get subarrays of same length in both and check whether they match or not 
+
+
+recursive approach :
+
+
+
+similar to Longest common substring
+
+class Solution {
+public://subarray means substring 
+    int maxlen=0;int len=0;
+    int lcs(vector<int>& nums1, vector<int>& nums2,int i,int j){
+        if(i<0 || j<0)
+        {
+            len=0;
+            return 0;
+        }
+        if(nums1[i]==nums2[j])
+        {
+            len++;
+            maxlen=max(len,maxlen);
+            return lcs(nums1,nums2,i-1,j-1);
+        }
+            else
+            {
+                len=0;
+                return max(lcs(nums1,nums2,i-1,j),lcs(nums1,nums2,i,j-1));
+            }
+        
+    }
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int n1=nums1.size();int n2=nums2.size();
+        lcs(nums1,nums2,n1-1,n2-1);
+        return maxlen;
+    }
+};
+
+
+TC:O(2^n)  so causes TLE
+
+
+
+
+Bottom up dp:
+
+
+class Solution {
+public://subarray means substring 
+   
+    int findLength(vector<int>& nums1, vector<int>& nums2) {
+        int n1=nums1.size();int n2=nums2.size();int maxlen=0;
+       vector<vector<int>>dp(n1+1,vector<int>(n2+1,0));
+        for(int i=1;i<=n1;i++)
+        {
+            for(int j=1;j<=n2;j++){
+                if(nums1[i-1]==nums2[j-1]){
+                        dp[i][j]=1+dp[i-1][j-1];
+                        maxlen=max(maxlen,dp[i][j]);
+                     } 
+                else
+                    dp[i][j]=0;
+            }
+        }
+        
+        return maxlen;
+    }
+};
