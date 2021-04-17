@@ -63,6 +63,118 @@ public:
 TC:O(n*n*n)
 TLE for larger values
 
+Bottom up approach based on longest common substring:
+using a slight modification 
+
+
+class Solution {
+public:
+    bool isPalin(string s){
+        int n=s.size();
+        for(int i=0;i<n/2;i++)
+        {
+            if(s[i]!=s[n-1-i])
+                return false;
+        }
+        return true;        
+    }
+    string longestPalindrome(string s) {
+       string rev="";//reverse of the string
+        int n=s.size();int maxlen=0;
+        for(int i=0;i<s.size();i++)
+            rev=s[i]+rev;
+        //take LCSubstring of rev & s
+        vector<vector<int>>dp(n+1,vector<int>(n+1,0));int iPos=0;
+        for(int i=0;i<=n;i++)
+            dp[i][0]=0;
+        for(int j=0;j<=n;j++)
+            dp[0][j]=0;
+        for(int i=1;i<=n;i++)
+        {
+            for(int j=1;j<=n;j++){
+                if(s[i-1]==rev[j-1])
+                {
+                    dp[i][j]=1+dp[i-1][j-1];
+                     int revIdx = i;
+                    int forIdx = j - dp[i][j] + 1;
+                    if (s.size() - revIdx + 1 == forIdx) {// Here we check if the reverse string original idx is same as original string idx.
+                        if (maxlen < dp[i][j]) {
+                            maxlen= dp[i][j];
+                            iPos = i;
+                        }
+                }
+                }
+                else if(s[i-1]!=rev[j-1]){
+                    dp[i][j]=0;
+                    
+                }
+            }
+        }
+        iPos--;string ans="";
+        while(maxlen>0){
+            ans+=s[iPos];
+            iPos--;
+            maxlen--;
+        }
+        
+        return ans;
+    }
+};
+
+
+TC:O(n*n)
+
+
+
+another approach :
+
+dp(i, j) represents whether s(i ... j) can form a palindromic substring, dp(i, j) is true when s(i) equals to s(j) and s(i+1 ... j-1) is a palindromic substring. 
+When we found a palindrome, check if it's the longest one. Time complexity O(n^2).
+
+
+
+
+class Solution {
+public:
+       
+    string longestPalindrome(string s) {
+        if(s.size()<=1)
+            return s;
+        int n=s.size();int maxlen=1;
+        vector<vector<bool>>dp(n,vector<bool>(n,false));
+        for(int i=0;i<n;i++)
+        {
+            dp[i][i]=true;
+        }
+        int start=0;int end=0;
+        for(int i=n-1;i>=0;i--)
+        {
+            for(int j=i+1;j<n;j++){
+                if(s[i]==s[j])
+                {
+                    if(j-i==1 || dp[i+1][j-1])
+                    {
+                        dp[i][j]=true;  
+                       if(maxlen<j-i+1){
+                       maxlen=j-i+1;
+                           start=i;
+                    }
+                }
+                }
+            }
+        }
+        cout<<maxlen;
+        return s.substr(start,maxlen);
+    }
+};
+
+
+
+
+TC:O(n*n)
+
+
+can be furthur optimised to O(n) by using sliding window technique 
 
 
 
