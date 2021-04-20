@@ -1,0 +1,118 @@
+There is an m by n grid with a ball. Given the start coordinate (i,j) of the ball, you can move the ball to adjacent cell or cross the grid boundary in four directions (up, down, left, right). However, you can at most move N times. Find out the number of paths to move the ball out of grid boundary. The answer may be very large, return it after mod 109 + 7.
+
+ 
+
+Example 1:
+
+Input: m = 2, n = 2, N = 2, i = 0, j = 0
+Output: 6
+Explanation:
+
+Example 2:
+
+Input: m = 1, n = 3, N = 3, i = 0, j = 1
+Output: 12
+Explanation:
+
+ 
+
+Note:
+
+Once you move the ball out of boundary, you cannot move it back.
+The length and height of the grid is in range [1,50].
+N is in range [0,50].
+
+recursive approach:
+
+
+class Solution {
+public:
+    int recur(int m,int n,int steps,int i,int j){
+        if(i>=m || j>=n || i<0 || j<0 )
+            return 1;
+        if(steps==0)
+            return 0;
+        return recur(m,n,steps-1,i+1,j)+recur(m,n,steps-1,i-1,j)+recur(m,n,steps-1,i,j+1)+recur(m,n,steps-1,i,j-1);
+    }
+    int findPaths(int m, int n, int N, int i, int j) {
+        return recur(m,n,N,i,j);
+    }
+};
+TC:O(4^n)
+
+
+gives TLE
+recursion with memoization:
+
+
+class Solution {
+   
+public:
+    #define mod 1000000007;
+    int dp[51][51][51];
+    int recur(int m,int n,int steps,int i,int j){
+        if(i>=m || j>=n || i<0 || j<0 )
+            return 1;//reached out of boundary thus one way found 
+        if(steps==0)
+            return 0;//no more steps left thus 0 way
+        if(dp[i][j][steps]!=-1)
+            return dp[i][j][steps];
+        long long int count=0;
+        count+=(recur(m,n,steps-1,i+1,j))%mod;
+        count+=(recur(m,n,steps-1,i-1,j))%mod;
+        count+=(recur(m,n,steps-1,i,j+1))%mod;
+        count+=(recur(m,n,steps-1,i,j-1))%mod;
+        return dp[i][j][steps]=count%mod;
+    }
+    int findPaths(int m, int n, int N, int i, int j) {
+        memset(dp,-1,sizeof(dp));
+        return recur(m,n,N,i,j);
+    }
+};
+
+TC:O(n*m*steps)
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+Bottom up dp:
+
+
+class Solution {
+   
+public:
+    #define mod 1000000007;
+    int findPaths(int m, int n, int N, int ik, int jk) {
+       vector<vector<vector<int>>>dp(N+1,vector<vector<int>>(m+1,vector<int>(n+1,0)));
+        for(int steps=1;steps<=N;steps++){
+            for(int i=0;i<m;i++){
+                for(int j=0;j<n;j++){
+                    long long int count=dp[steps][i][j];
+                   if(i-1<0)
+                       count+=1;
+                    else
+                       count+=dp[steps-1][i-1][j];
+                     if(j-1<0)
+                       count+=1;
+                    else
+                        count+=dp[steps-1][i][j-1];
+                     if(i+1>=m)
+                      count+=1;
+                    else
+                        count+=dp[steps-1][i+1][j];
+                     if(j+1>=n)
+                      count+=1;
+                    else
+                        count+=dp[steps-1][i][j+1];
+                    dp[steps][i][j]=count%mod;
+                         
+            }
+        }
+        }
+        return dp[N][ik][jk];
+    }
+};
+
+
