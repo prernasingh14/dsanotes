@@ -1,0 +1,64 @@
+Given an array of non-negative integers nums, you are initially positioned at the first index of the array.
+
+Each element in the array represents your maximum jump length at that position.
+
+Your goal is to reach the last index in the minimum number of jumps.
+
+You can assume that you can always reach the last index.
+
+ 
+
+Example 1:
+
+Input: nums = [2,3,1,1,4]
+Output: 2
+Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+Example 2:
+
+Input: nums = [2,3,0,1,4]
+Output: 2
+ 
+
+Constraints:
+
+1 <= nums.length <= 1000
+0 <= nums[i] <= 105
+
+
+recursive approach with memoization -
+
+
+
+we need to try all possible paths and take the path which is giving us the minimum numnber of steps 
+
+
+ long long int jumps(vector<int>&nums,int curr,vector<int>&dp){
+        if(curr>=nums.size()-1){
+            return 0;
+        }
+        if(dp[curr]!=-1)
+            return dp[curr];
+        long long int minSteps=INT_MAX;
+        for(int i=1;i<=nums[curr];i++){
+            minSteps=min(minSteps,1+jumps(nums,i+curr,dp));
+        }
+        return dp[curr]=minSteps;
+    }
+    int jump(vector<int>& nums) {
+        int maxJump=-1; 
+        int n=nums.size();
+        if(nums.size()==1)
+            return 0;
+        int minSteps=0;
+        vector<int>dp(n,-1);
+        return jumps(nums,0,dp);
+    }
+
+    eg: agar jump =2 hai then he can jump either 1 step or 2 step depending on which will take him minimum steps 
+
+TC:O(n*n)
+
+
+bottom up:
+
+
