@@ -107,6 +107,48 @@ public:
 //TC:O(r*c)
 
 
+Bottom UP DP:
+
+
+
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int r=matrix.size();int c=matrix[0].size();
+        if(r==0)
+            return 0;
+        int sz=0;
+        vector<vector<int>>dp(r,vector<int>(c,0));
+        for(int i=0;i<r;i++)
+        {
+            dp[i][0]=matrix[i][0]=='0'?0:1;
+            sz=max(sz,dp[i][0]);
+        }
+        for(int j=0;j<c;j++)
+        {
+        dp[0][j]=matrix[0][j]=='0'?0:1;
+             sz=max(sz,dp[0][j]);
+        }
+       // we start from every cell and check how much the cell can expand containing all 1's
+        for(int row =1; row<r; row++) {
+            for(int col = 1; col<c; col++) {
+               if (matrix[row][col] == '0') {
+                    dp[row][col] = 0;
+                } else {
+                    dp[row][col] = min(min(dp[row-1][col],dp[row][col-1]),
+                                        dp[row-1][col-1]) + 1;
+                }
+                sz = max(sz, dp[row][col]);
+            }
+        }
+        return sz*sz;//maximum size square possible  
+    }
+};
+//TC:O(r*c)
+
+
+
+
 
 
 
