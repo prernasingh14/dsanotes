@@ -1,0 +1,113 @@
+ 
+ Leetcode 221-
+
+ Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+
+ 
+
+Example 1:
+
+
+Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+Output: 4
+Example 2:
+
+
+Input: matrix = [["0","1"],["1","0"]]
+Output: 1
+Example 3:
+
+Input: matrix = [["0"]]
+Output: 0
+ 
+
+Constraints:
+
+m == matrix.length
+n == matrix[i].length
+1 <= m, n <= 300
+matrix[i][j] is '0' or '1'.
+
+
+ Brute force approach:
+
+
+is to check whether the squares of largest possible size are present or not 
+
+ 
+ int maximalSquare(vector<vector<char>>& matrix) {
+        int r=matrix.size();int c=matrix[0].size();
+        int sz=min(r,c);//maximum possible size of square
+        //now check whether squares of different sizes starting from largest is present or not 
+        for(int i=sz;i>=0;i--){
+            for(int j=0;j<=r-i;j++){
+                for(int k=0;k<=c-i;k++){
+                    bool zeroFound=false;
+                    for(int l=j;l<j+i;l++){
+                        for(int m=k;m<k+i;m++){
+                            if(matrix[l][m]=='0')
+                            {
+                                zeroFound=true;
+                                break;
+                            }
+                        }
+                    if(zeroFound)//if zero is found then not our desired square 
+                        break;
+                    }
+                if(!zeroFound)
+                return i*i;//square of size i
+            }
+        }
+        }
+        return 0;
+    }
+};
+
+
+TC:O(sz^5)
+SC:O(1)
+
+
+
+//////////////////////////////////////////////////////////////////
+
+
+
+recursion with memoization:
+
+
+class Solution {
+public:
+    int recur(vector<vector<char>>& matrix,int i,int j,int r,int c,vector<vector<int>>&dp){
+        if(i>=r || j>=c)
+            return 0;
+        if(matrix[i][j]=='0')
+            return 0;
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        return dp[i][j]=1+min(recur(matrix,i+1,j+1,r,c,dp),min(recur(matrix,i+1,j,r,c,dp),recur(matrix,i,j+1,r,c,dp)));
+    }
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int r=matrix.size();int c=matrix[0].size();
+        if(r==0)
+            return 0;
+        int sz=0;
+        vector<vector<int>>dp(r,vector<int>(c,-1));
+       // we start from every cell and check how much the cell can expand containing all 1's
+           for(int i=0;i<r;i++){
+               for(int j=0;j<c;j++){
+                   sz=max(sz,recur(matrix,i,j,r,c,dp));
+               }
+           } 
+        return sz*sz;//maximum size square possible 
+        
+    }
+    
+};
+//TC:O(r*c)
+
+
+
+
+
+
