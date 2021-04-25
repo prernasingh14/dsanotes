@@ -1,0 +1,69 @@
+Leetcode 1130-
+
+
+
+
+Given an array arr of positive integers, consider all binary trees such that:
+
+Each node has either 0 or 2 children;
+The values of arr correspond to the values of each leaf in an in-order traversal of the tree.  (Recall that a node is a leaf if and only if it has 0 children.)
+The value of each non-leaf node is equal to the product of the largest leaf value in its left and right subtree respectively.
+Among all possible binary trees considered, return the smallest possible sum of the values of each non-leaf node.  It is guaranteed this sum fits into a 32-bit integer.
+
+ 
+
+Example 1:
+
+Input: arr = [6,2,4]
+Output: 32
+Explanation:
+There are two possible trees.  The first has non-leaf node sum 36, and the second has non-leaf node sum 32.
+
+    24            24
+   /  \          /  \
+  12   4        6    8
+ /  \               / \
+6    2             2   4
+ 
+
+Constraints:
+
+2 <= arr.length <= 40
+1 <= arr[i] <= 15
+It is guaranteed that the answer fits into a 32-bit signed integer (ie. it is less than 2^31).
+
+
+
+class Solution {
+public:
+    int maxvalue(vector<int>&arr,int l,int h){
+        int maxi=0;
+        for(int i=l;i<=h;i++){
+            maxi=max(arr[i],maxi);
+        }
+        return maxi;
+    }
+    int recur(vector<int>&arr,int start,int end,vector<vector<int>>&dp){
+        if(start==end)
+            return dp[start][end]=0;
+        int ans=INT_MAX;
+        if(dp[start][end]!=-1)
+            return dp[start][end];
+        for(int i=start;i<end;i++){
+            int left=maxvalue(arr,start,i);
+            int right=maxvalue(arr,i+1,end);
+            int temp=recur(arr,start,i,dp)+recur(arr,i+1,end,dp);
+            ans=min(ans,(left*right)+temp);
+        }
+        return dp[start][end]=ans;
+    }
+    int mctFromLeafValues(vector<int>& arr) {
+         int n=arr.size();
+        vector <vector <int>> dp(n+1, vector <int>(n+1,-1));
+        return recur(arr,0,arr.size()-1,dp);
+    }
+};
+TC:O(n*n*n)(one n extra for calculating maximum values )
+sC:O(n*n)
+
+
