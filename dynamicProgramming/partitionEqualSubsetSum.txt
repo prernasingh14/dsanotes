@@ -40,6 +40,41 @@ SC:no extra space for storing values
 //////////////////////////////------------------------///////////////
 Memoization with recursion :
 
+
+
+
+
+ bool subset(vector<int>&nums,int n,int target,vector<vector<int>>&dp){
+        if(target==0){
+            //we got one sum
+            return true;
+    }
+        if(n<=0 || target<0){//base case checked all conditions
+            return false;
+        }
+        if(dp[n-1][target]!=-1)
+            return dp[n-1][target];
+        if(nums[n-1]<=target){//we can either exclude or include
+            return dp[n-1][target]=subset(nums,n-1,target-nums[n-1],dp) ||subset(nums,n-1,target,dp);
+        }
+       return dp[n-1][target]=subset(nums,n-1,target,dp);//no option left but to exclude
+    }
+    bool canPartition(vector<int>& nums) {
+        int n=nums.size();int sum=0;
+        for(int i=0;i<n;i++){
+          sum+=nums[i];
+      }
+     if(sum%2!=0)
+         return false;
+        vector<vector<int>>dp(n+1,vector<int>(sum/2+1,-1));
+        return subset(nums,n,sum/2,dp);
+        
+    }
+
+
+    TC:O(n*target/2)
+
+    
 we store up results in order to avoid blindly calling recursion 
 ////////////////////----------------------////////////////
 Bottom up:Dp based approach 
