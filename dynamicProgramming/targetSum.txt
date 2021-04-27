@@ -92,3 +92,38 @@ tc:O(n*sum + nlogn)
 
 Bottom Up Approach:
 
+
+
+ //count number of subsets with a given sum
+    int t[21][1001];
+    int countOfsubsetSum(vector<int> nums, int target, int n){
+        for(int j=0;j<=n;j++){
+            t[0][j] = 0;
+        }
+        for(int i=0;i<=n;i++){
+            t[i][0] = 1;
+        }
+        for(int i=1;i<=n;i++){
+            for(int j=0;j<=target;j++){
+                if(nums[i-1] <= j){
+                    t[i][j] = t[i-1][j] + t[i-1][j-nums[i-1]];
+                }
+                else{
+                    t[i][j] = t[i-1][j];
+                }
+            }
+        }
+        return t[n][target];
+        
+    }
+    int findTargetSumWays(vector<int>& nums, int target) {
+        int n = nums.size();
+        int sum=0;
+        for(auto x: nums){
+            sum+=x;
+        }
+        if(target> sum) return 0;
+        if((target+sum)%2!=0) return 0;
+        return countOfsubsetSum(nums,(target+sum)/2,nums.size());
+        
+    }
