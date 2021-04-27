@@ -30,6 +30,12 @@ The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit int
 
 Based on Kadane's Algorithm
 
+
+
+ Keep track of both the maximum and minimum products,
+  since at any point, a negative number * negative number = positive number. 
+  So you can't just keep track of the max positive product and not care about the negative - maybe that negative can become positive too, and claim the throne.
+
 class Solution {
 public:
     int maxProduct(vector<int>& nums) {
