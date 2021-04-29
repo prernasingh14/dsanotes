@@ -1,0 +1,121 @@
+Leetcode 130:
+https://leetcode.com/problems/surrounded-regions/
+
+
+
+Given an m x n matrix board containing 'X' and 'O', capture all regions surrounded by 'X'.
+
+A region is captured by flipping all 'O's into 'X's in that surrounded region.
+
+ 
+
+Example 1:
+
+
+Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+Output: [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+Explanation: Surrounded regions should not be on the border, which means that any 'O' on the border of the board are not flipped to 'X'. Any 'O' that is not on the border and it is not connected to an 'O' on the border will be flipped to 'X'. Two cells are connected if they are adjacent cells connected horizontally or vertically.
+Example 2:
+
+Input: board = [["X"]]
+Output: [["X"]]
+ 
+
+Constraints:
+
+m == board.length
+n == board[i].length
+1 <= m, n <= 200
+board[i][j] is 'X' or 'O'.
+
+
+
+
+Approach what I thought of -
+
+was to see which zeroes are connected to boundary zeroes and those which are connected to boundary zeroes on either side , don't change them to 'X'
+
+
+class Solution {
+public:
+    bool dfs(vector<vector<char>>& board,vector<vector<bool>>&visited,int i,int j,int m,int n){
+        if(i>=m || j>=n || i<0 || j<0 || visited[i][j] || board[i][j]=='X')
+            return false;
+        if(board[i][j]=='O' && (i==0 || j==0 || j==n-1 || i==m-1))
+            return true;//connected to boundary zeroes
+        bool up=false;bool down=false;bool left=false;bool right=false;
+        visited[i][j]=true;
+        up=dfs(board,visited,i-1,j,m,n);
+        if(up==false)
+          down=dfs(board,visited,i+1,j,m,n);
+        if(up==false && down==0)
+          left=dfs(board,visited,i,j-1,m,n);
+        if(down==false && up==false && left==false)
+         right=dfs(board,visited,i,j+1,m,n);
+         return up || down || left || right;
+        }
+    void solve(vector<vector<char>>& board) {
+        int m=board.size();
+        int n=board[0].size();
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                   vector<vector<bool>>visited(m,vector<bool>(n,false));
+                if(board[i][j]=='O' ){
+                    if(!dfs(board,visited,i,j,m,n))
+                        board[i][j]='X';
+                }
+            }
+        }
+    }
+};
+
+57/58 test cases passed but one caused TLE
+
+
+
+
+thus an efficient modified approach :
+
+
+
+
+class Solution {
+public:
+    void  dfs(vector<vector<char>>& board,vector<vector<bool>>&visited,int i,int j,int m,int n){
+        if(i>=m || j>=n || i<0 || j<0 || visited[i][j] || board[i][j]=='X')
+            return ;
+        visited[i][j]=true;//mark all connected 0's to boundary as visited
+          dfs(board,visited,i-1,j,m,n);
+           dfs(board,visited,i+1,j,m,n);
+          dfs(board,visited,i,j-1,m,n);
+          dfs(board,visited,i,j+1,m,n);
+        }
+    void solve(vector<vector<char>>& board) {
+        int m=board.size();
+        int n=board[0].size();
+          vector<vector<bool>>visited(m,vector<bool>(n,false));
+        //first we can mark the boundary zeroes and all zeroes connected to them 
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(i==0 || j==0 || i==m-1 || j==n-1)
+                {
+                if(board[i][j]=='O'){
+                       dfs(board,visited,i,j,m,n);
+                }
+            }
+            }
+        }
+            for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(board[i][j]=='O' && !visited[i][j]){
+                      board[i][j]='X';
+                }
+            }
+            }
+        }
+};
+
+
+TC:O(n*m)
+
+SC:O(n*m)
