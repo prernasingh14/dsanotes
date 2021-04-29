@@ -1,0 +1,150 @@
+Leetcode 463:
+
+https://leetcode.com/problems/island-perimeter/
+
+
+You are given row x col grid representing a map where grid[i][j] = 1 represents land and grid[i][j] = 0 represents water.
+
+Grid cells are connected horizontally/vertically (not diagonally). The grid is completely surrounded by water, and there is exactly one island (i.e., one or more connected land cells).
+
+The island doesn't have "lakes", meaning the water inside isn't connected to the water around the island. One cell is a square with side length 1. The grid is rectangular, width and height don't exceed 100. Determine the perimeter of the island.
+
+ 
+
+Example 1:
+
+
+Input: grid = [[0,1,0,0],[1,1,1,0],[0,1,0,0],[1,1,0,0]]
+Output: 16
+Explanation: The perimeter is the 16 yellow stripes in the image above.
+Example 2:
+
+Input: grid = [[1]]
+Output: 4
+Example 3:
+
+Input: grid = [[1,0]]
+Output: 4
+ 
+
+Constraints:
+
+row == grid.length
+col == grid[i].length
+1 <= row, col <= 100
+grid[i][j] is 0 or 1.
+
+
+Brute force approach:
+
+is that go through entire grid and for every land cell , check for all four directions whether it has water surrounding it 
+
+
+
+class Solution {
+public:
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int m=grid.size();int n=grid[0].size();
+        int perimeter=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    if(i+1==m ||  grid[i+1][j]==0)
+                        perimeter++;
+                     if(j+1==n ||  grid[i][j+1]==0)
+                        perimeter++;
+                     if(i-1<0 ||  grid[i-1][j]==0)
+                        perimeter++;
+                     if(j-1<0 ||  grid[i][j-1]==0)
+                        perimeter++;
+                }
+            }
+        }
+        return perimeter;
+    }
+};
+
+TC:O(n*m)
+SC:O(1)
+
+
+
+////////////////////////////////////////////////
+
+
+
+
+DFS approach:
+
+
+
+class Solution {
+public:
+    int peri=0;
+    void dfs(vector<vector<int>>&grid,vector<vector<bool>>&visited,int i,int j,int m,int n){
+        if(i==m || j==n || i<0 || j<0 || grid[i][j]==0)
+        {
+            peri++;
+           return ;
+        }
+        if(visited[i][j])
+            return ;
+        visited[i][j]=true;
+        dfs(grid,visited,i+1,j,m,n);//going down
+        dfs(grid,visited,i-1,j,m,n);//going up
+        dfs(grid,visited,i,j+1,m,n);//going right
+        dfs(grid,visited,i,j-1,m,n);//going left
+        
+    }
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int m=grid.size();int n=grid[0].size();
+       vector<vector<bool>>visited(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1 && !visited[i][j]){
+                    dfs(grid,visited,i,j,m,n);
+                }
+            }
+        }
+        return peri;
+    }
+};
+
+
+
+
+
+
+another analysis based solution :
+
+// find how many 1 in the map. If without the consideration of surrounding cells, the total perimeter should be the total amount of 1 times 4.
+// find how many cell walls that connect with both lands. We need to deduct twice of those lines from total perimeter
+
+
+
+class Solution {
+public:
+
+    int islandPerimeter(vector<vector<int>>& grid) {
+        int m=grid.size();int n=grid[0].size();
+          int land=0;int adjacent=0;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    land++;
+                    if(i!=0 && grid[i-1][j]==1)
+                        adjacent++;
+                    if(j!=0 && grid[i][j-1]==1)
+                        adjacent++;
+                   
+                }
+            }
+        }
+        return 4*land-2*adjacent;//as agar side to side land hoga toh donno ki 2 sides remove hongi
+    }
+};
+
+
+TC:O(m*n)
+SC:O(1)
+
