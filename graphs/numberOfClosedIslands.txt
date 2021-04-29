@@ -105,3 +105,44 @@ public:
 TC:O(n*m)
 SC:O(n*m)
 
+
+
+
+///////////////////////
+
+
+
+class Solution {
+public:
+    bool dfs(vector<vector<int>>& grid, vector<vector<bool>>& visited, int i, int j, int m, int n) {
+ 		if (i < 0 || i >= m || j < 0 || j >= n) return false;
+ 		if (grid[i][j] == 1 || visited[i][j]) return true;//surrounded by water
+ 		visited[i][j] = true;
+ 		int down=dfs(grid, visited, i+1, j, m, n);
+ 		int right=dfs(grid, visited, i, j+1, m, n);
+ 		int top=dfs(grid, visited, i-1, j, m, n);
+ 		int left=dfs(grid, visited, i, j-1, m, n);
+        return down && right && top && left;//chaaro side should be a water 
+ 	}
+    int closedIsland(vector<vector<int>>& grid) {
+        if (grid.empty()) return 0;
+
+ 		int m = grid.size();
+ 		int n = grid[0].size();
+ 		vector<vector<bool>>visited(m, vector<bool>(n, false));
+
+ 		int island = 0;
+        //now just check the number of connected components of 0 
+        for (int i = 0; i < m; i++) {
+ 			for (int j = 0; j < n; j++) {
+ 				if (grid[i][j]==0 && !visited[i][j]) {
+ 					if(dfs(grid, visited, i, j, m, n))
+                    island++; 
+ 				} 
+ 			}
+ 		}
+        return island;
+    }
+};
+
+TC:O(n*m)
