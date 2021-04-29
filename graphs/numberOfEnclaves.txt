@@ -1,0 +1,120 @@
+
+Leetcode 1020;
+https://leetcode.com/problems/number-of-enclaves/
+
+
+You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
+
+A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking off the boundary of the grid.
+
+Return the number of land cells in grid for which we cannot walk off the boundary of the grid in any number of moves.
+
+ 
+
+Example 1:
+
+
+Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
+Output: 3
+Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+Example 2:
+
+
+Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+Output: 0
+Explanation: All 1s are either on the boundary or can reach the boundary.
+ 
+
+Constraints:
+
+m == grid.length
+n == grid[i].length
+1 <= m, n <= 500
+grid[i][j] is either 0 or 1.
+
+brute force dfs :
+
+what i thought of is to go to every land and check wther any direction se it is possible to walk off the boundary 
+
+
+class Solution {
+public:
+    int dfs(vector<vector<int>>&grid,vector<vector<bool>>visited,int i,int j,int m,int n){
+        if(i>=m || j>=n || j<0 || i<0)
+            return 1;//walked out of boundary 
+        if(visited[i][j] || grid[i][j]==0)
+            return 0;
+        visited[i][j]=true;
+        int up=dfs(grid,visited,i+1,j,m,n);
+        int down=dfs(grid,visited,i-1,j,m,n);
+        int right=dfs(grid,visited,i,j+1,m,n);
+        int left=dfs(grid,visited,i,j-1,m,n);
+        return up || left || down || right;
+    }
+    int numEnclaves(vector<vector<int>>& grid) {
+        int cnt=0;int m=grid.size();int n=grid[0].size();int land=0;
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    land++;
+                    cnt+=dfs(grid,visited,i,j,m,n);
+                }
+            }
+        }
+        return land-cnt;
+    }
+};
+
+but its causing TLE
+
+
+
+efficient approach :
+
+is that -
+ki any land can only reach the boundary walk off condition only when it is connected to any boundaryland i.e on edges 
+
+
+class Solution {
+public:
+    void  dfs(vector<vector<int>>&grid,vector<vector<bool>>&visited,int i,int j,int m,int n){
+        if(i>=m || j>=n || j<0 || i<0  || visited[i][j] || grid[i][j]==0)
+            return ;//walked out of boundary 
+        visited[i][j]=true;
+       dfs(grid,visited,i+1,j,m,n);
+        dfs(grid,visited,i-1,j,m,n);
+        dfs(grid,visited,i,j+1,m,n);
+       dfs(grid,visited,i,j-1,m,n);
+    }
+    int numEnclaves(vector<vector<int>>& grid) {
+        int cnt=0;int m=grid.size();int n=grid[0].size();int land=0;
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                //any land connecetd to boundary land will always make it possible
+                //thus visit all 1's connected to boundary 1's
+                if((i==0 || j==0 || i==m-1 || j==n-1) && grid[i][j]==1 ){
+                    if(!visited[i][j])
+                    dfs(grid,visited,i,j,m,n);
+                }
+            }
+        }
+        //now see which land cells remained unvisited 
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                    if(grid[i][j]==1 && !visited[i][j])
+                    cnt++;
+                }
+            }
+        return cnt;
+    }
+};
+
+TC:O(n*m)
+SC:O(n*m)
+
+
+
+
+we can do it by changing the grid itself instead of visited array but changing the input is not a good idea always 
