@@ -33,6 +33,26 @@ The size of the input 2D-array will be between 3 and 1000.
 Every integer represented in the 2D-array will be between 1 and N, where N is the size of the input array.
 
 
+
+
+
+An edge will connect two nodes into one connected component.
+
+When we count an edge in, if two nodes have already been in the same connected component, the edge will result in a cycle. That is, the edge is redundant.
+
+We can make use of Disjoint Sets (Union Find).
+If we regard a node as an element, a connected component is actually a disjoint set.
+
+
+Given edges [1, 2], [1, 3], [2, 3],
+  1
+ / \
+2 - 3
+Initially, there are 3 disjoint sets: 1, 2, 3.
+Edge [1,2] connects 1 to 2, i.e., 1 and 2 are winthin the same connected component.
+Edge [1,3] connects 1 to 3, i.e., 1 and 3 are winthin the same connected component.
+Edge [2,3] connects 2 to 3, but 2 and 3 have been winthin the same connected component already, so [2, 3] is redundant.
+
 class Solution {
 public:
     //jin connected nodes ka parent same hoga that means they are redundant forming a cycle which when removed will make a tree 
@@ -68,3 +88,69 @@ public:
 
 time complexity in worst case:O(n*n)
 
+As in worst case finding the parent is O(N) {As there is no path compression.}
+
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+we can improve the time complexity by union by rank and path compression - O(logn)
+
+
+
+class Solution {
+public:
+    //jin connected nodes ka parent same hoga that means they are redundant forming a cycle which when removed will make a tree 
+    //path compression by halving 
+    int find(vector<int>&parent,int x){
+        if(parent[x]==-1)//means its made parent of itself i.e independent node 
+            return x;
+        return parent[x]=find(parent,parent[x]);
+    }
+    //return false if x and y are already connected 
+    //union by rank 
+    bool unionn(vector<int>&parent,vector<int>&rank,int x,int y){
+        int parentx=find(parent,x);
+        int parenty=find(parent,y);
+        if(parentx==parenty)
+            return false;
+       // Make root of smaller rank point to root of larger rank.
+            if (rank[parentx] < rank[parenty]) parent[parentx] = parenty;
+            else if (rank[parentx] > rank[parenty]) parent[parenty] = parentx;
+            else {
+                parent[parentx] = parenty;
+                rank[parenty]++;
+            }
+            return true;
+    }
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int e=edges.size();//number of edges 
+        //as nodes starts from 1 so we need e+1 
+        vector<int>parent(e+1,-1);//initially they are parents of themselves 
+        //now for every edge x-y make x the parent of y 
+        vector<int>rank(e+1,0);
+        for(int i=0;i<edges.size();i++){
+            int x=edges[i][0];
+            int y=edges[i][1];
+            if(!unionn(parent,rank,x,y))//if already in same 
+                return {x,y};
+        }
+        return {};
+    }
+};
+
+
+TC:O(n*logn)
+
+Time complexity:
+
+For regular union and find, each operation takes O(logn) in average, and O(n) in worst case.
+For union by rank, it takes at most O(logn) time since the height of tree-like structure is restricted in O(logn).
+For path compression, the time complexity is reduced to O(1) in average and worst case, since the structure is flattened.
+So the total time complexity can be reduced from O(n^2)(worst case), O(nlogn)(average case) to O(n) in both cases.
