@@ -1,3 +1,8 @@
+Leetcode 684-
+https://leetcode.com/problems/redundant-connection/
+
+
+
 In this problem, a tree is an undirected graph that is connected and has no cycles.
 
 The given input is a graph that started as a tree with N nodes (with distinct values 1, 2, ..., N), with one additional edge added. The added edge has two different vertices chosen from 1 to N, and was not an edge that already existed.
@@ -30,55 +35,36 @@ Every integer represented in the 2D-array will be between 1 and N, where N is th
 
 class Solution {
 public:
-    /*
-     * Find the subset a vertex belongs to.
-     */
-    int find(vector<int> &ss, int x) {
-        if (ss[x] == -1) return x;
-        return find(ss, ss[x]);
+    //jin connected nodes ka parent same hoga that means they are redundant forming a cycle which when removed will make a tree 
+    int find(vector<int>parent,int x){
+        if(parent[x]==-1)//means its made parent of itself i.e independent node 
+            return x;
+        return find(parent,parent[x]);
     }
-    
-    /*
-     * Unionize two subsets. 
-     */
-    void _union(vector<int> &ss, int x, int y) {
-        int xp = find(ss, x);
-        int yp = find(ss, y);
-        if (xp != yp) ss[yp] = xp;
+    void unionn(vector<int>parent,int x,int y){
+        int parentx=find(parent,x);
+        int parenty=find(parent,y);
+        if(parentx!=parenty)
+            parent[parenty]=parentx;
     }
-    
-    /*
-     * We use disjoint set (or Union-Find) to detect a cycle in
-     * an undirected graph.
-     */
-    vector<int> findRedundantConnection(vector<vector<int> >& e/*dges*/) {
-        
-        /* Create parent subsets and initialize them to -1 - this means
-         * the subsets contain only one item - i.e ss[i] only contains
-         * vertex i.
-         */
-        vector<int> ss; ss.push_back(-1);
-        for (int i = 0; i < e.size(); i++) ss.push_back(-1);
-        
-        /*
-         * We go through each edge one by one. We find the subset
-         * that the vertices of an edge belongs to. If they belong
-         * to two different subsets, we merge them into one set 
-         * using Union. Now, if both vertices are in the same 
-         * subset, we got a cycle - we return it.
-         *
-         */
-        for (int i = 0; i < e.size(); ++i) {
-            int x = find(ss, e[i][0]), y = find(ss, e[i][1]);            
-            if (x == y) return { e[i][0], e[i][1] };
-            _union(ss, x, y);
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int e=edges.size();//number of edges 
+        //as nodes starts from 1 so we need e+1 
+        vector<int>parent(e+1,-1);//initially they are parents of themselves 
+        //now for every edge x-y make x the parent of y 
+        for(int i=0;i<edges.size();i++){
+            int x=edges[i][0];
+            int y=edges[i][1];
+            int parentx=find(parent,x);
+            int parenty=find(parent,y);
+            if(parentx!=parenty)
+                parent[parenty]=parentx;
+            else
+                return {x,y};//if their parents are same 
         }
-        
-        /* No redundant edge found */
-        return vector<int>();
+        return {};
     }
 };
-
 
 time complexity in worst case:O(n*n)
 
