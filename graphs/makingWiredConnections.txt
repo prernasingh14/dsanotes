@@ -159,3 +159,62 @@ public:
 };
 
 TC:O(v*e)
+
+
+
+
+
+
+improving TC: by path compression:
+
+
+
+  
+class Solution {
+public:
+    int find(vector<int>&parent,int x){
+        if(parent[x]==x)
+            return x;
+        return parent[x]=find(parent,parent[x]);
+    }
+    bool unionn(vector<int>&parent,int x,int y){
+        int parentx=find(parent,x);
+        int parenty=find(parent,y);
+        if(parentx==parenty)
+            return false;
+        parent[parenty]=parentx;
+        return true;
+    }
+    int makeConnected(int n, vector<vector<int>>& connections) {
+        //we need to find the number if connected components first 
+        int edges=connections.size();
+        if(edges<n-1)
+            return -1;
+        vector<int>parent(n+1);
+        //initialize every node as parent of self
+        for(int i=0;i<n;i++)
+            parent[i]=i;
+        int redundant=0;
+      
+        for(int i=0;i<edges;i++)
+        {
+            int x=connections[i][0];int y=connections[i][1];
+            if(!unionn(parent,x,y))
+                redundant++;
+        }
+            
+        int connected=0;
+        for(int i=0;i<n;i++)
+        {
+            if(parent[i]==i)
+                connected++;
+        }
+        if(connected-1<=redundant)
+            return connected-1;
+        else
+            return -1;
+       
+        
+    }
+};
+TC:O(v*elogv)
