@@ -1,0 +1,77 @@
+
+
+Leetcode 802:https://leetcode.com/problems/find-eventual-safe-states/
+
+
+We start at some node in a directed graph, and every turn, we walk along a directed edge of the graph. If we reach a terminal node (that is, it has no outgoing directed edges), we stop.
+
+We define a starting node to be safe if we must eventually walk to a terminal node. More specifically, there is a natural number k, so that we must have stopped at a terminal node in less than k steps for any choice of where to walk.
+
+Return an array containing all the safe nodes of the graph. The answer should be sorted in ascending order.
+
+The directed graph has n nodes with labels from 0 to n - 1, where n is the length of graph. The graph is given in the following form: graph[i] is a list of labels j such that (i, j) is a directed edge of the graph, going from node i to node j.
+
+ 
+
+Example 1:
+
+Illustration of graph
+Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
+Output: [2,4,5,6]
+Explanation: The given graph is shown above.
+Example 2:
+
+Input: graph = [[1,2,3,4],[1,2],[3,4],[0,4],[]]
+Output: [4]
+ 
+
+Constraints:
+
+n == graph.length
+1 <= n <= 104
+0 <= graph[i].legnth <= n
+graph[i] is sorted in a strictly increasing order.
+The graph may contain self-loops.
+The number of edges in the graph will be in the range [1, 4 * 104].
+
+
+
+
+
+This problem is similar to a standard problem "Cycle Detection In a Directed Graph". We need to find only those nodes which are not part of any cycle. So all those nodes which are visited and marked safe (have no cycle) must be added to the result.
+Unvisited nodes are marked as 0.
+Visited but unsafe nodes are marked as 1.
+Visited but safe nodes are marked as 2.
+
+class Solution {
+public:
+    bool dfs(vector<vector<int>>& graph,vector<int>& color,int node)
+    {
+        color[node]=1;  // Initially assume that the node is unsafe.
+        
+        for(auto cur : graph[node])
+            if((color[cur]==0 && dfs(graph,color,cur)) || color[cur]==1)
+                return true;
+        
+        color[node]=2;  // If there is no cycle mark node as safe.
+        return false;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        vector<int> color(graph.size()),result;
+		
+		// If node is visited and safe or unvisited and does not contain cycle then add it to the answer.
+        for(int i=0;i<graph.size();i++)
+            if(color[i]==2 ||  !dfs(graph,color,i))
+                result.push_back(i);
+                
+        return result;
+    }
+};
+
+TC:O(v+e)
+
+
+
+
+
+or we can also use topological sorting too
