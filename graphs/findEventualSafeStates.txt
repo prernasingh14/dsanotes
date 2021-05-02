@@ -38,6 +38,47 @@ The number of edges in the graph will be in the range [1, 4 * 104].
 
 
 
+DFS based cycle detection in a directed graph using the concept of back edge -
+
+  //we'll find cycle in a directed graph by checking whether a back edge exists
+    bool checkForCycle(vector<vector<int>>&graph,vector<bool>&visited,vector<bool>&stack,int i){
+            visited[i]=true;//mark it visited 
+            stack[i]=true;//push it in stack
+            //now check for its neighbours
+            for(int j=0;j<graph[i].size();j++){
+                if(!visited[graph[i][j]])
+                {
+                    if(checkForCycle(graph,visited,stack,graph[i][j]))
+                    return true;
+                }
+                else if(stack[graph[i][j]])
+                    return true;
+            }
+        cout<<i<<" ";
+        stack[i]=false;
+        return false;
+    }
+    vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
+        int v=graph.size();vector<int>ans;
+        vector<bool>visited(v,false);//nodes not visited 
+        vector<bool>stack(v,false);//stack is empty (used for checking back edge)
+        for(int i=0;i<v;i++){
+                if(!checkForCycle(graph,visited,stack,i))
+                    ans.push_back(i);
+        }
+        return ans;
+    }
+
+
+
+TC:O(v+e)
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+Method 2: Graph coloring approach :
+
 This problem is similar to a standard problem "Cycle Detection In a Directed Graph". We need to find only those nodes which are not part of any cycle. So all those nodes which are visited and marked safe (have no cycle) must be added to the result.
 Unvisited nodes are marked as 0.
 Visited but unsafe nodes are marked as 1.
@@ -70,8 +111,10 @@ public:
 
 TC:O(v+e)
 
+//////////////////////////////////////////////////////////////////////////////
 
-
+Method 3: cycle detection using topological sorting 
 
 
 or we can also use topological sorting too
+

@@ -1,0 +1,132 @@
+Leetcode 132:
+
+
+
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return the minimum cuts needed for a palindrome partitioning of s.
+
+ 
+
+Example 1:
+
+Input: s = "aab"
+Output: 1
+Explanation: The palindrome partitioning ["aa","b"] could be produced using 1 cut.
+Example 2:
+
+Input: s = "a"
+Output: 0
+Example 3:
+
+Input: s = "ab"
+Output: 1
+ 
+
+Constraints:
+
+1 <= s.length <= 2000
+s consists of lower-case English letters only.
+
+
+
+backtracking based solution:
+
+
+class Solution {
+public:
+     bool ispalin(string& s, int start, int end) {
+        while(start <= end) {
+            if(s[start++] != s[end--])
+                return false;
+        }
+        return true;
+    }
+    void backtrack( vector<vector<string>>&ans,vector<string>&temp,int start,int n,string s,string &str,int &minCuts){
+        if(start==n)
+        {
+            int sz=temp.size();
+            minCuts=min(minCuts,sz);
+            ans.push_back(temp);
+            return ;
+        }
+        //we need to start from every characater
+        for(int i=start;i<n;i++)
+        {
+            if(ispalin(s,start,i)){
+            temp.push_back(s.substr(start,i-start+1));
+            backtrack(ans,temp,i+1,n,s,str,minCuts);
+            temp.pop_back();
+            }
+            
+        }
+    }
+    int minCut(string s) {
+          vector<vector<string>> ans;
+        int n=s.size();
+        vector<string>temp;
+        string str="";int minCuts=INT_MAX;
+        backtrack(ans,temp,0,n,s,str,minCuts);
+        return minCuts>=1?minCuts-1:0;
+    }
+};
+
+
+tc:O(n*2^n)
+
+tle caused 
+
+
+
+///////////////////////////////////////////////////
+
+
+DP approach:
+
+
+
+recursion with memoization:
+
+
+class Solution {
+public:
+    bool palin(string s,int i,int j){
+        while(i<=j){
+            if(s[i++]!=s[j--])
+                return false;
+        }
+        return true;
+    }
+    int partition(string s,int i,int j,vector<vector<int>>&dp){
+        if(i>=j)
+            return 0;
+        if(palin(s,i,j))//as no cut required then 
+            return 0;
+        if(dp[i][j]!=-1)
+            return dp[i][j];
+        int minn=INT_MAX;
+        for(int k=i;k<=j-1;k++)
+        {
+            int temp=partition(s,i,k,dp)+partition(s,k+1,j,dp)+1;
+           if(temp<minn)
+            minn=temp;
+        }
+        return dp[i][j]=minn;
+    }
+    int minCut(string s) {
+        vector<vector<int>>dp(s.size()+1,vector<int>(s.size()+1,-1));
+        return partition(s,0,s.size()-1,dp);
+    }
+};
+
+
+
+
+
+
+bottom up approach:
+
+
+
+
+
