@@ -33,99 +33,61 @@ grid[r][c] is 0 or 1
 
 
 
-first approach that I can think of is finding all paths & then finding which of these takes minimum cells 
 
-DFS based approach :
-class Solution {
-public:
-    int minCost=INT_MAX;
-    void dfs(vector<vector<int>>& grid,int pointx,int pointy,int destx,int desty,int n,int cost)
-    {
-         if(pointx<0 || pointy<0 || pointx>=n || pointy>=n || grid[pointx][pointy]==1)
-           return ;
-         else if(pointx==destx && pointy==desty)
-        {
-           
-            minCost=min(minCost,cost);
-             grid[pointx][pointy]=0;
-            return ;
-        }
-      
-          grid[pointx][pointy]=1;//visited
-         dfs(grid,pointx+1,pointy+1,destx,desty,n,cost+1);
-         dfs(grid,pointx+1,pointy-1,destx,desty,n,cost+1);
-         dfs(grid,pointx-1,pointy+1,destx,desty,n,cost+1);
-         dfs(grid,pointx-1,pointy-1,destx,desty,n,cost+1);
-         dfs(grid,pointx+1,pointy,destx,desty,n,cost+1);
-         dfs(grid,pointx-1,pointy,destx,desty,n,cost+1);
-         dfs(grid,pointx,pointy+1,destx,desty,n,cost+1);
-         dfs(grid,pointx,pointy-1,destx,desty,n,cost+1);
-        grid[pointx][pointy]=0;//unvisited;
-        
-        
-    }
-    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        int n=grid.size();
-        if(grid[0][0]==1 || grid[n-1][n-1]==1)
-            return -1;
-        int cost=1;
-        dfs(grid,0,0,n-1,n-1,n,cost);
-        return minCost==INT_MAX?-1:minCost;
-        
-        
-    }
-};
-
-
-TC:O(n*n) thus will cause TLE 
-
-
-Method 2 : bfs based approach 
+Method 1 : bfs based approach 
  
-it is used to find only the first possible path 
-Time complexity is O(N^2) because in the worst-case scenario, the BFS has to visit all the cells in the grid when there is no obstacles. The visitedMap makes sure that the algorithm is not visiting a node (being added back to the queue) for a second time.
-Space complexity is O(N^2) because of the visitedMap.
+it is used to find only the first possible path (thus finds the shortest path instead of checking all possibilities )
+
+Time complexity is O(N*N) because in the worst-case scenario, the BFS has to visit all the cells in the grid when there is no obstacles. The visitedMap makes sure that the algorithm is not visiting a node (being added back to the queue) for a second time.
+Space complexity is O(N^2) because of the visited matrix.
+
 
 
 class Solution {
-    private:
-    struct Cell{
-        int x;//x coordinate
-        int y;//y coordinate
-        int dist;//distance from source
-        
-    };
 public:
-    int shortestPathBinaryMatrix(vector<vector<int>>& grid) {
-        int n=grid.size();
-        if(grid[0][0]==1 || grid[n-1][n-1]==1)
+    int shortestPathBinaryMatrix(vector<vector<int>>& mat) {
+        int m=mat.size();int n=mat[0].size();
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        queue<pair<int,int>>q;
+        //start  top right 0 as source node  at level=0
+        //push its adjacent nodes in the queue
+        //such that we can find the shortest path 
+        if(mat[0][0]==1 || mat[m-1][n-1]==1)
             return -1;
-       queue<Cell>q;
-       bool visited[n][n];
-       memset(visited,false,sizeof(visited));
-        q.push({0,0,1});
-        while(!q.empty())
-        {
-           Cell c=q.front();
-            q.pop();
-            if(c.x<0 || c.x>=n || c.y<0 || c.y>=n || grid[c.x][c.y]==1 || visited[c.x][c.y]==true)
-                continue;//go back
-            else if(c.x==n-1 && c.y==n-1)//reached that destination
-                return c.dist;//number of cells in between from source to dest 
-               q.push({c.x+1,c.y+1,c.dist+1});
-               q.push({c.x+1,c.y-1,c.dist+1});
-               q.push({c.x-1,c.y+1,c.dist+1});
-               q.push({c.x-1,c.y-1,c.dist+1});
-               q.push({c.x+1,c.y,c.dist+1});
-               q.push({c.x-1,c.y,c.dist+1});
-               q.push({c.x,c.y+1,c.dist+1});
-               q.push({c.x,c.y-1,c.dist+1});
-               visited[c.x][c.y]=true;//visited
-            
+        if(m==1 && n==1 && mat[0][0]==0)
+            return 1;
+        int dx[]={-1,-1,0,+1,+1,+1,0,-1};
+        int dy[]={0,+1,+1,+1,0,-1,-1,-1};
+        for(int i=0;i<8;i++){
+            q.push({dx[i],dy[i]});
         }
-        return -1;//no path exists 
-        
-        
+        int level=0;//initial level is zero 
+        bool reached=false;
+        while(!q.empty()){
+            int sz=q.size();
+             level++;
+            for(int k=0;k<sz;k++){
+                int i=q.front().first;
+                int j=q.front().second;
+                q.pop();
+               if(i>=0 && j>=0 && i<m && j<n && !visited[i][j] && mat[i][j]==0){
+                   mat[i][j]=level;
+                   visited[i][j]=true;
+                   if(i==m-1 && j==n-1)
+                {
+                    reached=true;
+                      break;
+                }
+                   for(int l=0;l<8;l++){
+                      q.push({i+dx[l],j+dy[l]});
+                      }
+               }
+            }
+            if(reached)
+                break;
+        }
+        return reached?level+1:-1;
     }
 };
 
+TC:O(n*n)
