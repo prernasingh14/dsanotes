@@ -84,3 +84,33 @@ public:
 };
 
 TC:O(height)  which in worst case can be n thus O(n)
+
+
+
+
+Method 2: DFS based approach :
+
+
+
+ void dfs(TreeNode* node,int parent,int depth,unordered_map<int,pair<int,int>>&mp){
+        if(node==NULL)
+            return ;
+        mp[node->val]={parent,depth};
+        dfs(node->left,node->val,depth+1,mp);
+        dfs(node->right,node->val,depth+1,mp);
+        
+    }
+    bool isCousins(TreeNode* root, int x, int y) {
+        unordered_map<int,pair<int,int>>mp;
+        dfs(root,0,0,mp);
+        return mp[x].first!=mp[y].first && mp[x].second==mp[y].second;
+    }
+};
+
+
+
+Time: O(N)
+Space: O(h), it's the depth of dfs recursion, where h is the height of the binary tree.
+
+
+
