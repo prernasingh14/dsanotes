@@ -1,0 +1,100 @@
+Leetcode 934:
+
+In a given 2D binary array A, there are two islands.  (An island is a 4-directionally connected group of 1s not connected to any other 1s.)
+
+Now, we may change 0s to 1s so as to connect the two islands together to form 1 island.
+
+Return the smallest number of 0s that must be flipped.  (It is guaranteed that the answer is at least 1.)
+
+ 
+
+Example 1:
+
+Input: A = [[0,1],[1,0]]
+Output: 1
+Example 2:
+
+Input: A = [[0,1,0],[0,0,0],[0,0,1]]
+Output: 2
+Example 3:
+
+Input: A = [[1,1,1,1,1],[1,0,0,0,1],[1,0,1,0,1],[1,0,0,0,1],[1,1,1,1,1]]
+Output: 1
+ 
+
+Constraints:
+
+2 <= A.length == A[0].length <= 100
+A[i][j] == 0 or A[i][j] == 1
+
+
+
+DFS + BFS approach :
+
+DFS to visit a single island then BFS to find the shortest path between it and the other island 
+
+
+
+class Solution {
+public:
+    void dfs(vector<vector<int>>&grid,int i,int j,vector<vector<bool>>&visited){
+        if(i>=grid.size() || i<0 || j<0 || j>=grid[0].size() ||  visited[i][j] || grid[i][j]==0)
+            return ;
+        visited[i][j]=true;
+        dfs(grid,i+1,j,visited);
+        dfs(grid,i-1,j,visited);
+         dfs(grid,i,j-1,visited);
+         dfs(grid,i,j+1,visited);
+    }
+    int shortestBridge(vector<vector<int>>&grid) {
+        int m=grid.size();int n=grid[0].size();
+        queue<pair<int,int>>q;
+        //visit one island
+        int one=0;
+        bool flag=false;
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    flag=true;
+                    dfs(grid,i,j,visited);
+                       break;
+                }
+            }
+            if(flag)
+                break;
+        }
+        //now for the visited island push in all its neighbouring cells so as to find when can we reach the unvisited island in shortest steps 
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(visited[i][j] && grid[i][j]==1){
+                    q.push({i+1,j});
+                    q.push({i-1,j});
+                    q.push({i,j-1});
+                    q.push({i,j+1});     
+                }
+            }
+        }
+        int level=0;
+        while(!q.empty()){
+            int sz=q.size(); level++;
+            for(int k=0;k<sz;k++){
+                int i=q.front().first;
+                int j=q.front().second;q.pop();
+                if(i>=0 && j>=0 && j<n && i<m && !visited[i][j] && grid[i][j]==1)
+                    return level-1;
+                if(i>=0 && j>=0 && j<n && i<m && !visited[i][j] && grid[i][j]==0){
+                    visited[i][j]=true;
+                    q.push({i+1,j});
+                    q.push({i-1,j});
+                    q.push({i,j+1});
+                    q.push({i,j-1});
+                }
+            }
+        }
+        return 0;
+    }
+};
+
+TC:O(n*m)
+SC:O(n*m)
