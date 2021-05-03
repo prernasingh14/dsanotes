@@ -1,0 +1,70 @@
+Leetcode 502:
+https://leetcode.com/problems/01-matrix/
+
+
+
+Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+
+The distance between two adjacent cells is 1.
+
+ 
+
+Example 1:
+
+
+Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
+Output: [[0,0,0],[0,1,0],[0,0,0]]
+Example 2:
+
+
+Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+ 
+
+Constraints:
+
+m == mat.length
+n == mat[i].length
+1 <= m, n <= 104
+1 <= m * n <= 104
+mat[i][j] is either 0 or 1.
+There is at least one 0 in mat.
+
+Method 1 : BFS shortest path approach when all have same unit distance from each other 
+
+class Solution {
+public:
+    //BFS shortest path approach 
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int m=mat.size();int n=mat[0].size();
+        vector<vector<bool>>visited(m,vector<bool>(n,false));
+        queue<pair<int,int>>q;
+        //push all 0's first as we'll consider them as source nodes 
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(mat[i][j]==0){
+                    q.push({i-1,j});q.push({i+1,j});q.push({i,j+1});q.push({i,j-1});
+                }
+            }
+        }
+        int level=0;//initial level is zero 
+        while(!q.empty()){
+            int sz=q.size();
+             level++;
+            for(int k=0;k<sz;k++){
+                int i=q.front().first;
+                int j=q.front().second;
+                q.pop();
+               if(i>=0 && j>=0 && i<m && j<n && !visited[i][j] && mat[i][j]==1){
+                   mat[i][j]=level;
+                   visited[i][j]=true;
+                   q.push({i-1,j});q.push({i+1,j});q.push({i,j+1});q.push({i,j-1});
+               }
+            }
+        }
+        return mat;
+    }
+};
+
+
+TC:O(m*n)
