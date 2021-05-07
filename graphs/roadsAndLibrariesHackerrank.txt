@@ -52,16 +52,13 @@ int main()
         {
             vector<long>nodes;//number of nodes in each connected component
             dfs(i,vis,v,nodes);
-            cost+=(nodes.size()-1)*lr;//eaxh connected component requires only nodes-1 edges to be connected 
+            cost+=min((nodes.size()-1)*lr+lc,lc*nodes.size());//eaxh connected component requires only nodes-1 edges to be connected 
             ++c;
         }
     }
-    cost+=c*lc;
+    
     }
     cout<<cost<<endl;
     }
     return 0;
 }
-
-TC:O(v*e)  as its simple dfs 
-
