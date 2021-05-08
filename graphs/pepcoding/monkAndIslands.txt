@@ -1,0 +1,93 @@
+
+https://www.hackerearth.com/practice/algorithms/graphs/breadth-first-search/practice-problems/algorithm/monk-and-the-islands/
+
+
+
+
+Monk visits the land of Islands. There are a total of N islands numbered from 1 to N. Some pairs of islands are connected to each other by Bidirectional bridges running over water.
+Monk hates to cross these bridges as they require a lot of efforts. He is standing at Island #1 and wants to reach the Island #N. Find the minimum the number of bridges that he shall have to cross, if he takes the optimal route.
+
+Input:
+First line contains T. T testcases follow.
+First line of each test case contains two space-separated integers N, M.
+Each of the next M lines contains two space-separated integers X and Y , denoting that there is a bridge between Island X and Island Y.
+
+Output:
+Print the answer to each test case in a new line.
+
+Constraints:
+1 ≤ T ≤ 10
+1 ≤ N ≤ 104
+1 ≤ M ≤ 105
+1 ≤ X, Y ≤ N
+
+
+
+Sample Input          
+2
+3 2
+1 2
+2 3
+4 4
+1 2
+2 3
+3 4
+4 2
+ Sample Output 
+ 2
+ 2
+
+
+
+
+for finding shortest path we always use bfs 
+
+
+//we will perform bfs , bfs is like level order traversal thus gives shortest path only by giving equal importance to nodes on same level 
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+	int t;cin>>t;
+	while(t--){
+		//we can consider it as number of nodes and number of edges 
+		int n,m;cin>>n>>m;//number of islands and number of bridges
+		vector<int>graph[n+1];
+		for(int i=0;i<m;i++){
+			int u,v;cin>>u>>v;
+			graph[u].push_back(v);
+			graph[v].push_back(u);//as bidirectional edge
+		}
+		int steps=0;queue<int>q;
+		vector<bool>vis(n+1,false);//visited or not
+		q.push(1);//as we have to start from island 1 
+		vis[1]=true;bool reached=false;
+		while(!q.empty()){
+			int sz=q.size();steps++;
+			for(int j=0;j<sz;j++){
+			//push its adjacent vertices
+			int src=q.front();q.pop();
+			for(int i=0;i<graph[src].size();i++){
+				if(!vis[graph[src][i]]){
+					{
+						vis[graph[src][i]]=true;
+						if(graph[src][i]==n)
+			              {
+							  reached=true;
+							  break;
+						  }
+						  
+					       q.push(graph[src][i]);
+					}
+				}
+			}
+			}
+			if(reached)
+			break;
+		}
+		cout<<steps<<"\n";
+	}
+}
+
+TC:O(n*m)
+
+SC:O(n)
