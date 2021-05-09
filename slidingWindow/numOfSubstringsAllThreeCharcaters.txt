@@ -1,0 +1,91 @@
+
+Leetcode 1358:
+
+https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/
+
+
+Given a string s consisting only of characters a, b and c.
+
+Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+
+ 
+
+Example 1:
+
+Input: s = "abcabc"
+Output: 10
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again). 
+Example 2:
+
+Input: s = "aaacb"
+Output: 3
+Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb". 
+Example 3:
+
+Input: s = "abc"
+Output: 1
+ 
+
+Constraints:
+
+3 <= s.length <= 5 x 10^4
+s only consists of a, b or c characters.
+
+
+
+Brute force approach:
+ is to run two loops and for every index run inner loop until you find atleast one occurence of every character 
+
+ class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        int n=s.size();int sum=0;
+        for(int i=0;i<n;i++){
+            int right=i;
+            unordered_set<char>st;
+            while(right<n){
+                st.insert(s[right]);
+                if(st.size()==3)
+                    break;
+                right++;
+            }
+            sum+=(n-right);//number of substrings 
+        }
+        return sum;
+    }
+};
+
+
+TC:O(n*n)
+SC:O(1) as extra space of set
+
+
+
+optimised approach :
+
+Sliding window -
+
+
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        int n = s.size();
+	     vector<int>count = {0, 0, 0};
+		int i = 0, j = 0, res = 0, ans = 0;
+        for(int i=0;i<n;i++){
+            count[s[i]-'a']++;     /* have some hashmap or counter */	
+					/* Loop inside for to reduce the window size based on constraint */
+		while (j < n && count[0] && count[1] && count[2]) {
+			ans++;
+		count[s[j]-'a']--;
+		j++;
+		}
+            res += ans;
+           
+    }
+        return res;
+    }
+        
+};
+TC:O(n)
+SC:O(1)
