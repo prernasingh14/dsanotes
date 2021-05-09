@@ -1,0 +1,88 @@
+Leetcode 1004-
+https://leetcode.com/problems/max-consecutive-ones-iii/
+
+
+Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+Output: 6
+Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+Example 2:
+
+Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+Output: 10
+Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+nums[i] is either 0 or 1.
+0 <= k <= nums.length
+
+Brute force approach:
+
+
+is to run two loops and break the inner loop when you have flipped  'k'  zeroes.
+
+
+class Solution {
+public:
+    int longestOnes(vector<int>& nums, int k) {
+        int maxlength=0;
+        for(int i=0;i<nums.size();i++){
+              int right=i;int flips=k;
+                while(right<nums.size()){
+                    if(nums[right]==0 && flips>0)
+                        flips--;
+                    else if(nums[right]==0 && flips<=0)
+                        break; 
+                   right++;
+                }
+            maxlength=max(maxlength,right-i);
+                
+            }
+        return maxlength;
+        }
+};
+
+TC:O(n*n) worst case as lets take the case when there is no zero and all 1's
+SC:O(1)
+
+
+
+Optimised approach : Sliding window 
+
+
+class Solution {
+public:
+    int longestOnes(vector<int>& nums, int k) {
+               int count = 0, i = 0, j = 0;
+				int res = INT_MIN;
+				for (i = 0; i < nums.size(); i++) {
+					if (nums[i] == 0) count++;  /* have some hashmap or counter */
+					
+					/* Loop inside for to reduce the window size based on constraint */
+					while (count > k && j < nums.size()) {
+						if (nums[j] == 0)
+							count--;
+						j++;
+					}
+					/* get the maximum value of the window which satisfies the constraint */
+					res = max(res, i-j+1);
+				}
+				return res == INT_MIN ? ((count <= k) ? nums.size() : 0) : res;
+			}
+};
+
+
+TC:O(n)
+SC:O(1)
+
+
