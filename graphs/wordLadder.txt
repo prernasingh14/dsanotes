@@ -39,6 +39,56 @@ Keep doing so until we find the target word or we have traversed all words.
 
 
 
+shortest path mein bfs is useful as it follows level order 
+
+
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        queue<pair<string,int>>q;
+        unordered_map<string,bool>words;
+        for(int i=0;i<wordList.size();i++){
+            words[wordList[i]]=true;
+        }
+        q.push({beginWord,1});//initially the first word is at level 1
+        int ladder=1;
+        while(!q.empty()){
+            
+            string word=q.front().first;
+            int dist=q.front().second;
+            q.pop();
+            if(word==endWord)
+                return dist;
+            //now replace every letter from word and check whether it exists in the 
+            //dictionary or not as then it could be our next stepping stone
+            for(int i=0;i<word.size();i++){
+                char ch=word[i];
+              for(int j=0;j<26;j++){
+                  word[i]=j+'a';
+                  if(words[word]){
+                      q.push({word,dist+1});
+                      words.erase(word);  
+                  }
+              }
+                word[i]=ch;//make it original again
+            }
+           
+        }
+        return 0;
+    }
+};
+
+
+
+
+TC:O(26*n*m)
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 class Solution {
 public:
