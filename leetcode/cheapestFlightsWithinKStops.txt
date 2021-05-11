@@ -45,7 +45,100 @@ There will not be any duplicated flights or self cycles.
 
 like shortest path between the source and destination
 
-method 1: using bellman ford algorithm
+
+
+Method 1: Shortest path using BFS approach 
+
+class Solution {
+public:
+    //for shortest path bfs also fits well here 
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+        vector<pair<int,int>>g[n];
+        for(int i=0;i<flights.size();i++){
+            g[flights[i][0]].push_back({flights[i][1],flights[i][2]});
+        }
+int ans = INT_MAX;
+        queue<pair<int,int>> q;
+        q.push({src,0}); 
+        int steps =0; 
+        while(!q.empty()){
+            int n = q.size();
+            for(int i=0; i<n; ++i){
+             auto curr=q.front();q.pop();
+            if(curr.first == dst) ans = min(ans, curr.second);   
+            for(auto x:  g[curr.first]){             
+               if( curr.second + x.second > ans) continue;
+                q.push({x.first,curr.second + x.second });
+             }  
+            }
+          if(steps++ > K) break;
+        }
+        
+        return ans == INT_MAX ? - 1 : ans;
+    } 
+};
+
+
+causing TLE on leetcode 
+
+
+
+
+class Solution {
+public:
+    //for shortest path bfs also fits well here 
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K) {
+         vector<vector<pair<int,int>>> adj(n);
+ //create a directed weighted graph from given edges in flights       
+        for(int i=0;i<flights.size();i++){
+           adj[flights[i][0]].push_back({flights[i][2], flights[i][1]}); 
+        }
+        
+//we use priority queue in ascending order of weights to process vertices
+        priority_queue< pair<int,pair<int,int>>, vector<pair<int,pair<int,int>>>, greater<pair<int,pair<int,int>>>> q;
+
+//push the start vertex "src" with weight 0 as a node is connected to itself no weight
+//needed and the steps k+1, we use k+1 instead of k bcoz if we can visit k nodes as a stop
+// it means we can visit k+1 edges
+        
+        q.push({0,{src, K+1}});
+        
+//Loop until q is not empty
+        while(!q.empty()){
+            auto node = q.top(); //get the front element with samllest weight in q
+            q.pop();    ///remove the processed pair
+            
+            int cost = node.first;  //weight or cost of currently popped pair
+            int v = node.second.first;  //the vertex
+            int steps_left = node.second.second; //steps left currenlty
+            
+    //if steps_left becomes <0 this means we have exceeded the number of stops allowed from src to dst
+            if(steps_left<0)continue;
+//else if w have reached the dst return the cost of that path
+            if(dst == v)return cost;
+//Nowe we loop all the neighbour of vertex v above and add the cost of visiting and also
+//reduce the steps_left and then push it in priority_queue to be processes further
+            for(auto temp: adj[v]){
+                int cost_to = temp.first;
+                 int to = temp.second;
+                q.push({cost+cost_to, {to,steps_left-1}});
+            }
+            
+        }
+//if at last we are unable to reach dst from ource with given number of stops then return -1
+       return -1;
+    }
+};
+
+
+
+
+causing TLE on leetcode 
+
+
+
+
+method 3: using bellman ford algorithm
 
 
 
@@ -83,3 +176,5 @@ public:
 
 
 TC:O(k*E)
+
+
