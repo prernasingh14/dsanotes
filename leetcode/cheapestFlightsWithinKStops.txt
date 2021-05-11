@@ -1,3 +1,10 @@
+
+
+
+Leetcode - 787
+
+https://leetcode.com/problems/cheapest-flights-within-k-stops/
+
 There are n cities connected by m flights. Each flight starts from city u and arrives at v with a price w.
 
 Now given all the cities and flights, together with starting city src and the destination dst, your task is to find the cheapest price from src to dst with up to k stops. If there is no such route, output -1.
@@ -40,29 +47,39 @@ like shortest path between the source and destination
 
 method 1: using bellman ford algorithm
 
+
+
 class Solution {
 public:
-    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int K)     {
-      int edges=flights.size();
-        vector<int>price(n,1e8);
-        price[src]=0;
-        for(int i=0;i<=K;i++)
-        {
-            vector<int>temp=price;
-            for(int j=0;j<edges;j++)
-            {
-             int u=flights[j][0];
-                 int v=flights[j][1];
-                 int pricee=flights[j][2];
-                temp[v]=min(temp[v],pricee+price[u]);
-            }
-            price=temp;
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<pair<int,int>>graph[n];
+        for(int i=0;i<flights.size();i++){
+            graph[flights[i][0]].push_back({flights[i][1],flights[i][2]});
         }
-        return price[dst]==1e8?-1:price[dst];
+        vector<int>dist(n,1e8);
+        dist[src]=0;
+        //single pair shortest path 
+        //bellman ford
+        //relax n-1 times then we get shortest path from source node to every other node
+        // but here we are allowed to relax only k times 
+        for(int i=0;i<k+1;i++){
+            //we'll take a snapshot of minimum distances at every stop 
+            vector<int>temp=dist;
+            for(int j=0;j<flights.size();j++){
+                int u=flights[j][0];
+                int v=flights[j][1];
+                int wt=flights[j][2];
+                if(temp[v]>dist[u]+wt)
+                    temp[v]=dist[u]+wt;
+            }
+            dist=temp;
+            
+        }
+        if(dist[dst]==1e8)
+            return -1;
+        return dist[dst];
     }
 };
 
 
-TC:O(K*E)
-
-
+TC:O(k*E)
