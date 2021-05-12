@@ -72,6 +72,71 @@ public:
 
 
 
- we will do it in O(1) space now
+ using a single stack:
 
- 
+
+
+
+
+ class MinStack {
+public:
+    /** initialize your data structure here. */
+  stack<pair<int, int>> stk;
+    
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        int minVal = INT_MAX;
+        if(stk.empty()){
+            minVal = val;
+        } else {
+            minVal = min(stk.top().second, val);
+        }
+        
+        stk.push({val, minVal});
+    }
+    
+    void pop() {
+        stk.pop();
+    }
+    
+    int top() {
+        return stk.top().first;
+    }
+    
+    int getMin() {
+        return stk.top().second;
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+
+ When popping it will remove both top and minimum element. How will we be able to get the minimum in that case?
+minVal finds the min of the stack every time you push an element. It won't matter.
+If an element modifies the minVal, and you remove that element in the future, the minVal goes back to what it was.
+If the addition of an element didn't change minVal, it won't change it if that element is removed from stack.
+
+minVal is always calculated for the addition of every element and is not tied to any specific element. 
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+using O(1)
+
+space :
+
+
+
+
