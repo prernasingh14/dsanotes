@@ -1,7 +1,11 @@
+
+
+https://practice.geeksforgeeks.org/problems/reverse-a-string-using-stack/1#
+
+
 You are given a string S, the task is to reverse the string using stack.
 
  
-
 Example 1:
 
 
@@ -24,4 +28,18 @@ Constraints:
 
  
 
- 
+ char* reverse(char *S, int len)
+{
+    //code here
+    stack<char>st;
+    for(int i=0;i<len;i++){
+        st.push(S[i]);
+    }
+    int start=0;
+    while(!st.empty()){
+        S[start]=st.top();
+        st.pop();
+        start++;
+    }
+    return S;
+}
