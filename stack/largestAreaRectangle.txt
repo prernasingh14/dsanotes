@@ -53,6 +53,58 @@ int area=0;
 	    cout<<area<<"\n";
         int main() {
 	//code//////////////////////////////////////////
+
+
+
+
+
+	 class Solution {
+public:
+    //the building will stop expanding on the left and right when the height of next adjacent building is smaller than the current building 
+    //thus for every index find the next smaller height on left & right
+    int largestRectangleArea(vector<int>& heights) {
+        int n=heights.size();
+        vector<int>left(n,0);
+        vector<int>right(n,0);
+        stack<int>st;
+        for(int i=0;i<n;i++){
+                while(!st.empty() && heights[st.top()]>=heights[i])
+                    st.pop();
+                if(st.empty())//no smaller on the left 
+                    left[i]=-1;
+                else
+                    left[i]=st.top();
+            st.push(i);
+    }
+        
+        stack<int>stk;
+        for(int i=n-1;i>=0;i--){
+                while(!stk.empty() && heights[i]<=heights[stk.top()])
+                    stk.pop();
+                if(stk.empty())//no smaller on the left 
+                    right[i]=n;
+                else
+                    right[i]=stk.top();
+            stk.push(i);
+        }
+        int maxArea=0;
+        for(int i=0;i<n;i++){
+            //cout<<((right[i]-left[i])-1)*heights[i]<<" ";
+            maxArea=max(maxArea,((right[i]-left[i])-1)*heights[i]);
+        }
+        return maxArea;
+        
+    }
+};
+
+
+
+////////////////////////////////////////////////////////////////
+
+Space optimised approach :
+
+
+
     Stack based approach O(N)
 	class Solution {
 public:
