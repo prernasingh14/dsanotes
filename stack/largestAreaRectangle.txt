@@ -56,7 +56,7 @@ int area=0;
 
 
 
-
+Approach based on NExt smaller element on left and right 
 
 	 class Solution {
 public:
