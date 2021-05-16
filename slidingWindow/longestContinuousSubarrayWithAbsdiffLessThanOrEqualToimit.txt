@@ -41,3 +41,75 @@ Constraints:
 0 <= limit <= 109
 
 
+
+
+Method 1 : brute force approach:
+
+for every index , check how far it can expand with diff<=limit 
+and find the maxlen
+int longestSubarray(vector<int>& nums, int limit) {
+        int maxlen=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            int maxe=nums[i];
+            int mine = nums[i];
+            for(int j=i;j<nums.size();j++)
+            {
+                if(nums[j]>maxe)
+                    maxe = nums[j];
+                if(nums[j]<mine)
+                    mine = nums[j];
+                
+                if(maxe-mine<=limit)
+                    maxlen = max(maxlen,j-i+1);
+            }
+        }
+        return maxlen;
+    }
+
+
+
+TC:O(n*n)
+SC:O(1)
+
+
+
+
+Method 2: using multiset 
+so that for every new element being added in the window we can get the maximum and minimum element currently in the window 
+
+
+class Solution {
+public:
+    int longestSubarray(vector<int>& nums, int limit) {
+        int n=nums.size();
+        multiset<int>s;int j=0;
+        int ans=0;
+        int minn=0;
+        int maxx=0;
+        for(int i=0;i<n;i++){
+            s.insert(nums[i]);
+             minn=*(s.begin());//maximum
+             maxx=*(s.rbegin());//minimum
+            while(maxx-minn>limit){//then time to shrink window
+            s.erase(s.find(nums[j++]));
+             minn=*(s.begin());
+             maxx=*(s.rbegin());
+            }
+                ans = max(ans, i - j + 1);//finds the maximum window length that can be achieved 
+        }
+        return ans;
+        
+    }
+};
+
+TC:O(nlogn)
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Method 2: using deque-
+
+
+
+
