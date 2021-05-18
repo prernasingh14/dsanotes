@@ -1,0 +1,116 @@
+Interview bit -https://www.interviewbit.com/problems/simplify-directory-path/
+
+
+
+Given a string A representing an absolute path for a file (Unix-style).
+
+Return the string A after simplifying the absolute path.
+
+Note:
+
+Absolute path always begin with ’/’ ( root directory ).
+
+Path will not have whitespace characters.
+
+
+
+Input Format
+
+The only argument given is string A.
+Output Format
+
+Return a string denoting the simplified absolue path for a file (Unix-style).
+For Example
+
+Input 1:
+    A = "/home/"
+Output 1:
+    "/home"
+
+Input 2:
+    A = "/a/./b/../../c/"
+Output 2:
+    "/c"
+
+
+
+explanation :
+"/a/./"   --> means stay at the current directory 'a'
+"/a/b/.." --> means jump to the parent directory
+              from 'b' to 'a'
+"////"    --> consecutive multiple '/' are a  valid  
+              path, they are equivalent to single "/".
+
+Input : /home/
+Output : /home
+
+Input : /a/./b/../../c/
+Output : /c
+
+Input : /a/..
+Output:/
+
+Input : /a/../
+Output : /
+
+Input : /../../../../../a
+Output : /a
+
+Input : /a/./b/./c/./d/
+Output : /a/b/c/d
+
+Input : /a/../.././../../.
+Output:/
+
+Input : /a//b//c//////d
+Output : /a/b/c/d
+Note: The given input will always have a valid absolute path.
+
+
+string Solution::simplifyPath(string A) {
+    stack<string> st;
+    
+    int len = A.length();
+    
+    for(int i=0;i<len;i++){
+        if(A[i]=='/'){
+            continue;
+        }
+        if(A[i]=='.'){
+            if(i+1<len && A[i+1]=='.'){//if we get .. then we need to go to parent directory thus pop back 
+                if(!st.empty())
+                    st.pop();
+                i++;
+            }
+        }
+        else{//if we get a file name 
+            string tem="";
+            while(i<len && A[i]!='/'){
+                tem = tem+A[i];
+                i++;
+            }
+            st.push(tem);
+        }
+    }
+    string ans = "";
+    stack<string>stt;
+    while(!st.empty()){
+        ans+="/"+st.top();
+        st.pop();
+        stt.push(ans);ans="";
+    }
+     ans="";
+     //another stack for reversing the string path 
+     while(!stt.empty()){
+        ans+=stt.top();
+        stt.pop();
+    }
+
+    return (ans=="")?"/":ans;
+    
+    
+}
+
+
+TC:O(n)
+SC:O(n)
