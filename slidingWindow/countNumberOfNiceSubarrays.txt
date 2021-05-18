@@ -1,0 +1,71 @@
+Leetcode 1248:
+https://leetcode.com/problems/count-number-of-nice-subarrays/
+
+
+
+Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+
+Return the number of nice sub-arrays.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,2,1,1], k = 3
+Output: 2
+Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+Example 2:
+
+Input: nums = [2,4,6], k = 1
+Output: 0
+Explanation: There is no odd numbers in the array.
+Example 3:
+
+Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+Output: 16
+ 
+
+Constraints:
+
+1 <= nums.length <= 50000
+1 <= nums[i] <= 10^5
+1 <= k <= nums.length
+
+
+
+Brute force approach:
+
+
+run two loops and for every index i , check how far j can go 
+
+
+
+optimised approach : sliding winodw 
+
+
+class Solution {
+public:
+    int numberOfSubarrays(vector<int>& nums, int k) {
+        int n=nums.size();
+        int j=0;
+         int num=0;int count=0;int sub=0;
+        for(int i=0;i<n;i++){
+            if(nums[i]%2!=0)
+                count++;
+            while(count>=k){
+                num++;
+                if(nums[j]%2!=0)
+                    count--;
+                int c = i+1;                
+                while (c < nums.size() && (nums[c] % 2 == 0)) {//see how much more subarrays can be made such that all are even from this point on after getting k odds
+                        num++;
+                        c++;
+                }
+                j++;//make it shrink 
+            }
+        }
+        return num;
+    }
+};
+
+TC:O(n)
