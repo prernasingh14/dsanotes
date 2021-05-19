@@ -1,0 +1,98 @@
+Leetcode 28:
+https://leetcode.com/problems/implement-strstr/
+
+
+Implement strStr().
+
+Return the index of the first occurrence of needle in haystack, or -1 if needle is not part of haystack.
+
+Clarification:
+
+What should we return when needle is an empty string? This is a great question to ask during an interview.
+
+For the purpose of this problem, we will return 0 when needle is an empty string. This is consistent to C's strstr() and Java's indexOf().
+
+ 
+
+Example 1:
+
+Input: haystack = "hello", needle = "ll"
+Output: 2
+Example 2:
+
+Input: haystack = "aaaaa", needle = "bba"
+Output: -1
+Example 3:
+
+Input: haystack = "", needle = ""
+Output: 0
+ 
+
+Constraints:
+
+0 <= haystack.length, needle.length <= 5 * 104
+haystack and needle consist of only lower-case English characters.
+
+
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if(needle=="")
+            return 0;
+        int t=needle.size();
+        int n=haystack.size();
+        int k=0;
+        for(int i=0;i<n;i++){
+            if(haystack[i]==needle[k]){
+                int count=0;int index=i;
+                while(k<t && haystack[index]==needle[k]){
+                    count++;
+                    index++;
+                    k++;
+                }
+                k=0;
+                if(count==t)
+                    return i;
+            }
+        }
+        return -1;
+    }
+};
+
+
+TC:O(m*n)
+SC:O(1)
+
+
+
+
+optimised two pointer approach:
+
+
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        if(needle=="")
+            return 0;
+        int t=needle.size();
+        int n=haystack.size();
+        int i=0;int j=0;
+        while(i<n){
+            if(haystack[i]==needle[j]){
+                if(j==t-1)
+                return i-j;
+                i++;
+                j++;
+        }
+            else{
+                i=i-j+1;//we now need to begin from the next index after it matched 
+                j=0;//we need to begin again from starting 
+            }
+    }
+        return -1;
+    }
+};
+
+TC:O(n)
+SC:O(1)
