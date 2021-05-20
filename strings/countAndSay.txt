@@ -1,3 +1,7 @@
+Leetcode 38: count and say
+https://leetcode.com/problems/count-and-say/
+
+
 The count-and-say sequence is a sequence of digit strings defined by the recursive formula:
 
 countAndSay(1) = "1"
