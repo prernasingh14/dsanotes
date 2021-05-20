@@ -1,3 +1,7 @@
+Leetcode 151:
+https://leetcode.com/problems/reverse-words-in-a-string/
+
+
 Given an input string s, reverse the order of the words.
 
 A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
@@ -84,5 +88,40 @@ public:
         if(word!="")
        rev=word+rev;
         return rev;
+    }
+};
+
+
+
+
+OR :
+
+
+
+
+
+class Solution {
+public:
+    string reverseWords(string s) {
+         //let me start the string from the back
+        int n=s.size();string str="";
+        string word="";int k=0;
+        for(int i=s.size()-1;i>=0;i--){
+            if(s[i]!=' '){
+                word=s[i]+word;
+            }
+            else{//space comes 
+                
+                if(word!="")
+                {
+                    str+=word+" ";
+                    word="";
+                }
+            }
+        }
+        str+=word;
+        if(str[str.size()-1]==' ')
+            str=str.substr(0,str.size()-1);
+        return str;
     }
 };
