@@ -19,6 +19,59 @@ then two is occuring 2 times thus
 therefore final string is "2122"
 TC:O(n*n) Solution
 
+
+
+
+
+recursive approach :
+
+
+class Solution {
+public:
+    string ans="";
+    void countsay(int n,string s,unordered_map<int,string>mp){
+        if(n==0)
+        {
+            ans=s;
+            return ;
+        }
+        //we have to count the occurence 
+        int count=1;string res="";
+        for(int i=0;i<s.size()-1;i++){
+            if(s[i]==s[i+1])
+                count++;
+            else{
+                res+=mp[count];res+=s[i];count=1;//the way of appending strings can make a huge difference in TC
+            }
+        }
+         res+=mp[count];res+=s[s.size()-1];
+        countsay(n-1,res,mp);
+    }
+    string countAndSay(int n) {
+        string s="";
+        if(n==1)
+            return "1";
+        if(n==2)
+            return "11";
+        s="11";
+        unordered_map<int,string>mp;
+     mp[1]="1";mp[2]="2";mp[3]="3";mp[4]="4";mp[5]="5";mp[6]="6";mp[7]="7";mp[8]="8";mp[9]="9";
+        countsay(n-2,s,mp);
+        return ans;
+    }
+};
+
+one thing to note is that instead of map , you can also just simply add count to string as res+=char(count+'0');
+
+
+tc:O(n*k)  k is length of the string 
+//////////////////////////////////////////////////////////////////////////
+
+
+
+Iterative approach :
+
+
 class Solution {
 public:
     string countAndSay(int n) {
