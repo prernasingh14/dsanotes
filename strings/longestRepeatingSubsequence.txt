@@ -34,6 +34,10 @@ Constraints:
 DP based approach:
 
 
+
+Find LCS between the str and str.
+
+
 int LongestRepeatingSubsequence(string str){
 		    // Code here
 		    int n=str.size();
