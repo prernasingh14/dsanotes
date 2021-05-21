@@ -1,0 +1,59 @@
+GFG Easy-
+https://practice.geeksforgeeks.org/problems/longest-repeating-subsequence2004/1#
+
+
+Given a string str, find length of the longest repeating subseequence such that the two subsequence don’t have same string character at same position, i.e., any i’th character in the two subsequences shouldn’t have the same index in the original string.
+ 
+
+Exampel 1:
+
+Input: str = "axxxy"
+Output: 2
+Explanation: The longest repeating subsequenece
+is "xx".
+Example 2:
+
+Input: str = "aab"
+output: 1
+Explanation: The longest reapting subsequenece
+is "a".
+ 
+
+Your Task:
+You don't need to read or print anything. Your task is to complete the function LongestRepeatingSubsequence() which takes str as input parameter and returns the length of the longest repeating subsequnece.
+ 
+
+Expected Time Complexity: O(n2)
+Expected Space Complexity: O(n2)
+ 
+
+Constraints:
+1 <= |str| <= 500
+
+
+DP based approach:
+
+
+int LongestRepeatingSubsequence(string str){
+		    // Code here
+		    int n=str.size();
+		    vector<vector<int>>dp(n+1,vector<int>(n+1,0));
+		    for(int i=1;i<=n;i++){
+		        for(int j=1;j<=n;j++){
+		            if(str[i-1]==str[j-1])//matches
+		            {
+		                if(i==j)//then no value it will add to previous value 
+		                dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+		                else
+		                dp[i][j]=dp[i-1][j-1]+1;//one more matching thus add 1 
+		            }
+		            else
+		            dp[i][j]=max(dp[i][j-1],dp[i-1][j]);
+		        }
+		    }
+		    return dp[n][n];
+		}
+
+
+TC:O(n*n)
+SC:O(n*n)
