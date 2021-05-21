@@ -1,0 +1,88 @@
+codestudio link:https://www.codingninjas.com/codestudio/problems/split-binary-string_1115684
+
+
+The problem is also available on GFG but has no practice link
+
+Chintu has a long binary string ‘str’. A binary string is a string which contains only 0 and 1. He considers a string ‘beautiful’ if and only if the number of 0's and 1's in the string are equal.
+For example, 0011 , 1100 , 101010 etc are beautiful strings whereas 1110, 0001,10101 etc are not beautiful strings.
+Now Chintu wants to split the string into substrings such that each substring is beautiful. Can you help Chintu to find the maximum number of beautiful strings he can split the string into? If it is not possible to split the string in such a way that all strings are beautiful, return -1.
+For example, let the given string be “101001”
+We will return 3 as we can divide the string in 3 beautiful strings “10” “10” and “01’.
+Input Format:
+The first line of input contains an integer 'T’ denoting the number of test cases to run. Then the test cases follow.
+The first line of each test case contains the string ‘str’.        
+Output Format
+For each test case, return the maximum number of substrings, ‘str’ can be split into such that each substring is beautiful.
+
+If there are none, return -1.
+
+Output for each test case will be printed in a new line.
+Note: You Do Not Need To Print Anything; It Has Already Been Taken Care Of. Just Implement The Given Function.
+Constraints:
+1 <= T <= 100
+1 <= N <= 5000
+
+Where ‘T’ is the total number of test cases and N denotes the length of the string.
+Time limit: 1 second
+Sample Input 1:
+2
+10101100
+11111111
+Sample Output 1:
+3
+-1
+Explanation Of Sample Input 1 :
+Test Case 1:
+
+In the first test case,
+We can split the given string into 3 beautiful substrings ‘10’ , ‘10’ and ‘1100’ . Hence we return 3.
+
+In the second test case,
+We cannot split the given string into any beautiful string hence we return -1.
+Sample Input 2:
+2
+1110001100
+0000111
+Sample Output 2:
+2
+-1
+
+
+ for string to be beautiful count of 1 and 0 need to same
+
+
+int splitString(string str) {
+    // Write your code here
+    int count=0;
+    
+    int zero=0;int ones=0;
+    for(int i=0;i<str.size();i++){
+        if(str[i]=='0')
+            zero++;
+        else
+            ones++;
+    }
+    if(zero!=ones)//if count isn't same
+        return -1;
+    ones=0;zero=0;
+    for(int i=0;i<str.size();i++){
+        if(str[i]=='0')
+            zero++;
+        else
+            ones++;
+        if(ones==zero)
+        {
+            count++;
+            ones=0;
+            zero=0;
+        }
+    }
+    
+   
+    
+    return count;
+}
+
+
+TC:O(n)
+sc:O(1)
