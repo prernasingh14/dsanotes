@@ -1,0 +1,144 @@
+Leetcode 567:https://leetcode.com/problems/permutation-in-string/ 
+
+
+
+
+
+Given two strings s1 and s2, return true if s2 contains the permutation of s1.
+
+In other words, one of s1's permutations is the substring of s2.
+
+ 
+
+Example 1:
+
+Input: s1 = "ab", s2 = "eidbaooo"
+Output: true
+Explanation: s2 contains one permutation of s1 ("ba").
+Example 2:
+
+Input: s1 = "ab", s2 = "eidboaoo"
+Output: false
+ 
+
+Constraints:
+
+1 <= s1.length, s2.length <= 104
+s1 and s2 consist of lowercase English letters.
+
+
+Brute force approach:
+
+is to generate all possible combinations of string s1 then 
+find all substrings of string s2 of size n , check wether any of those substrings are there in permutations set of string s1 , if so return true 
+
+
+
+class Solution {
+public:
+    void backtrack(string s1,unordered_set<string>&st,int start,int n){
+        if(start==n-1)
+        {
+            st.insert(s1);
+            return ;
+        }
+        for(int i=start;i<n;i++){
+            swap(s1[i],s1[start]);//swap 
+            backtrack(s1,st,start+1,n);
+             swap(s1[i],s1[start]);//swap back to form the original string 
+        }
+    }
+    bool checkInclusion(string s1, string s2) {
+        int n=s1.size();
+        unordered_set<string>st;
+        if(s2.size()<n)
+            return false;
+        //generate all permutations of string s1
+        backtrack(s1,st,0,n);
+        //find all substrings of size n in s2
+        for(int i=0;i<=s2.size()-n;i++){
+            string ss=s2.substr(i,n);
+            if(st.find(ss)!=st.end())
+                return true;
+        }
+        return false;
+        
+    }
+};
+
+TC:(n!*n+m) m is size of string s2
+
+this method will obviously cause TLE as the factorial value of n grows
+
+
+////////////////////////////////////////////////////////////////////////////
+
+
+Optimised approach :
+
+
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        int n=s1.size();
+        vector<int>mp(26,0);
+        if(s2.size()<n)
+            return false;
+        for(int i=0;i<n;i++){
+            mp[s1[i]-'a']++;
+        }
+        int count=0;
+        for(int i=0;i<=s2.size()-n;i++){
+            string ss=s2.substr(i,n);//substring of size n
+            vector<int>match(26,0);//then find whether the freq matches in substring and string s1
+            for(int j=0;j<ss.size();j++){
+                match[ss[j]-'a']++;
+            }
+            int count=0;
+            for(int k=0;k<s1.size();k++){
+                if(match[s1[k]-'a']==mp[s1[k]-'a'])
+                    count++;
+            }
+            if(count==s1.size())
+                return true;
+           
+            }
+        return false;
+    }
+};
+
+TC:O(n+n+n)
+
+
+
+
+
+But sliding window would be better approach as it does only one traversal :
+
+
+
+class Solution {
+public:
+    //sliding window approach
+    bool checkInclusion(string s1, string s2) {
+        vector<int> cnt1(26, 0);
+        for (char ch : s1) {
+            cnt1[ch-'a']++;
+        }
+        int j=0;
+        for(int i=0;i<s2.size();i++){
+            cnt1[s2[i]-'a']--;
+            while(cnt1[s2[i]-'a']<0){
+                cnt1[s2[j]-'a']++;
+                j++;
+            }
+            if(i-j+1==s1.size())//size of window equals that of the string s1 
+                return true;
+        }
+        return false;
+       
+    }
+};
+
+TC:O(m+n)
+
