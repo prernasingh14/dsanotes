@@ -1,0 +1,73 @@
+Leetcode 680:
+https://leetcode.com/problems/valid-palindrome-ii/
+
+
+Given a string s, return true if the s can be palindrome after deleting at most one character from it.
+
+Example 1:
+
+Input: s = "aba"
+Output: true
+Example 2:
+
+Input: s = "abca"
+Output: true
+Explanation: You could delete the character 'c'.
+Example 3:
+
+Input: s = "abc"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length <= 105
+s consists of lowercase English letters.
+
+
+class Solution {
+public:
+    //we need to make the whole string as palindrome
+    bool palin(string s){
+        int n=s.size();
+        for(int i=0;i<s.size()/2;i++){
+            if(s[i]!=s[n-1-i])
+                return false;
+        }
+        return true;
+    }
+    bool validPalindrome(string s) {
+        int n=s.size();
+        if(n<=2)
+            return true;
+        if(palin(s))//if already a palindrome then return true
+        return true;
+          int index1=0;int index2=0;
+          for(int i=0;i<n;i++){
+           if(s[i]!=s[n-1-i])
+           {
+               index1=i;
+               index2=n-i-1;
+               break;
+           }
+        }
+        string s1="";string s2="";
+        //check either of index ko delete karke can we make palindrome
+        for(int i=0;i<n;i++){
+            if(i!=index1)
+            s1+=s[i];
+        }
+        if(palin(s1))
+            return true;
+        for(int i=0;i<n;i++){
+            if(i!=index2)
+                s2+=s[i];
+        }
+        if(palin(s2))
+            return true;
+        return false;
+    }
+};
+
+TC:O(n)
+SC:O(1)
