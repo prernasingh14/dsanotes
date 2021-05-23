@@ -1,0 +1,67 @@
+Leetcode 796:
+https://leetcode.com/problems/rotate-string/
+
+
+We are given two strings, s and goal.
+
+A shift on s consists of taking string s and moving the leftmost character to the rightmost position. For example, if s = 'abcde', then it will be 'bcdea' after one shift on s. Return true if and only if s can become goal after some number of shifts on s.
+
+Example 1:
+Input: s = 'abcde', goal = 'cdeab'
+Output: true
+
+Example 2:
+Input: s = 'abcde', goal = 'abced'
+Output: false
+Note:
+
+s and goal will have length at most 100.
+
+
+
+concatenate the original string with itself -
+as then it would contain all the possible rotations of itself 
+
+For example: PENCIL:
+
+PENCIL ENCILP  NCILPE CILPEN ILPENC LPENCI  = PENCILPENCIL
+now the string contains all the rotations.
+
+and see whether the given rotation matches or not 
+
+class Solution {
+public:
+    bool rotateString(string A, string B) {
+        //rightshifts have to be made
+        if(A.length() == 0 && B.length() ==0){
+            return true;
+        }
+        if(A.length() == 0){
+            return false;
+        }
+        if(A.length()!=B.length()){
+            return false;
+        }
+        string temp = A+A;
+        int n = temp.length();
+        int m = B.length();
+        for(int i = 0; i<n-m; i++){
+            int flag =1;
+            for(int j=0; j<m-1; j++){
+                if(B[j]!=temp[i+j]){
+                    flag = 0;
+                    break;
+                }
+            }
+                if(flag == 1){
+                return true;
+                }
+        }
+        return false;
+        
+    }
+};
+
+
+TC:O(n*n)
+SC:O(1)
