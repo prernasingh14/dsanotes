@@ -1,0 +1,100 @@
+Leetcode 345:
+https://leetcode.com/problems/reverse-vowels-of-a-string/
+
+
+Given a string s, reverse only all the vowels in the string and return it.
+
+The vowels are 'a', 'e', 'i', 'o', and 'u', and they can appear in both cases.
+
+ 
+
+Example 1:
+
+Input: s = "hello"
+Output: "holle"
+Example 2:
+
+Input: s = "leetcode"
+Output: "leotcede"
+ 
+
+Constraints:
+
+1 <= s.length <= 3 * 105
+s consist of printable ASCII characters.
+
+
+
+Approach 1:  
+
+make a new string with all vowels .
+traverse the original string from the end , and Whenever we get a vowel we'll put the character at index j from 'vowels' string .
+increment j
+
+
+class Solution {
+public:
+    string reverseVowels(string s) {
+        string vowels="";
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='a' || s[i]=='e' || s[i]=='o' || s[i]=='i' || s[i]=='u' || s[i]=='A' || s[i]=='E' || s[i]=='O' || s[i]=='U' || s[i]=='I')
+                vowels+=s[i];
+        }
+        int j=0;
+        for(int i=s.size()-1;i>=0;i--){
+            if(s[i]=='a' || s[i]=='e' || s[i]=='o' || s[i]=='i' || s[i]=='u'  || s[i]=='A' || s[i]=='E' || s[i]=='O' || s[i]=='U' || s[i]=='I')
+                s[i]=vowels[j++];
+        }
+        return s;
+    }
+};
+
+TC:O(n)
+SC:O(1)
+requires two pass 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Approach 2:
+
+two pointer approach just one pass
+
+
+Take one pointer at the starting index 
+take another pointer at the end 
+if both vowels then swap both positions and increment both
+else if s[i]is a vowel j--(as we need to go backwards)
+else i++(go forward to find another vowel to swap)
+
+
+
+class Solution {
+public:
+    bool isVowel(char s){
+        if(s=='a' || s=='e' || s=='o' || s=='i' || s=='u' || s=='A' || s=='E' || s=='O' || s=='U' || s=='I')
+            return true;
+        return false;
+    }
+    string reverseVowels(string s) {
+        string vowels="";
+        int n=s.size();
+        int i=0;int j=n-1;
+        while(i<j){
+         if(isVowel(s[i]) && isVowel(s[j]))
+         {
+             swap(s[i],s[j]);
+             i++;
+             j--;
+         }
+        else if(isVowel(s[i]))
+            j--;
+            else
+                i++;
+        }
+        return s;
+    }
+};
+
+TC:O(n)
+sc:O(1)

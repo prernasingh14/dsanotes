@@ -67,3 +67,33 @@ public:
 TC:O(n)
 SC:O(n)
 
+
+
+
+Method 2: without using any extra space :
+
+
+
+class Solution {
+public:
+    //Whenever we get open bracket we will increase count by 1 and when we get close bracket we will decrease count by 1. 
+    //But If our count becomes less than 0 than we have to add open bracket before current position so just absolute value of count and make count 0. Now at last we will add count to ans as we have to close all opened bracket.
+    int minAddToMakeValid(string s) {
+       int count=0;int ans =0;
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='(')
+               count++;
+            else
+                count--;
+            if(count<0)//means for ')' there was no '('
+            { ans+=abs(count);
+                count=0;
+            }
+            }
+         ans+=abs(count);//for remaining '('
+        return ans;
+    }
+};
+
+TC:O(n)
+SC:O(1)
