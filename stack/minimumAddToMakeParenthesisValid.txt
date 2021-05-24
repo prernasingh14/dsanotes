@@ -1,0 +1,69 @@
+Leetcode 921:
+https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/
+
+
+Given a string s of '(' and ')' parentheses, we add the minimum number of parentheses ( '(' or ')', and in any positions ) so that the resulting parentheses string is valid.
+
+Formally, a parentheses string is valid if and only if:
+
+It is the empty string, or
+It can be written as AB (A concatenated with B), where A and B are valid strings, or
+It can be written as (A), where A is a valid string.
+Given a parentheses string, return the minimum number of parentheses we must add to make the resulting string valid.
+
+ 
+
+Example 1:
+
+Input: s = "())"
+Output: 1
+Example 2:
+
+Input: s = "((("
+Output: 3
+Example 3:
+
+Input: s = "()"
+Output: 0
+Example 4:
+
+Input: s = "()))(("
+Output: 4
+ 
+
+Note:
+
+s.length <= 1000
+s only consists of '(' and ')' characters.
+
+
+
+We take in a stack and see which '(' have a closing bracket to complete it .
+
+and in the end check ho wmany get left , so we need to add them 
+also if for any ')' , we don't have '(' then we need to add those as well
+
+
+class Solution {
+public:
+    int minAddToMakeValid(string s) {
+        stack<char>st;int count=0;
+        for(int i=0;i<s.size();i++){
+            if(s[i]=='(')
+                st.push('(');
+            else{
+                if(!st.empty())
+                    st.pop();
+                else
+                    count++;//add '('
+            }
+        }
+        if(!st.empty())
+            count+=st.size();//need to add ')'
+        return count;
+    }
+};
+
+TC:O(n)
+SC:O(n)
+
