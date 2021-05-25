@@ -1,0 +1,75 @@
+GFG link -
+
+https://practice.geeksforgeeks.org/problems/transform-string5648/1#
+
+
+Given two strings A and B, the task is to convert A to B if possible. The only operation allowed is to put any character from A and insert it at front. Find if it’s possible to convert the string. If yes, then output minimum no. of operations required for transformation.
+
+Examples: 
+
+Input:  A = "ABD", B = "BAD"
+Output: 1
+Explanation: Pick B and insert it at front.
+
+Input:  A = "EACBD", B = "EABCD"
+Output: 3
+Explanation: Pick B and insert at front, EACBD => BEACD
+             Pick A and insert at front, BEACD => ABECD
+             Pick E and insert at front, ABECD => EABCD
+
+
+
+
+Approach :
+
+Checking whether a string can be transformed to another is simple.
+We need to check whether both strings have same number of characters and same set of characters.
+This can be easily done by creating a count array for first string and checking if second string has same count of every character. 
+
+Now how to find the minimum number of operations to do -
+
+Start traversing from end of both strings. 
+……a) If current characters of A and B match, i.e., A[i] == B[j] 
+………then do i = i-1 and j = j-1 
+……b) If current characters don’t match, then search B[j] in remaining 
+………A. While searching, keep incrementing result as these characters 
+………must be moved ahead for A to B transformation.
+
+
+
+
+int transform (string A, string B)
+    {
+        //code here.
+        int n=A.size();int m=B.size();
+        if(n!=m)
+        return -1;
+        unordered_map<char,int>mp,mb;
+        //now check whether they can be converted 
+        for(int i=0;i<n;i++){
+            mp[A[i]]++;
+        }
+        for(int i=0;i<m;i++){
+            mb[B[i]]++;
+        }
+        for(int i=0;i<n;i++){
+            if(mp[A[i]]!=mb[A[i]])
+            return -1;
+        }
+       int i=n-1;int j=n-1;int res=0;
+       while(i>=0 && j>=0){
+           if(A[i]==B[j]){
+               i--;j--;
+           }
+           else if(B[j]!=A[i]){//count the characters being mismatched ,we need to bring it at first
+               i--;
+               res++;
+           }
+       }
+       return res;
+    }
+
+TC:O(n)
+SC:O(n)
+
+
