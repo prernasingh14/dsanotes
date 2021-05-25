@@ -1,0 +1,144 @@
+Leetcode 1370:
+https://leetcode.com/problems/increasing-decreasing-string/
+
+Given a string s. You should re-order the string using the following algorithm:
+
+Pick the smallest character from s and append it to the result.
+Pick the smallest character from s which is greater than the last appended character to the result and append it.
+Repeat step 2 until you cannot pick more characters.
+Pick the largest character from s and append it to the result.
+Pick the largest character from s which is smaller than the last appended character to the result and append it.
+Repeat step 5 until you cannot pick more characters.
+Repeat the steps from 1 to 6 until you pick all characters from s.
+In each step, If the smallest or the largest character appears more than once you can choose any occurrence and append it to the result.
+
+Return the result string after sorting s with this algorithm.
+
+ 
+
+Example 1:
+
+Input: s = "aaaabbbbcccc"
+Output: "abccbaabccba"
+Explanation: After steps 1, 2 and 3 of the first iteration, result = "abc"
+After steps 4, 5 and 6 of the first iteration, result = "abccba"
+First iteration is done. Now s = "aabbcc" and we go back to step 1
+After steps 1, 2 and 3 of the second iteration, result = "abccbaabc"
+After steps 4, 5 and 6 of the second iteration, result = "abccbaabccba"
+Example 2:
+
+Input: s = "rat"
+Output: "art"
+Explanation: The word "rat" becomes "art" after re-ordering it with the mentioned algorithm.
+Example 3:
+
+Input: s = "leetcode"
+Output: "cdelotee"
+Example 4:
+
+Input: s = "ggggggg"
+Output: "ggggggg"
+Example 5:
+
+Input: s = "spo"
+Output: "ops"
+ 
+
+Constraints:
+
+1 <= s.length <= 500
+s contains only lower-case English letters.
+
+
+
+Brute force solution:
+
+
+is to store frequencies of all the characters .
+loop over the map- add one element from every key whose value >0 .
+if(even time) then sort the formed string in ascending order , 
+else
+sort the string in desceneding order.
+we'll keep doing this until we can no longer get any element whose freq is greater than 0.
+
+
+class Solution {
+public:
+    string sortString(string s) {
+        int n=s.size();
+       unordered_map<char,int>mp;
+        for(int i=0;i<n;i++){
+            mp[s[i]]++;
+        }
+       int k=0;string str="";
+        while(1){
+           string temp="";
+           bool flag=false;//to check whether we got any element whose freq>0
+        for(auto &i:mp){
+            char val=i.first;
+            if(i.second>0)
+            {
+                flag=true;
+                temp+=val;
+                i.second=i.second-1;
+            }            
+        }
+            if(k%2==1)
+                sort(temp.begin(),temp.end(),greater<char>());//descending order 
+            else
+                sort(temp.begin(),temp.end());
+            if(!flag)//if didn't then come out of the loop 
+                break;
+            for(auto i:temp)
+                str+=i;
+            k++;
+        }
+        return str;
+    }
+
+
+////////////////////////////////////////////////////////////////////
+
+
+ Optimised approach :
+
+Count the frequency of each character.
+Loop over all character from 'a' to 'z' and append the character if it exists and decrease frequency by 1. Do the same from 'z' to 'a'.
+Keep repeating until the frequency of all characters is zero.
+
+
+class Solution {
+public:
+    string sortString(string s) {
+        int n=s.size();
+        vector<int>ch(26,0);
+        for(int i=0;i<n;i++){
+            ch[s[i]-'a']++;
+        }
+       string str="";
+        while(1){
+            bool flag=false;
+        for(int i=0;i<26;i++){
+            if(ch[i]>0)
+            {
+                str+=('a'+i);
+                flag=true;ch[i]--;
+            }
+        }
+        for(int i=25;i>=0;i--){
+            if(ch[i]>0)
+            {
+             str+=('a'+i);
+                flag=true;
+                ch[i]--;
+            }
+        }
+            if(!flag)
+                break;
+        }
+        return str;
+    }
+};
+
+TC:O(n)
+SC:O(1) constant as 26 characters only lowercase 
