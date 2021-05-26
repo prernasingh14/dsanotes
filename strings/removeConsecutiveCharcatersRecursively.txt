@@ -1,0 +1,94 @@
+GFG link-
+
+https://practice.geeksforgeeks.org/problems/consecutive-elements2306/1#
+
+Given a string S delete the characters which are appearing more than once consecutively.
+
+Example 1:
+
+Input:
+S = aabb
+Output:  ab 
+Explanation: 'a' at 2nd position is
+appearing 2nd time consecutively.
+Similiar explanation for b at
+4th position.
+
+Example 2:
+
+Input:
+S = aabaa
+Output:  aba
+Explanation: 'a' at 2nd position is
+appearing 2nd time consecutively.
+'a' at fifth position is appearing
+2nd time consecutively.
+ 
+
+Your Task:
+You dont need to read input or print anything. Complete the function removeConsecutiveCharacter() which accepts a string as input parameter and returns modified string. 
+ 
+
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(|S|).
+ 
+
+Constraints:
+1<=|S|<=105
+All characters are lowercase alphabets.
+ 
+
+
+
+Recursive approach :
+
+
+
+
+void recur(int i,int j,string s,string& temp){
+        if(i==s.size())
+        return ;
+        if(temp=="" || s[i]!=temp[j])
+        {
+            temp+=s[i];
+            recur(i+1,j+1,s,temp);
+        }
+        else
+        recur(i+1,j,s,temp);
+    }
+    string removeConsecutiveCharacter(string s)
+    {
+        // code here.
+        string temp="";
+        recur(0,-1,s,temp);
+        return temp;
+        
+    }
+ TC:O(n)
+
+
+    Iterative :
+
+
+string removeConsecutiveCharacter(string s)
+    {
+        // code here.
+        string temp="";
+        stack<char>st;
+        for(int i=0;i<s.size();i++){
+            if(st.empty() || st.top()!=s[i])
+            st.push(s[i]);
+        }
+        while(!st.empty()){
+            temp+=st.top();
+            st.pop();
+        }
+        reverse(temp.begin(),temp.end());
+        return temp;
+        
+    }
+
+    TC:O(n)
+    SC:O(n)
+
+    
