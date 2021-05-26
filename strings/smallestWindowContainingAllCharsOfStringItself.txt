@@ -1,0 +1,75 @@
+GFG link -https://www.geeksforgeeks.org/smallest-window-contains-characters-string/
+
+Given a string, find the smallest window length with all distinct characters of the given string. For eg. str = “aabcbcdbca”, then the result would be 4 as of the smallest window will be “dbca” .
+Examples: 
+
+Input: aabcbcdbca
+Output: dbca
+Explanation: 
+Possible substrings= {aabcbcd, abcbcd, 
+bcdbca, dbca....}
+Of the set of possible substrings 'dbca' 
+is the shortest substring having all the 
+distinct characters of given string. 
+
+Input: aaab
+Output: ab
+Explanation: 
+Possible substrings={aaab, aab, ab}
+Of the set of possible substrings 'ab' 
+is the shortest substring having all 
+the distinct characters of given string.    
+
+
+Brute force approach:
+
+is to run two loops :
+for every i , extend j(from i) till it doesn't conatin all distinct characters 
+
+TC:O(n*n)
+
+
+///////////////////////////////////////////////////////////////////
+
+
+Optimised approach :
+two pointer approach
+
+
+string findSubString(string str)
+    {
+        // Your code goes here  
+        int j=0;int i=0;
+        unordered_map<char,int>mp;
+        int n=str.size();
+        unordered_set<char>s;
+        for(int i=0;i<n;i++)
+        s.insert(str[i]);
+        int count=0;int start_index=0;
+        int dist=s.size();
+        int ans=INT_MAX;
+        while(i<n){
+           mp[str[i]]++;
+           if(mp[str[i]]==1)
+           count++;
+           if(count==dist){//we got our window which is satisfying the constraint 
+               while(mp[str[j]]>1 && j<n)
+               {
+                   mp[str[j]]--;
+                   j++;
+               }
+            if (i-j+1<ans) {
+                ans=i-j+1;
+                start_index=j;
+           }
+           }
+           i++;
+        }
+        return str.substr(start_index,ans);
+    }
+
+
+TC:O(n)
+we traverse every character only once
+
+sC:O(n)
