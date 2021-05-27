@@ -1,0 +1,73 @@
+GFG link:
+https://practice.geeksforgeeks.org/problems/print-anagrams-together/1#
+
+
+
+
+Given an array of strings, return all groups of strings that are anagrams. The groups must be created in order of their appearance in the original array. Look at the sample case for clarification.
+
+
+Example 1:
+
+Input:
+N = 5
+words[] = {act,god,cat,dog,tac}
+Output: 
+god dog
+act cat tac
+Explanation:
+There are 2 groups of
+anagrams "god", "dog" make group 1.
+"act", "cat", "tac" make group 2.
+Example 2:
+
+Input:
+N = 3
+words[] = {no,on,is}
+Output: 
+no on
+is
+Explanation:
+There are 2 groups of
+anagrams "no", "on" make group 1.
+"is" makes group 2. 
+
+Your Task:
+The task is to complete the function Anagrams() that takes a list of strings as input and returns a list of groups such that each group consists of all the strings that are anagrams.
+
+
+Expected Time Complexity: O(N*|S|*log|S|), where |S| is the length of the strings.
+Expected Auxiliary Space: O(N*|S|), where |S| is the length of the strings.
+
+
+Constraints:
+1<=N<=100
+
+Company Tags
+ Amazon  D-E-Shaw  Goldman Sachs  Morgan Stanley  Snapdeal  Microsoft
+
+
+anagrams means they contain the same frequency of letters
+we will take a hash map to store the strings which are anagrams of each other 
+we can check wether two strings are anagrams of each other or not by simply sorting them and checking whether they match ...if they do they are anamgrams 
+
+push in anagrams under the same key - which can be differentiated by sorting 
+
+vector<vector<string> > Anagrams(vector<string>&str) 
+{
+    // Your Code Here
+    vector<vector<string>>ans;int n=str.size();
+    unordered_map<string,vector<string>>mp;
+    for(int i=0;i<n;i++){
+        string s=str[i];
+        sort(s.begin(),s.end());
+        mp[s].push_back(str[i]);
+    }
+    for(auto i:mp){
+            ans.push_back(i.second);
+    }
+    return ans;
+}
+
+TC:O(n*slog(s))
+sc:O(n*s)
