@@ -1,0 +1,117 @@
+GFG link :
+https://practice.geeksforgeeks.org/problems/smallest-window-in-a-string-containing-all-the-characters-of-another-string-1587115621/1#
+
+
+
+Given two strings S and P. Find the smallest window in the S consisting of all the characters of P.
+
+Example 1:
+
+Input:
+S = "timetopractice"
+P = "toc"
+Output: 
+toprac
+Explanation: "toprac" is the smallest
+substring in which "toc" can be found.
+Example 2:
+
+Input:
+S = "zoomlazapzo"
+P = "oza"
+Output: 
+apzo
+Explanation: "apzo" is the smallest 
+substring in which "oza" can be found.
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function smallestWindow() which takes two string S and P as input paramters and returns the smallest window in string S having all the characters of the string P. In case there are multiple such windows of same length, return the one with the least starting index. Return "-1" in case there is no such window present. 
+
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(1)
+
+Constraints: 
+1 ≤ |S|, |P| ≤ 105
+
+Company Tags
+ Amazon  Google  MakeMyTrip  Streamoid Technologies  Microsoft  Media.net
+Topic Tags
+ Hash  Sliding-window  Strings
+
+
+
+string smallestWindow (string s, string p)
+    {
+        // Your code here
+        unordered_map<char,int>pp;
+        for(int i=0;i<p.size();i++){
+            pp[p[i]]++;
+        }
+        unordered_map<char,int>sp;
+        int j=0;int i=0;int ans=INT_MAX;int count=0;int start_index=0;
+        while(i<s.size()){
+            sp[s[i]]++;
+            if(sp[s[i]]<=pp[s[i]]){//if that character is present in p too
+                count++;
+            }
+            if(count==p.size()){
+                //now time for shrinking the window 
+                while(sp[s[j]]>pp[s[j]]){
+                    sp[s[j]]--;
+                    j++;
+                }
+                if(i-j+1<ans){
+                    ans=i-j+1;
+                    start_index=j;
+                }
+            }
+            i++;
+        }
+        
+        return ans==INT_MAX?"-1":s.substr(start_index,ans);
+    }
+
+    TC:O(N)
+    SC:O(n)
+
+
+
+
+    but it is giving TLE on gfg , i guess we need to take array for freq mapping 
+
+
+    string smallestWindow (string s, string p)
+    {
+        
+       
+        vector<int>pp(26,0);
+        for(int i=0;i<p.size();i++){
+            pp[p[i]-'a']++;
+        }
+        vector<int>sp(26,0);
+        int j=0;int i=0;int ans=INT_MAX;int count=0;int start_index=0;
+        while(i<s.size()){
+            sp[s[i]-'a']++;
+            if(sp[s[i]-'a']<=pp[s[i]-'a']){//if that character is present in p too
+                count++;
+            }
+            if(count==p.size()){
+                //now time for shrinking the window 
+                while(sp[s[j]-'a']>pp[s[j]-'a']){
+                    sp[s[j]-'a']--;
+                    j++;
+                }
+                if(i-j+1<ans){
+                    ans=i-j+1;
+                    start_index=j;
+                }
+            }
+            i++;
+        }
+        
+        return ans==INT_MAX?"-1":s.substr(start_index,ans);
+    }
+
+    TC:O(n)
+    SC:O(26)
+
+    
