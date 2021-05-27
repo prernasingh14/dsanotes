@@ -1,0 +1,93 @@
+Restore IP Addresses: https://leetcode.com/problems/restore-ip-addresses/
+
+Given a string s containing only digits, return all possible valid IP addresses that can be obtained from s. You can return them in any order.
+
+A valid IP address consists of exactly four integers, each integer is between 0 and 255, separated by single dots and cannot have leading zeros. For example, "0.1.2.201" and "192.168.1.1" are valid IP addresses and "0.011.255.245", "192.168.1.312" and "192.168@1.1" are invalid IP addresses. 
+
+ 
+
+Example 1:
+
+Input: s = "25525511135"
+Output: ["255.255.11.135","255.255.111.35"]
+Example 2:
+
+Input: s = "0000"
+Output: ["0.0.0.0"]
+Example 3:
+
+Input: s = "1111"
+Output: ["1.1.1.1"]
+Example 4:
+
+Input: s = "010010"
+Output: ["0.10.0.10","0.100.1.0"]
+Example 5:
+
+Input: s = "101023"
+Output: ["1.0.10.23","1.0.102.3","10.1.0.23","10.10.2.3","101.0.2.3"]
+ 
+
+Constraints:
+
+0 <= s.length <= 3000
+s consists of digits only.
+
+
+Backtracking based approach : as we have to generate all possible combinations 
+
+Either select only a single digit, add a dot and move onto selecting other blocks (further function calls).
+Or select two digits at the same time, add a dot and move further.
+Or select three consecutive digits and move for the next block.
+
+At the end of the fourth block, if all the digits have been used and the address generated is a valid ip-address then add it to the results and then backtrack by removing the digits selected in the previous call.
+
+
+class Solution {
+public:
+    bool isValid(string s,int start,int end){
+        string temp = s.substr(start, end-start+1);
+        int ip = stoi(temp);
+        
+        //if we have ip=012, its invalid but if its ip=0 its valid like 127.0.0.1 :p
+        if(s[start] == '0' && start != end) return false;
+        //self explanatory
+        else if(ip >= 0 && ip <= 255) return true;
+        
+        //eg: 256
+        return false;
+    }
+    void backtrack(string s,int start,int parts,string ans,vector<string>&res){
+        if(start==s.size() && parts==4){
+            res.push_back(ans);
+            return ;
+        }
+        for(int i=start;i<s.size();i++){
+            if(parts<4 && i-start<3 && isValid(s,start,i)){
+                ans.append(s.substr(start,i-start+1));
+                parts++;
+                if(parts<4)
+                    ans.push_back('.');
+                    backtrack(s,i+1,parts,ans,res);
+                //now if it wasn't the last part , we need to remove it to check for more possibilities
+                if(parts<4)
+                ans.pop_back();
+                //decrement the parts coz we are trying the next combination.
+                // eg: 255.255.11 part was 3, Now we are ready to remove 11, and try for 111 so do
+                // parts--.
+                parts--;
+                //remove the part added. 
+                for(int j = 0; j < i-start+1; j++)ans.pop_back();
+                
+            }
+        }
+    }
+    vector<string> restoreIpAddresses(string s) {
+        vector<string>res;
+        string ans="";
+        backtrack(s,0,0,ans,res);
+        return res;
+    }
+};
+
+TC:O()
