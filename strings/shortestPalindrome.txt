@@ -1,0 +1,67 @@
+Leetcode 214:
+https://leetcode.com/problems/shortest-palindrome/
+
+
+You are given a string s. You can convert s to a palindrome by adding characters in front of it.
+
+Return the shortest palindrome you can find by performing this transformation.
+
+ 
+
+Example 1:
+
+Input: s = "aacecaaa"
+Output: "aaacecaaa"
+Example 2:
+
+Input: s = "abcd"
+Output: "dcbabcd"
+ 
+
+Constraints:
+
+0 <= s.length <= 5 * 104
+s consists of lowercase English letters only.
+
+
+class Solution {
+public:
+    //lps[i] is the longest prefix which is also a suffix
+    void computeLPS(string s,vector<int>&lps){
+        int len=0;
+        lps[0]=0;
+        int i=1;
+        while(i<s.size()){
+            if(s[i]==s[len]){
+                len++;
+                lps[i]=len;
+                i++;
+            }
+            else{
+                if(len!=0){
+                    len=lps[len-1];
+                }
+                else {
+                    lps[i]=0;
+                    i++;
+                }
+            }
+        }
+        
+    }
+    string shortestPalindrome(string s) {
+        string rev=s;
+        reverse(rev.begin(),rev.end());
+        string temp=s+'$'+rev;
+        int n=s.size();
+        vector<int>lps(2*n+1,0);
+        computeLPS(temp,lps);
+        int leftChars=n-lps[lps.size()-1];
+        string add=rev.substr(0,leftChars);
+        return add+s;
+        
+    }
+};
+
+TC:O(n)
+SC:O(n)
