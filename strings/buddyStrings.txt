@@ -1,0 +1,140 @@
+leetcode 859:
+https://leetcode.com/problems/buddy-strings/
+
+
+Given two strings s and goal, return true if you can swap two letters in s so the result is equal to goal, otherwise, return false.
+
+Swapping letters is defined as taking two indices i and j (0-indexed) such that i != j and swapping the characters at s[i] and s[j].
+
+For example, swapping at indices 0 and 2 in "abcd" results in "cbad".
+ 
+
+Example 1:
+
+Input: s = "ab", goal = "ba"
+Output: true
+Explanation: You can swap s[0] = 'a' and s[1] = 'b' to get "ba", which is equal to goal.
+Example 2:
+
+Input: s = "ab", goal = "ab"
+Output: false
+Explanation: The only letters you can swap are s[0] = 'a' and s[1] = 'b', which results in "ba" != goal.
+Example 3:
+
+Input: s = "aa", goal = "aa"
+Output: true
+Explanation: You can swap s[0] = 'a' and s[1] = 'a' to get "aa", which is equal to goal.
+Example 4:
+
+Input: s = "aaaaaaabc", goal = "aaaaaaacb"
+Output: true
+ 
+
+Constraints:
+
+1 <= s.length, goal.length <= 2 * 104
+s and goal consist of lowercase letters.
+
+
+
+Brute force :
+
+what I could think of :
+
+class Solution {
+public:
+    bool buddyStrings(string s, string goal) {
+        if(s.size()!=goal.size())
+            return false;//both can never be equal then 
+        unordered_set<char>st;
+        for(int i=0;i<s.size();i++){
+            st.insert(s[i]);
+        }
+        if(s.size()==1 && goal.size()==1)
+            return false;
+        if((st.size()==1 && s==goal) || (st.size()<s.size() && s==goal))
+            return true;
+        else if(s==goal)
+            return false;
+           int count=0;
+        for(int i=0;i<s.size();i++){
+            if(s[i]!=goal[i] && count<1){
+                //find the position of matching character of goal in s
+                int j=i+1;
+                while(j<s.size()){
+                    if(s[j]==goal[i])
+                        break;
+                    j++;
+                }
+                if(j<s.size())
+                swap(s[j],s[i]);cout<<s<<" ";
+                count++;
+                if(s==goal)
+                    return true;
+                 swap(s[j],s[i]);//swap them back for next choice 
+            }
+            else if(count>=1)//as maximum one swap was allowed 
+                break;
+               
+        }count=0;
+        for(int i=s.size()-1;i>=0;i--){
+            if(s[i]!=goal[i] && count<1){
+                //find the position of matching character of goal in s
+                int j=i-1;
+                while(j>=0){
+                    if(s[j]==goal[i])
+                        break;
+                    j--;
+                }
+                if(j>=0)
+                swap(s[j],s[i]);cout<<s<<" ";
+                 if(s==goal)
+                    return true;
+                count++;
+                
+                
+            }
+            else if(count>=1)//as maximum one swap was allowed 
+                break;
+        }
+           return false;  
+        
+    }
+};
+
+
+
+
+much better efficient approach:
+
+class Solution {
+public:
+    bool buddyStrings(string s, string goal) {
+        if(s.size()!=goal.size())
+            return false;//both can never be equal then 
+        unordered_set<char>st;
+        for(int i=0;i<s.size();i++){
+            st.insert(s[i]);
+        }
+        if(s.size()==1 && goal.size()==1)
+            return false;
+        if((st.size()==1 && s==goal) || (st.size()<s.size() && s==goal))
+            return true;
+        else if(s==goal)
+            return false;
+           vector<int>index;
+        for(int i=0;i<s.size();i++){
+            if(s[i]!=goal[i])
+                index.push_back(i);
+            if(index.size()>2)
+                return false;
+              
+        }
+        return index.size()==2 && s[index[0]]==goal[index[1]] && s[index[1]]==goal[index[0]];
+        
+    }
+};
+
+TC:O(n)
+sc:O(n)
+could be done w/o set too
