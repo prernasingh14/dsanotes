@@ -1,0 +1,168 @@
+Leetcode 139:
+https://leetcode.com/problems/word-break/
+
+
+Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note that the same word in the dictionary may be reused multiple times in the segmentation.
+
+ 
+
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet","code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple","pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length <= 300
+1 <= wordDict.length <= 1000
+1 <= wordDict[i].length <= 20
+s and wordDict[i] consist of only lowercase English letters.
+All the strings of wordDict are unique.
+
+
+
+Backtracking based approach : as we have to generate all possible words
+
+
+class Solution {
+public:
+    bool flag=false;
+    void backtrack(string s,unordered_set<string>&words,int start,string temp){
+        if(start==s.size()){
+            flag=true;
+            return ;
+        }
+        for(int i=start;i<s.size();i++){
+            string t=s.substr(start,i-start+1);
+            if(words.find(t)!=words.end()){
+                backtrack(s,words,i+1,t);
+            }
+        }
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string>words;
+        for(int i=0;i<wordDict.size();i++){
+            words.insert(wordDict[i]);
+        }
+        backtrack(s,words,0,"");
+        return flag;
+    }
+};
+
+TLE on leetcode 
+
+
+
+
+The optimised way is to go through Dynamic programming based solution as we can store previous results that we get :
+
+RECURSION :
+TC:O(2^n)
+
+class Solution {
+public:
+    int recur(string s,unordered_set<string>&words,int start){
+        if(start==s.size()){
+            return true;
+        }
+        for(int i=start;i<s.size();i++){
+            string t=s.substr(start,i-start+1);
+            if(words.find(t)!=words.end() && recur(s,words,i+1)){
+                return true;
+            }
+        }
+        return false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string>words;
+        for(int i=0;i<wordDict.size();i++){
+            words.insert(wordDict[i]);
+        }
+       return recur(s,words,0);
+        
+    }
+};
+
+
+
+MEMOIZED appoach :
+
+
+class Solution {
+public:
+    int recur(string s,unordered_set<string>&words,int start,vector<char>&mem){
+        if(start==s.size()){
+            return true;
+        }
+        if(mem[start]!=-1)
+            return mem[start];
+        for(int i=start;i<s.size();i++){
+            string t=s.substr(start,i-start+1);
+            if(words.find(t)!=words.end() && recur(s,words,i+1,mem)){
+                return mem[start]=true;
+            }
+        }
+        return mem[start]=false;
+    }
+    bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string>words;
+        for(int i=0;i<wordDict.size();i++){
+            words.insert(wordDict[i]);
+        }
+       vector<char> mem(s.size(),-1);
+       return recur(s,words,0,mem);
+        
+    }
+};
+
+TC:O(n*n)
+
+
+
+Bottom up approach :
+
+
+
+bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string>words;
+        for(int i=0;i<wordDict.size();i++){
+            words.insert(wordDict[i]);
+        }
+       vector<bool>mem(s.size()+1);
+        mem[0]=true;
+        for(int i=1;i<=s.size();i++)
+        {
+            for(int j=0;j<i;j++)
+            {
+                if(mem[j] &&  words.find(s.substr(j,i-j))!= words.end())
+                {
+                     mem[i]=true;
+                        break; //next i
+                    }
+                }
+            }
+        return mem[s.size()];
+    }
+    
+
+
+    TC:O(n*n)
+    sC:O(n+d) d is number of words in wordDict 
+
+
+
+
