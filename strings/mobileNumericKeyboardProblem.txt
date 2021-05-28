@@ -1,0 +1,69 @@
+GFG link -
+https://practice.geeksforgeeks.org/problems/convert-a-sentence-into-its-equivalent-mobile-numeric-keypad-sequence0547/1
+
+Given a sentence in the form of a string in uppercase, convert it into its equivalent mobile numeric keypad sequence.
+
+Example 1:
+
+Input:
+S = "GFG"
+Output: 43334
+Explanation: For 'G' press '4' one time.
+For 'F' press '3' three times.
+Example 2:
+
+Input:
+S = "HEY U"
+Output: 4433999088
+Explanation: For 'H' press '4' two times.
+â€‹For 'E' press '3' two times. For 'Y' press '9' 
+three times. For white space press '0' one time.
+For 'U' press '8' two times.
+ 
+
+Your Task:  
+You dont need to read input or print anything. Complete the function printSequence() which takes a string as input parameter and returns its equivalent mobile numeric keypad sequence as a string.
+ 
+
+Expected Time Complexity: O(Length of String)
+Expected Auxiliary Space: O(Length of String)
+ 
+
+Constraints:
+
+1 <= Length of String <= 105
+Characters of string can be empty space or capital alphabets.
+
+
+
+
+the idea is simple -
+just map the characters to the way they'll appear when pressed on mobile keypad 
+for eg : to get F , we need to press 3 three times thus it contributes to the string as '333'
+to get H - '4' pressesd four times 
+
+
+string printSequence(string s)
+{
+    //code here.
+    string arr[]= {"2","22","222",
+"3","33","333",
+"4","44","444",
+"5","55","555",
+"6","66","666",
+"7","77","777","7777",
+"8","88","888",
+"9","99","999","9999"};
+string str="";
+for(int i=0;i<s.size();i++){
+    if(s[i]>='A' && s[i]<='Z')
+    str+=arr[s[i]-'A'];
+    else
+    str+='0';
+}
+return str;
+
+}
+
+TC:O(n)
+sc:O(n)
