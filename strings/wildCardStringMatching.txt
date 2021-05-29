@@ -1,6 +1,7 @@
 GFG link -
 https://practice.geeksforgeeks.org/problems/wildcard-string-matching1126/1
 
+Leetcode 44:
 
 Given two strings wild and pattern where wild string may contain wild card characters and pattern string is a normal string. Determine if the two strings match. The following are the allowed wild card characters in first string :-
 
@@ -33,4 +34,115 @@ Constraints:
 Company Tags
  Amazon  Ola Cabs
 
+RECURSIVE approach :
 
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        return helper(s,p,0,0);
+    }
+    
+    bool helper(string s, string p, int i, int j)
+    {
+        if(j==p.length())
+            return i==s.length();
+        if(i==s.length())
+            return (p[j]=='*' && helper(s,p,i,j+1));
+       // check if the current charcter of pattern and string are equal or not. They would be equal if either s[i]==p[j] or p[j]='?'.
+        bool first_match=(i<s.length() && (p[j]==s[i] || p[j]=='?'));
+        //if the current pattern character is ' * ' then we have two options either to move j forward and don't use it for matching or we can match and move the string index and keep the pattern index at j only.
+        if(p[j]=='*')
+        {
+            return (helper(s,p,i+1,j) || helper(s,p,i,j+1));
+        }
+        //if the current character is not ' * ', then we need to check only if the first_match is true and move both the i and j index by 1.
+        else
+        {
+            return (first_match && helper(s,p,i+1,j+1));
+        }
+    }
+};
+
+
+MEMOIZED APPROACH:
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+         if(p.length()==0){
+            return (s.length()==0);
+        }
+        vector<vector<int>> dp(s.length()+1,vector<int> (p.length()+1,-1));
+        return helper(s,p,0,0,dp);
+    }
+    
+    bool helper(string s, string p, int i, int j,vector<vector<int>>&dp)
+    {
+        if(j==p.length())
+            return i==s.length();
+        else if(dp[i][j]!=-1)
+            return dp[i][j];
+        else if(i==s.length())
+            return dp[i][j]=(p[j]=='*' && helper(s,p,i,j+1,dp));
+          //if the current character is not ' * ', then we need to check only if the first_match is true and move both the i and j index by 1
+        else if(i<s.length() && (p[j]==s[i] || p[j]=='?'))
+            return dp[i][j]=helper(s,p,i+1,j+1,dp);
+         //if the current pattern character is ' * ' then we have two options either to move j forward and don't use it for matching or we can match and move the string index and keep the pattern index at j only.
+        else if(p[j]=='*')
+        {
+            return dp[i][j]=(helper(s,p,i+1,j,dp) || helper(s,p,i,j+1,dp));
+        }
+        else
+        {
+           return dp[i][j]=false;
+        }
+    }
+};
+
+TLE 
+
+
+BOTTOM UP APPROACH:
+
+dp[0][0]=true or 1. it is because if the length of the pattern and matching string is 0 then, they are equal or they are a match.
+
+We can fill the first row of the dp. First row of DP tells us that the matching string length is zero, then uptill which column the pattern matches the empty string. So we know that it can only happen if the pattern character at that point is ' * ' and if anything else comes other then a ' * ' then we break.
+
+Now, we can start filling the second row of dp, if the pattern is ' * ' at j-1, then either we can use it to match in that case it would be equal to dp[i-1][j] and if we use the empty string for ' * ' then it is equal to dp[i][j-1].
+
+If the pattern at j-1 is not ' * ' then we need check if the characters are equal or pattern character at j-1 is ' ? ' then dp[i][j] =dp[i-1][j-1];
+
+
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        if(p.length()==0)
+            return (s.length()==0);
+        vector<vector<int>> dp(s.length()+1,vector<int>(p.length()+1,0));
+        dp[0][0]=1;
+        for(int i=1;i<=p.length();i++)
+        {
+            if(p[i-1]=='*')
+                dp[0][i]=1;
+            else
+                break;
+        }
+        for(int i=1;i<=s.length();i++)
+        {
+            for(int j=1;j<=p.length();j++)
+            {
+                if(p[j-1]=='*')
+                {
+                    dp[i][j]=dp[i-1][j] || dp[i][j-1];
+                }
+                else if(p[j-1]==s[i-1] || p[j-1]=='?')
+                {
+                    dp[i][j]=dp[i-1][j-1];
+                }
+            }
+        }
+        return dp[s.length()][p.length()]; 
+    }
+    
+};
