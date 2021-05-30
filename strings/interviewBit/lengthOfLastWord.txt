@@ -1,0 +1,85 @@
+asked in Amazon
+
+
+Length of the last word ----
+
+Given a string s consists of upper/lower-case alphabets and empty space characters ' ', return the length of last word in the string.
+
+If the last word does not exist, return 0.
+
+Note: A word is defined as a character sequence consists of non-space characters only.
+
+Example:
+
+Given s = "Hello World",
+
+return 5 as length("World") = 5.
+
+Please make sure you try to solve this problem without using library functions. Make sure you only traverse the string once.
+
+
+i'm making a new string with unnecessary ""
+traversing the string two times -
+one for removing extra ""
+other for finding the last word 
+
+
+int Solution::lengthOfLastWord(const string A) {
+    if(A.size()==0)
+    return 0;
+    string word="";
+    //make a new string without ""
+    string AA="";
+    for(int i=0;i<A.size();i++){
+        if(A[i]!=34)//remove all "" from the string 
+        AA+=A[i];
+    }
+    //remove all extra spaces from the end 
+    int j=AA.size()-1;
+    while(AA[j]==' '){
+        j--;
+    }
+   //get the last word 
+    for(int i=j;i>=0;i--){
+        if(AA[i]!=' ')
+            word+=AA[i];
+            else
+            break;
+        }
+        return word.size();
+    }
+
+
+tC:O(n)
+sC:O(1)
+
+
+
+optimised way - by traversing the string once
+
+int Solution::lengthOfLastWord(const string A) {
+    if(A.size()==0)
+    return 0;
+    string word="";
+    //make a new string without ""
+    
+    //remove all extra spaces from the end 
+    int j=A.size()-1;
+    while(A[j]==' '){
+        j--;
+    }
+   //get the last word 
+    for(int i=j;i>=0;i--){
+        if(A[i]!=' ' || A[i]==34)
+            word+=A[i];
+            else
+            break;
+        }
+        return word.size();
+    }
+
+
+TC:O(n)
+SC:O(1)
+
+
