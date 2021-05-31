@@ -1,0 +1,128 @@
+Pretty Json:
+
+asked in facebook,microsoft 
+
+Given a string A representating json object. Return an array of string denoting json object with proper indentaion.
+
+Rules for proper indentaion:
+
+Every inner brace should increase one indentation to the following lines.
+Every close brace should decrease one indentation to the same line and the following lines.
+The indents can be increased with an additional ‘\t’
+Note:
+
+[] and {} are only acceptable braces in this case.
+
+Assume for this problem that space characters can be done away with.
+
+
+
+Input Format
+
+The only argument given is the integer array A.
+Output Format
+
+Return a list of strings, where each entry corresponds to a single line. The strings should not have "\n" character in them.
+For Example
+
+Input 1:
+    A = "{A:"B",C:{D:"E",F:{G:"H",I:"J"}}}"
+Output 1:
+    { 
+        A:"B",
+        C: 
+        { 
+            D:"E",
+            F: 
+            { 
+                G:"H",
+                I:"J"
+            } 
+        } 
+    }
+
+Input 2:
+    A = ["foo", {"bar":["baz",null,1.0,2]}]
+Output 2:
+   [
+        "foo", 
+        {
+            "bar":
+            [
+                "baz", 
+                null, 
+                1.0, 
+                2
+            ]
+        }
+    ]
+
+
+
+BASIC implementation:
+
+
+string getString(int n){
+string a = "";
+while(n>0){
+    a += "\t";
+    n--;
+}
+return a;
+}
+vector<string> Solution::prettyJSON(string A) {
+    vector<string>ans;
+if (A.size()==0)
+return ans;
+
+string s= "";
+s += A[0];//any brace
+ans.push_back(s);
+int cnt = 1;
+s= getString(cnt);
+bool n = true;
+for(int i=1;i<A.size();i++){
+    //breakage conditions for indentation 
+    if (A[i]== '[' || A[i]== '{'|| A[i]== ',' || A[i]==']'|| A[i]== '}'){
+        
+        if (A[i]== ','){
+            s += A[i];
+            ans.push_back(s);//as ab new line pe jaana hai but same indent 
+            s = getString(cnt);//number of tabs for new line 
+            n = true;//for comma 
+            //on increment in cnt as remains on the same indent when comma is there  
+        }
+        else{
+            //if some braces 
+            if (!n){//if no comma was there then simply push the word formed 
+                ans.push_back(s);
+                n= true;
+                }
+
+            if (A[i]== '[' || A[i]== '{'){
+                s = getString(cnt);
+                s += A[i];
+                ans.push_back(s);
+                cnt++;//increase the indent 
+                s = getString(cnt);
+                n=true;
+                }
+            else{
+                cnt--;//decrease the indent 
+                s = getString(cnt);
+                s += A[i];
+                n=false;
+                } 
+            
+            }
+    }
+    else{
+        s += A[i];//form the word tab tak
+        n = false;//didn't reach any breakage condition 
+        }
+}
+ans.push_back(s);
+return ans;
+}
+
+
