@@ -1,0 +1,91 @@
+
+Multiply two strings :
+
+Asked in Google , Microsoft 
+
+Given two numbers represented as strings, return multiplication of the numbers as a string.
+
+ Note: The numbers can be arbitrarily large and are non-negative.
+Note2: Your answer should not have leading zeroes. For example, 00 is not a valid answer. 
+For example, 
+given strings "12", "10", your answer should be “120”.
+
+NOTE : DO NOT USE BIG INTEGER LIBRARIES ( WHICH ARE AVAILABLE IN JAVA / PYTHON ). 
+We will retroactively disqualify such submissions and the submissions will incur penalties.
+
+See Expected Output
+
+
+
+Think of how multiplication is done for numbers
+
+string addSTR(string num1,string num2){
+       int carry=0;string str="";
+        int i=num1.size()-1;int j=num2.size()-1;
+        while(i>=0 || j>=0){
+            int sum=0;int n1=0;int n2=0;
+            if(i>=0)
+             n1=(num1[i]-'0');
+            if(j>=0)
+             n2=(num2[j]-'0');
+            sum=n1+n2;
+            sum+=carry;
+            str+=(sum%10+'0');
+            carry=sum/10;
+            i--;j--;
+        }
+        if(carry){
+            str+=(carry+'0');
+        }
+        reverse(str.begin(),str.end());
+        return str;
+    }
+string Solution::multiply(string nums1, string nums2) {
+
+ 
+        if(nums2=="0" || nums1=="0")
+            return "0";
+        int n1=nums1.size();int n2=nums2.size();int times=0;
+        vector<string>add;int carry=0;
+        for(int i=n2-1;i>=0;i--){
+            string str="";carry=0;
+            for(int j=n1-1;j>=0;j--){
+                int num1=nums1[j]-'0';
+                int num2=nums2[i]-'0';
+                int pro=num1*num2;
+                pro+=carry;
+                str+=(pro%10+'0');
+                carry=pro/10;
+            }
+            if(carry)
+                str+=(carry+'0');
+               reverse(str.begin(),str.end());
+               int zero=times;
+                while(zero>0){
+                    str+='0';
+                    zero--;
+                }
+                times++;
+              add.push_back(str);
+        }
+        string sum="";string prev=add[0];
+        for(int i=1;i<add.size();i++){
+            sum=addSTR(add[i],prev);
+            prev=sum;
+                 
+            }
+            string ans="";int i=0;
+            //answer can contain leading zeroes thus remove it 
+            while(i<sum.size() && sum[i]=='0'){
+                i++;
+            }
+            while(i<sum.size())
+            {
+                ans+=sum[i];
+                i++;
+            }
+        return add.size()==1?prev:ans;
+}
+
+TC:O(n*m)
+sC:O(n)
