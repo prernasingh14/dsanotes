@@ -1,0 +1,126 @@
+Leetcode 43:
+https://leetcode.com/problems/multiply-strings/
+
+Given two non-negative integers num1 and num2 represented as strings, return the product of num1 and num2, also represented as a string.
+
+Note: You must not use any built-in BigInteger library or convert the inputs to integer directly.
+
+ 
+
+Example 1:
+
+Input: num1 = "2", num2 = "3"
+Output: "6"
+Example 2:
+
+Input: num1 = "123", num2 = "456"
+Output: "56088"
+ 
+
+Constraints:
+
+1 <= num1.length, num2.length <= 200
+num1 and num2 consist of digits only.
+Both num1 and num2 do not contain any leading zero, except the number 0 itself.
+
+
+
+we need to multiply each digit of nums2 with nums1 and then store the result for addition with rest of the results 
+thus it combines the question -'Add two strings'
+
+
+class Solution {
+public:
+    string addSTR(string num1,string num2){
+       int carry=0;string str="";
+        int i=num1.size()-1;int j=num2.size()-1;
+        while(i>=0 || j>=0){
+            int sum=0;int n1=0;int n2=0;
+            if(i>=0)
+             n1=(num1[i]-'0');
+            if(j>=0)
+             n2=(num2[j]-'0');
+            sum=n1+n2;
+            sum+=carry;
+            str+=(sum%10+'0');
+            carry=sum/10;
+            i--;j--;
+        }
+        if(carry){
+            str+=(carry+'0');
+        }
+        reverse(str.begin(),str.end());
+        return str;
+    }
+    string multiply(string nums1, string nums2) {
+        //multiply each digit of num2 with num1
+        if(nums2=="0" || nums1=="0")
+            return "0";
+        int n1=nums1.size();int n2=nums2.size();int times=0;
+        vector<string>add;int carry=0;
+        for(int i=n2-1;i>=0;i--){
+            string str="";carry=0;
+            for(int j=n1-1;j>=0;j--){
+                int num1=nums1[j]-'0';
+                int num2=nums2[i]-'0';
+                int pro=num1*num2;
+                pro+=carry;
+                str+=(pro%10+'0');
+                carry=pro/10;
+            }
+            if(carry)
+                str+=(carry+'0');
+              reverse(str.begin(),str.end());
+               int zero=times;
+                while(zero>0){
+                    str+='0';
+                    zero--;
+                }
+                times++;
+              add.push_back(str);
+        }
+        string sum="";string prev=add[0];
+        for(int i=1;i<add.size();i++){
+            sum=addSTR(add[i],prev);
+            prev=sum;
+                 
+            }
+        return add.size()==1?prev:sum;
+    }
+};
+
+
+
+
+
+Better approach :
+
+
+
+class Solution {
+public:
+    string multiply(string a, string b) {
+        //multiply each digit of num2 with num1
+        if(a=="0" || b=="0")
+            return "0";
+       int i,j;
+        if(a=="0"||b=="0") return "0";
+        vector<int> res(a.size()+b.size(),0);
+        for(i=a.size()-1;i>=0;i--){
+            for(j=b.size()-1;j>=0;j--){
+                 // digit i * digit j contributes to digit i + j
+                res[i+j+1]+=((a[i]-'0')*(b[j]-'0'));
+                res[i+j]+=(res[i+j+1]/10);
+                res[i+j+1]%=10;
+            }
+        }
+        i=0;
+         // remove leading 0; keep last 0 if all 0
+        while(i<res.size() && res[i]==0) i++;
+        string ans="";
+        while(i<res.size()) ans+=(res[i++]+'0');
+        return ans;
+    }
+};
+TC:O(n*m)
+
