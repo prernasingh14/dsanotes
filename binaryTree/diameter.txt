@@ -37,22 +37,26 @@ Method 2:using O(n) time complexity
 AS For every node, length of longest path which pass it = Maxheight of its left subtree + Maxheight of its right subtree.
 
 
+
+
 class Solution {
 public:
-    int height(TreeNode* root,int &res)
-    {
+    int maxDia(TreeNode* root,int &res){
         if(root==NULL)
             return 0;
-        int leftHeight=height(root->left,res);
-        int rightHeight=height(root->right,res);
-        res=max(res,leftHeight+rightHeight);//storing the final maximum of all diameters calculated
-        return max(leftHeight,rightHeight)+1;
+        int lh=maxDia(root->left,res);
+        int rh=maxDia(root->right,res);
+        res=max(res,lh+rh);
+        return max(lh,rh)+1;//root adds 1 (due to itself)
     }
     int diameterOfBinaryTree(TreeNode* root) {
-        if(root==NULL)
-            return 0;
-       int res=0;
-    height(root,res);
+        //there are 3 choices which can give us max diameter
+        //either left subtree has max diameter 
+        //either right subtree has max diameter
+        //or the parth through root has max diameter
+        int res=0;
+        maxDia(root,res);
         return res;
     }
 };
+
