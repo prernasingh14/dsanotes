@@ -1,3 +1,5 @@
+Leetcode 226:
+
 Invert a binary tree.
 
 Example:
@@ -37,6 +39,33 @@ public:
 };
 //////////////////////----------------------------//////////////////////////////////////
 we can use the swap variable to swap values
+    
+
+class Solution {
+public:
+    void mirror(TreeNode* root){
+        if(root==NULL)
+            return ;
+        TreeNode* temp=root->left;
+        root->left=root->right;
+        root->right=temp;
+        mirror(root->left);
+        mirror(root->right);
+    }
+    TreeNode* invertTree(TreeNode* root) {
+        if(root==NULL)
+            return NULL;
+        mirror(root);
+        return root;
+        
+    }
+};
+
+
+or
+
+class Solution {
+public:
     TreeNode* invertTree(TreeNode* root) {
         if(root==NULL)
             return NULL;
@@ -48,3 +77,33 @@ we can use the swap variable to swap values
         
     }
 };
+
+
+///////////////////////////////////
+
+
+
+Iterative approach :
+
+class Solution {
+public:
+
+    TreeNode* invertTree(TreeNode* root) {
+        if(root==NULL)
+            return NULL;
+       //just traverse the tree and swap
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* temp=q.front();
+            q.pop();
+            swap(temp->left,temp->right);
+            if(temp->left)
+                q.push(temp->left);
+            if(temp->right)
+                q.push(temp->right); 
+        }
+        return root;  
+    }
+};
+
