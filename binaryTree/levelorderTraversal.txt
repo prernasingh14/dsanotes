@@ -22,6 +22,10 @@ vector<int> levelOrder(Node* node)
   return v;
 }
 
+
+
+Leetcode 102: https://leetcode.com/problems/binary-tree-level-order-traversal/
+
 Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
 
 For example:
@@ -66,3 +70,48 @@ vector<vector<int>> levelOrder(TreeNode* root) {
     helper(root,0);
     return ans;
 }
+
+
+
+
+recursive approach using maps:
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    //questions to ask: what about null values do we need to represent that 
+    map<int,vector<int>>m;
+    void traverse(TreeNode* root,int level){
+        if(root==NULL)
+            return ;
+        m[level].push_back(root->val);
+        traverse(root->left,level+1);
+        traverse(root->right,level+1);
+    }
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>>level;
+        if(root==NULL)
+            return level;
+        traverse(root,0);
+        for(auto i:m){
+            if(i.second.size())
+                level.push_back(i.second);
+        }
+        return level;
+    }
+};
+
+
+TC:O(n)
+sc:O(level)

@@ -49,3 +49,4 @@ string Solution::convert(string A, int rows) {
 }
 
 
+TC:O(n)
