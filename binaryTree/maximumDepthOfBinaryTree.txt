@@ -1,0 +1,96 @@
+Leetcode 104:
+
+
+Given the root of a binary tree, return its maximum depth.
+
+A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+ 
+
+Example 1:
+
+
+Input: root = [3,9,20,null,null,15,7]
+Output: 3
+Example 2:
+
+Input: root = [1,null,2]
+Output: 2
+Example 3:
+
+Input: root = []
+Output: 0
+Example 4:
+
+Input: root = [0]
+Output: 1
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 104].
+-100 <= Node.val <= 100
+
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+
+
+
+ Iterative approach:
+ level order traversal approach 
+ just count the number of times ,the while loop runs (due to each level)
+
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        int level=0;
+        if(root==NULL)
+            return 0;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+        int nodes=q.size();
+            while(nodes--){
+                TreeNode* temp=q.front();
+                q.pop();
+                if(temp->left)
+                    q.push(temp->left);
+                if(temp->right)
+                    q.push(temp->right);
+            }
+            level=level+1;
+        }
+        return level;
+    }
+};
+
+
+TC:O(n)
+sc:O(k) is number of nodes in the longest layer of  binary tree 
+
+
+
+Recursive approach:
+
+
+int maxDepth(TreeNode *root)
+{
+    if(root==NULL)
+    return 0;
+    return  max(maxDepth(root -> left), maxDepth(root -> right)) + 1;
+}
+
+TC:O(n) as traverse each node only once
+sc:O(height) as if the tree is skewed , it would take O(n) stack space 
+
