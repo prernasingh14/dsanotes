@@ -19,6 +19,8 @@ if we look closely its just like opposite of bottom view
 
 Recursive approach :
 
+DFS based aprpaoch :
+pre order 
 void top(Node* root,int val,int level,map<int,pair<int,int>>&m)
     {
         if(root==NULL)
@@ -51,31 +53,36 @@ sc:O(n)
 
 
 approach: BFS using queue level order 
-void topView(struct Node *root)      //TC:O(nlogn)
-{
-    //Your code here
-    if(root==NULL)
-    return ;
-    map<int,vector<int> >m;
-    queue<pair<Node*,int> >q;
-    q.push({root,0});
-    while(!q.empty())
+ vector<int> topView(Node *root)
     {
-      pair<Node*,int>p=q.front();q.pop();
-       int hd=p.second;Node* temp=p.first;
-      if(temp->left)
-      q.push({temp->left,hd-1});
-      if(temp->right)
-      q.push({temp->right,hd+1});
-    m[hd].push_back(temp->data);
+        //BFS based approach level order traversal 
+         vector<int>ans;
+        if(root==NULL)
+        return ans;
+        map<int,int>m;
+       
+        queue<pair<Node*,int>>q;
+        q.push({root,0});
+        while(!q.empty()){
+            Node* temp=q.front().first;
+             int hd=q.front().second;
+            q.pop();
+            if(!m.count(hd))//if new level 
+            m[hd]=temp->data;
+            if(temp->left)
+            q.push({temp->left,hd-1});
+            if(temp->right)
+            q.push({temp->right,hd+1});
+        }
+        
+        
+        for(auto i:m){
+            ans.push_back(i.second);
+        }
+        return ans;
     }
-    for(auto i:m)
-    {
-        vector<int>v=i.second;
-    cout<<v[0]<<" ";
-    }
-    
-}
+TC:O(nlogn)
+
 ////////////////----------//////////////////////////
 No need to use vector in map can also be done with map<int,int> by just ensuring we're inserting each key for the first time 
 void topView(struct Node *root)
