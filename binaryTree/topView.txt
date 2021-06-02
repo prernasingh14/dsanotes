@@ -112,6 +112,44 @@ void topView(struct Node *root)
     }
     
 }
+
+
+
+optimised O(n) approach:
+
+vector<int> topView(Node *root)
+    {
+        //BFS based approach level order traversal 
+         vector<int>ans;
+        if(root==NULL)
+        return ans;
+        unordered_map<int,int>m;
+        queue<pair<Node*,int>>q;
+        q.push({root,0});
+        int maxHd=INT_MIN;int minHd=INT_MAX;
+        while(!q.empty()){
+            Node* temp=q.front().first;
+             int hd=q.front().second;
+            q.pop();
+            if(hd<minHd)
+            minHd=hd;
+            if(hd>maxHd)
+            maxHd=hd;
+            if(!m.count(hd))//if new level 
+            m[hd]=temp->data;
+            if(temp->left)
+            q.push({temp->left,hd-1});
+            if(temp->right)
+            q.push({temp->right,hd+1});
+        }
+        for(int i=minHd;i<=maxHd;i++){
+            ans.push_back(m[i]);
+        }
+        return ans;
+    }
+
+TC:O(n)
+
 /////////////////////////top View using stack//////////////////////////////////
 void top_view(Node root)
 {
