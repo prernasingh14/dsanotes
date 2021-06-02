@@ -14,6 +14,42 @@ if we look closely its just like opposite of bottom view
             1:3
             2:7
             we need to print the first nodes of every key in map
+
+
+
+Recursive approach :
+
+void top(Node* root,int val,int level,map<int,pair<int,int>>&m)
+    {
+        if(root==NULL)
+            return ;
+            if(m.count(val)==0 || level<m[val].second)
+        m[val]={root->data,level};
+        top(root->left,val-1,level+1,m);
+        top(root->right,val+1,level+1,m);
+    }
+    vector<int> topView(Node *root)
+    {
+        //Your code here
+        map<int,pair<int,int>>m;
+        vector<int>ans;
+        if(root==NULL)
+        return ans;
+        top(root,0,0,m);
+        for(auto i:m){
+            ans.push_back(i.second.first);
+        }
+        return ans;
+    }
+
+TC:O(nlogn)
+sc:O(n)
+
+
+
+////////////////////////////////////////////
+
+
 approach: BFS using queue level order 
 void topView(struct Node *root)      //TC:O(nlogn)
 {
