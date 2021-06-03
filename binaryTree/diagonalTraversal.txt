@@ -25,6 +25,38 @@ Diagonal Traversal of binary tree :
 
 we analyze that we have to print right most nodes & then left node of the root & then similarly for others 
 
+we'll use a queue to store left nodes so that we can access them later 
+
+
+
+vector<int> diagonal(Node *root)
+{
+   // your code here
+   vector<int>ans;
+   if(root==NULL)
+   return ans;
+   queue<Node*>q;
+   while(root || !q.empty()){
+       while(root){
+           ans.push_back(root->data);
+           q.push(root);
+           root=root->right;
+           
+       }
+       root=q.front();
+       q.pop();
+       root=root->left;
+   }
+   return ans;
+}
+
+TC:O(n)
+SC:O(n) in case of worst case that if tree is skewed 
+
+
+
+OR /////////////////////////////////////////////////////////
+
  vector<int> diagonal(Node *root)
 {
    // your code here
@@ -54,6 +86,8 @@ we analyze that we have to print right most nodes & then left node of the root &
 
 TC:O(n)
 SC:O(n)
+
+
 
 
 
