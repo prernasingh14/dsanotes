@@ -1,0 +1,159 @@
+Leetcode 880: available on lintcode too
+
+Medium level
+
+
+
+
+Description
+You need to construct a binary tree from a string consisting of parenthesis and integers.
+
+The whole input represents a binary tree. It contains an integer followed by zero, one or two pairs of parenthesis. The integer represents the root's value and a pair of parenthesis contains a child binary tree with the same structure.
+
+You always start to construct the left child node of the parent first if it exists.
+
+There will only be '(', ')', '-' and '0' ~ '9' in the input string.
+An empty tree is represented by "" instead of "()".
+Example
+Example 1:
+
+Input: "-4(2(3)(1))(6(5))"
+Output: {-4,2,6,3,1,5}
+Explanation:
+The output is look like this:
+      -4
+     /  \
+    2    6
+   / \   / 
+  3   1 5   
+Example 2:
+
+Input: "1(-1)"
+Output: {1,-1}
+Explanation:
+The output is look like this:
+     1
+    /
+  -1
+
+
+
+
+stack based approach :
+
+
+Scan the string from left to right.
+
+Every time we meet a digit -  form the number  out of the substring .
+push it into the stack , after the number there definitely would be '(' bracket ,do nothing 
+
+
+If every time we meet ')', pop out top of the stack (child) and again pop out top (parent)
+
+see whether parent->left is empty make it(child) as left subtree else make it as right subtree.
+push in the parent again
+
+
+
+class Solution {
+public:
+     bool isDig(char ch){//whether character is a digit 
+         return ch>='0' && ch<='9';
+     }
+     int toNum(string str){//convert string to number 
+         int num=0;int sign=1;int j=0;
+         if(str[0]=='-')
+         {
+             sign=-1;j=1;
+         }
+         for(int i=j;i<str.size();i++){
+             int val=(str[i]-'0');
+             num=num*10+val;
+         }
+         return num*sign;
+     }         
+    TreeNode * str2tree(string &s) {
+        if(s.size()==0)
+        return NULL;
+        stack<TreeNode*>st;
+        for(int i=0;i<s.size();i++){
+            if((isDig(s[i])) || s[i]=='-'){
+                 int len= 1;
+                while (i + 1 < s.size() && isDig(s[i+len])) 
+                len++;//extract the integers
+                string str=s.substr(i,len);
+                int num=toNum(str);
+                TreeNode* curr=new TreeNode(num);
+                st.push(curr);
+                i+=len-1;//skip those characters now 
+            }
+            else if(s[i]==')'){
+                 TreeNode *temp = st.top();
+                st.pop();
+                TreeNode *parent = st.top();
+                st.pop();
+                if (parent->left!=NULL)//then it should be its right subtree
+                    parent->right = temp;
+                else
+                parent->left = temp;
+                st.push(parent);//push in the parent again
+            }
+            }
+        return st.top();
+    }
+};
+
+
+Recursive approach :
+
+class Solution {
+public:
+    /**
+     * @param s: a string
+     * @return: a root of this tree
+     */
+     bool isDig(char ch){
+         return ch>='0' && ch<='9';
+     }
+     int toNum(string str){
+         int num=0;int sign=1;int j=0;
+         if(str[0]=='-')
+         {
+             sign=-1;j=1;
+         }
+         for(int i=j;i<str.size();i++){
+             int val=(str[i]-'0');
+             num=num*10+val;
+         }
+         return num*sign;
+     } 
+     TreeNode* solve(string &s,int& idx){
+         if (idx >= s.size())
+         return NULL;
+      string num = "";
+      while (idx < s.size() && s[idx] != '(' && s[idx] != ')') {
+         num += s[idx];
+         idx++;
+      }
+      TreeNode* node = new TreeNode(toNum(num));
+      if (idx < s.size() && s[idx] == '(') {
+         idx++;
+         node->left = solve(s, idx);
+         idx++;
+         if (idx < s.size() && s[idx] == '(') {
+            idx++;
+            node->right = solve(s, idx);
+            idx++;
+         }
+      }
+      return node;
+     }        
+    TreeNode * str2tree(string &s) {
+        // write your code here
+        int idx=0;
+        if(s.size()==0)
+        return NULL;
+       solve(s,idx);
+    }
+};
+
