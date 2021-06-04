@@ -1,0 +1,94 @@
+Leetcode 783:
+
+Given the root of a Binary Search Tree (BST), return the minimum difference between the values of any two different nodes in the tree.
+
+ 
+
+Example 1:
+
+
+Input: root = [4,2,6,1,3]
+Output: 1
+Example 2:
+
+
+Input: root = [1,0,48,null,null,12,49]
+Output: 1
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [2, 100].
+0 <= Node.val <= 105
+ 
+
+
+Method 1 : just traverse the tree and find min difference b/w two values in O(n*n)
+
+
+//just traverse the tree
+    void preorder(TreeNode* root,vector<int>&nodes){
+        if(root==NULL)
+            return ;
+        nodes.push_back(root->val);
+        preorder(root->left,nodes);
+        preorder(root->right,nodes);
+    }
+    
+    int minDiffInBST(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return 0;
+        int diff=0;int minDiff=INT_MAX;
+        preorder(root,nodes);
+        for(int i=0;i<nodes.size()-1;i++){
+            for(int j=i+1;j<nodes.size();j++){
+                diff=abs(nodes[j]-nodes[i]);
+                minDiff=min(minDiff,diff);
+            }
+        }
+        return minDiff;
+    }
+
+
+    TC:O(n*n)
+    sc:O(height)
+
+
+
+Optimised approach based on BST property :
+
+
+
+
+we can do it in O(n) by doing inorder traversal of tree and thus it would give us sorted array and then just traverse the array from left to right and find min difference 
+
+
+
+ class Solution {
+public:
+    //just traverse the tree
+    void inorder(TreeNode* root,vector<int>&nodes){
+        if(root==NULL)
+            return ;
+        inorder(root->left,nodes);
+        nodes.push_back(root->val);
+        inorder(root->right,nodes);
+    }
+    
+    int minDiffInBST(TreeNode* root) {
+        vector<int>nodes;
+        if(root==NULL)
+            return 0;
+        int diff=0;int minDiff=INT_MAX;
+        inorder(root,nodes);
+        for(int i=0;i<nodes.size()-1;i++){
+                diff=abs(nodes[i+1]-nodes[i]);
+                minDiff=min(minDiff,diff);
+            }
+        return minDiff;
+    }
+};
+
+TC:O(n)
+sc:O(height+ nodes)
