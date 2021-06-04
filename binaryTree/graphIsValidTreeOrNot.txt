@@ -1,0 +1,87 @@
+available on lintcode :
+
+Description
+Given n nodes labeled from 0 to n - 1 and a list of undirected edges (each edge is a pair of nodes), write a function to check whether these edges make up a valid tree.
+
+You can assume that no duplicate edges will appear in edges. Since all edges are undirected, [0, 1] is the same as [1, 0] and thus will not appear together in edges.
+Example
+Example 1:
+
+Input: n = 5 edges = [[0, 1], [0, 2], [0, 3], [1, 4]]
+Output: true.
+Example 2:
+
+Input: n = 5 edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]]
+Output: false.
+
+
+
+Basically you have to find whether graph is valid tree or not :
+
+
+class Solution {
+public:
+    /**
+     * @param n: An integer
+     * @param edges: a list of undirected edges
+     * @return: true if it's a valid tree, or false
+     */
+     void dfs(vector<int>graph[],int src,vector<bool> &vis){
+         vis[src]=true;
+         for(int i=0;i<graph[src].size();i++){
+             if(!vis[graph[src][i]])
+             dfs(graph,graph[src][i],vis);
+         }
+     }
+     bool cyclereal(int i,vector<bool> &mark,int parent,vector<int>graph[])
+    {
+       
+        mark[i]=true;//that node is marked as visited
+        for(int j=0;j<graph[i].size();j++)
+        {
+            if(mark[graph[i][j]]==false)
+            {
+                if(cyclereal(graph[i][j],mark,i,graph)==true)
+                    return true;
+            }
+            else  if(mark[graph[i][j]]==true && graph[i][j]!=parent)
+                return true;
+        }
+        return false;  
+    }
+bool isCyclic(vector<int> g[], int v)
+{
+   // Your code here
+    vector<bool> mark(v,false);
+        for(int i=0;i<v;i++)
+        {
+            if(!mark[i])
+                if(cyclereal(i,mark,-1,g))//parent of source node is not present thus -1
+            return true;
+        }
+            return false;
+}
+    bool validTree(int n, vector<vector<int>> &edges) {
+        // write your code here
+        //contuct graph from edges
+        vector<int>graph[n];
+        for(int i=0;i<edges.size();i++){
+            int u=edges[i][0];
+            int v=edges[i][1];
+            graph[u].push_back(v);
+            graph[v].push_back(u);
+        }
+       vector<bool>vis(n,false);
+       int conn=0;
+       for(int i=0;i<n;i++){
+           if(!vis[i])
+           {
+               dfs(graph,i,vis);
+               conn++;
+           }
+       }
+      return conn==1 && !isCyclic(graph,n);
+    }
+};
+
+
