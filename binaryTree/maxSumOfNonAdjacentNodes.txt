@@ -1,0 +1,102 @@
+GFG link - https://practice.geeksforgeeks.org/problems/maximum-sum-of-non-adjacent-nodes/1
+
+
+Given a binary tree with a value associated with each node, we need to choose a subset of these nodes such that sum of chosen nodes is maximum under a constraint that no two chosen node in subset should be directly connected that is, if we have taken a node in our sum then we can’t take its any children in consideration and vice versa.
+
+                                               
+
+Example 1:
+
+Input:
+     11
+    /  \
+   1    2
+Output: 11
+Explanation: The maximum sum is sum of
+node 11.
+Example 2:
+
+Input:
+        1
+      /   \
+     2     3
+    /     /  \
+   4     5    6
+Output: 16
+Explanation: The maximum sum is sum of
+nodes 1 4 5 6 , i.e 16. These nodes are
+non adjacent.
+Your Task:
+You don't need to read input or print anything. You just have to complete function getMaxSum() which accepts root node of the tree as parameter and returns the maximum sum as described.
+
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(Height of the Tree).
+
+Constraints:
+1 <= N <= 1000
+
+
+
+Naive solution:
+
+int robb(TreeNode* root,unordered_map<TreeNode*,int>&mp){
+
+    if(root==NULL)
+    return 0;
+    if(mp.count(root))
+        return mp[root];
+    int sum=0;
+    //if root gets robbed , go to its grand children 
+   if(root->left) {
+            sum += robb(root->left->left,mp) + robb(root->left->right,mp);
+        }
+        if(root->right) {
+            sum += robb(root->right->left,mp) + robb(root->right->right,mp);
+        }
+        return mp[root]=max(sum + root->val, robb(root->left,mp) + robb(root->right,mp));//the second condition is when the root doesn't get robbed 
+    }
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        if(root==NULL)
+            return 0;
+        unordered_map<TreeNode*,int>mp;
+        return robb(root,mp);
+    }
+
+
+    TC:O(2^n)
+
+
+
+    other approach:
+    
+Its similar to house robber problem :
+
+
+int recur(Node* root,bool prev,unordered_map<Node*,unordered_map<bool,int>>&mp){
+
+    if(root==NULL)
+    return 0;
+    if(mp[root][prev])
+        return mp[root][prev];
+    if(prev){
+        return mp[root][prev]=recur(root->left,false,mp)+recur(root->right,false,mp);
+    }else{
+        int inc=root->data+recur(root->left,true,mp)+recur(root->right,true,mp);
+        int exc=recur(root->left,false,mp)+recur(root->right,false,mp);
+    return mp[root][prev]=max(inc,exc);
+    }
+}
+int getMaxSum(Node *root) 
+{
+    // Add your code here
+    if(root==NULL)
+    return 0;
+     unordered_map<Node*,unordered_map<bool,int>>mp;
+   return recur(root,false,mp);
+}
+
+
+TC:O(N)
+SC:O(n)
