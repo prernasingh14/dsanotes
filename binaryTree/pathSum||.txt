@@ -1,0 +1,58 @@
+Leetcode 113:
+
+
+Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where each path's sum equals targetSum.
+
+A leaf is a node with no children.
+
+ 
+
+Example 1:
+
+
+Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+Output: [[5,4,11,2],[5,8,4,5]]
+Example 2:
+
+
+Input: root = [1,2,3], targetSum = 5
+Output: []
+Example 3:
+
+Input: root = [1,2], targetSum = 0
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [0, 5000].
+-1000 <= Node.val <= 1000
+-1000 <= targetSum <= 1000
+
+
+class Solution {
+public:
+    void targetSum(TreeNode* root,int target,int sum,vector<vector<int>>&ans,vector<int>temp){
+        if(root==NULL)
+            return ;
+        //if a leaf node
+        sum+=root->val;temp.push_back(root->val);
+        if(root->left==NULL && root->right==NULL){
+            if(sum==target){
+                ans.push_back(temp);
+            }
+            return ;
+        }
+        targetSum(root->left,target,sum,ans,temp);
+        targetSum(root->right,target,sum,ans,temp); 
+    }
+    vector<vector<int>> pathSum(TreeNode* root, int target) {
+        vector<vector<int>>ans;
+        vector<int>temp;
+        if(root==NULL)
+            return ans;
+        targetSum(root,target,0,ans,temp);
+        return ans;
+    }
+};
+
