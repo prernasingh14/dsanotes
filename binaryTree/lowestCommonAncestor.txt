@@ -1,3 +1,5 @@
+Leetcode 236:
+
 Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
 
 According to the definition of LCA on Wikipedia:
@@ -24,3 +26,50 @@ public:
             
     }
 };
+
+
+
+///////////////////////////////////////////
+
+
+Iterative approach:
+
+
+// Non Recursive BFS Approach: TC - O(n)
+    // Step 1: traverse all the tree and save the node-parent pairs (in a hash map) for all the nodes in the tree (till the point we encounter BOTH p and q)
+    // Step 2: start from p and save all the parents of p till root (including p and root) in a hash set
+    // Step 3: start from q and and navigate through all the parents till root and whenever you see a parent that is present in the set (common ancestor for p and q), that is LCA
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root==NULL)
+            return NULL;
+        unordered_map<TreeNode*,TreeNode*>parent;
+        queue<TreeNode*>qt;
+        qt.push(root);
+        parent[root]=NULL;//root has no parent
+        while(!parent.count(p) || !parent.count(q)){
+            TreeNode* temp=qt.front();
+            qt.pop();
+            parent[temp->left]=temp;
+            parent[temp->right]=temp;
+            if(temp->left)
+                qt.push(temp->left);
+            if(temp->right)
+                qt.push(temp->right);
+            
+        }
+        unordered_set<TreeNode*>st;
+        while(p){//push in all the parents of p 
+            st.insert(p);
+            p=parent[p];
+        }
+        while(st.find(q)==st.end()){//until you find a common parent 
+            q=parent[q];
+        }
+        return q;
+        
+    }
+};
+
+
