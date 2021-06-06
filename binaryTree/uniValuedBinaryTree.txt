@@ -1,0 +1,78 @@
+Leetcode 965:
+
+
+A binary tree is univalued if every node in the tree has the same value.
+
+Return true if and only if the given tree is univalued.
+
+ 
+
+Example 1:
+
+
+Input: [1,1,1,1,1,null,1]
+Output: true
+Example 2:
+
+
+Input: [2,2,2,5,2]
+Output: false
+ 
+
+Note:
+
+The number of nodes in the given tree will be in the range [1, 100].
+Each node's value will be an integer in the range [0, 99].
+
+
+Brute force method :
+
+do any of the traversals of the tree and put the  node's value in set .
+check whether set is equal to 1.
+
+class Solution {
+public:
+    //we can do any traversal and check whether all values are same 
+    void uni(TreeNode* root,unordered_set<int>&s){
+        if(root==NULL)
+            return ;
+       s.insert(root->val);
+        uni(root->left,s);
+        uni(root->right,s);
+    }
+    bool isUnivalTree(TreeNode* root) {
+       unordered_set<int>s;
+        uni(root,s);
+        return s.size()==1;
+    }
+};
+
+
+TC:O(n)
+SC:O(height+number of different nodes)
+
+
+optimised better approach w/o using any extra space 
+
+class Solution {
+public:
+    //we can do any traversal and check whether all values are same 
+bool uni(TreeNode* root,int prev){
+        if(root==NULL)
+            return true;
+       if(root->val!=prev)
+           return false;
+        bool left=uni(root->left,prev);
+        bool right=uni(root->right,prev);
+        return (left && right);
+    }
+    bool isUnivalTree(TreeNode* root) {
+       int prev=0;
+        return uni(root,root->val);
+       
+    }
+};
+
+TC:O(n)
+SC:O(height)
+
