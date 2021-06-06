@@ -1,0 +1,71 @@
+leetcode 530:
+
+
+Given the root of a Binary Search Tree (BST), return the minimum absolute difference between the values of any two different nodes in the tree.
+
+ 
+
+Example 1:
+
+
+Input: root = [4,2,6,1,3]
+Output: 1
+Example 2:
+
+
+Input: root = [1,0,48,null,null,12,49]
+Output: 1
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [2, 104].
+0 <= Node.val <= 105
+
+
+class Solution {
+public:
+    //if we sort the values then the difference between two consecutive numbers which will minimum difference 
+    void traverse(TreeNode* root,vector<int>&nodes){
+        if(root==NULL)
+            return ;
+        traverse(root->left,nodes);
+        nodes.push_back(root->val);
+        traverse(root->right,nodes);
+    }
+    int getMinimumDifference(TreeNode* root) {
+        int minDiff=INT_MAX;
+        vector<int>nodes;
+        traverse(root,nodes);
+        for(int i=1;i<nodes.size();i++){
+            minDiff=min(minDiff,nodes[i]-nodes[i-1]);
+        }
+        return minDiff;
+    }
+};
+
+
+
+without using any extra spce :
+
+
+class Solution {
+public:
+    //if we sort the values then the difference between two consecutive numbers which will minimum difference 
+    void traverse(TreeNode* root,int& prev,int& minDiff){
+        if(root==NULL)
+            return ;
+        traverse(root->left,prev,minDiff);
+        if(prev!=-1)//not the first node 
+        minDiff=min(minDiff,abs(root->val-prev));
+        prev=root->val;
+        traverse(root->right,prev,minDiff);
+    }
+    int getMinimumDifference(TreeNode* root) {
+        int minDiff=INT_MAX;
+        int prev=-1;
+        traverse(root,prev,minDiff);
+        return minDiff;
+    }
+};
+
