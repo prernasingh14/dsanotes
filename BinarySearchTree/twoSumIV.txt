@@ -1,0 +1,134 @@
+Leetcode 653:
+
+
+Given the root of a Binary Search Tree and a target number k, return true if there exist two elements in the BST such that their sum is equal to the given target.
+
+ 
+
+Example 1:
+
+
+Input: root = [5,3,6,2,4,null,7], k = 9
+Output: true
+Example 2:
+
+
+Input: root = [5,3,6,2,4,null,7], k = 28
+Output: false
+Example 3:
+
+Input: root = [2,1,3], k = 4
+Output: true
+Example 4:
+
+Input: root = [2,1,3], k = 1
+Output: false
+Example 5:
+
+Input: root = [2,1,3], k = 3
+Output: true
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 104].
+-104 <= Node.val <= 104
+root is guaranteed to be a valid binary search tree.
+-105 <= k <= 105
+
+
+approach based on two sum:
+
+
+class Solution {
+public:
+    //just traverse the tree 
+    //use hashmap to store their node's values 
+    unordered_map<int,int>mp;
+    bool traverse(TreeNode* root,int k){
+        if(root==NULL)
+            return false;
+        if(mp.count(k-root->val)>0)
+        return true;
+        mp[root->val]++;
+        bool leftSide=traverse(root->left,k);
+        bool rightSide=traverse(root->right,k);
+        return leftSide || rightSide;
+    }
+    bool findTarget(TreeNode* root, int k) {
+        if(root->left==NULL && root->right==NULL)
+            return false;
+        return traverse(root,k);
+    }
+};
+
+tc:O(n)
+sc:O(height)
+
+
+
+
+Iterative approach:
+
+class Solution {
+public:
+    //just traverse the tree 
+    //use hashmap to store their node's values 
+    unordered_map<int,int>mp;
+    bool findTarget(TreeNode* root, int k) {
+        if(root->left==NULL && root->right==NULL)
+            return false;
+        queue<TreeNode*>q;
+        q.push(root);
+        while(!q.empty()){
+            TreeNode* t=q.front();
+            q.pop();
+            if(mp.count(k-t->val)>0)
+                return true;
+            mp[t->val]++;
+            if(t->left)
+                q.push(t->left);
+            if(t->right)
+                q.push(t->right);
+        }
+        return false;
+    }
+};
+
+
+
+
+Approach based on two pointer technique :
+
+
+class Solution {
+public:
+    void inorder(TreeNode* node,vector<int>&vec)
+    {
+        if(!node)
+            return;
+        inorder(node -> left,vec);
+        vec.push_back(node -> val);
+        inorder(node -> right,vec);
+    }
+    
+    bool findTarget(TreeNode* root, int k) {
+        if(!root)
+            return false;
+        vector<int>vec;
+        inorder(root,vec);//will give array in sorted order 
+        int i = 0, j = vec.size()-1;
+        while(i < j)
+        {
+            int sum = vec[i]+vec[j];
+            if(sum == k)
+                return true;
+            else if(sum < k)
+                i++;
+            else
+                j--;
+        }
+        return false;
+    }
+};
+
