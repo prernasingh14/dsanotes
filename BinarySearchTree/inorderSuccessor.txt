@@ -1,0 +1,219 @@
+GFG link:
+https://practice.geeksforgeeks.org/problems/inorder-successor-in-bst/1#
+
+Given a BST, and a reference to a Node x in the BST. Find the Inorder Successor of the given node in the BST.
+ 
+
+Example 1:
+
+Input:
+      2
+    /   \
+   1     3
+K(data of x) = 2
+Output: 3 
+Explanation: 
+Inorder traversal : 1 2 3 
+Hence, inorder successor of 2 is 3.
+
+Example 2:
+
+Input:
+             20
+            /   \
+           8     22
+          / \
+         4   12
+            /  \
+           10   14
+K(data of x) = 8
+Output: 10
+Explanation:
+Inorder traversal: 4 8 10 12 14 20 22
+Hence, successor of 8 is 10.
+ 
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function inOrderSuccessor(). This function takes the root node and the reference node as argument and returns the node that is inOrder successor of the reference node. If there is no successor, return null value.
+
+
+Expected Time Complexity: O(Height of the BST).
+Expected Auxiliary Space: O(1).
+
+
+Constraints:
+1 <= N <= 1000, where N is number of nodes
+
+Company Tags
+ Amazon  Morgan Stanley  Microsoft
+
+
+
+Method 1: using the parent pointer 
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* A binary tree node has data, 
+   the pointer to left child
+   and a pointer to right child */
+struct node {
+    int data;
+    struct node* left;
+    struct node* right;
+    struct node* parent;
+};
+
+struct node* minValue(struct node* node);
+
+struct node* inOrderSuccessor(
+    struct node* root,
+    struct node* n)
+{
+    // step 1 of the above algorithm
+    if (n->right != NULL)
+        return minValue(n->right);
+
+    // step 2 of the above algorithm
+    struct node* p = n->parent;
+    while (p != NULL && n == p->right) {
+        n = p;
+        p = p->parent;
+    }
+    return p;
+}
+
+/* Given a non-empty binary search tree, 
+    return the minimum data  
+    value found in that tree. Note that 
+    the entire tree does not need
+    to be searched. */
+struct node* minValue(struct node* node)
+{
+    struct node* current = node;
+
+    /* loop down to find the leftmost leaf */
+    while (current->left != NULL) {
+        current = current->left;
+    }
+    return current;
+}
+
+/* Helper function that allocates a new 
+    node with the given data and 
+    NULL left and right pointers. */
+struct node* newNode(int data)
+{
+    struct node* node = (struct node*)
+        malloc(sizeof(
+            struct node));
+    node->data = data;
+    node->left = NULL;
+    node->right = NULL;
+    node->parent = NULL;
+
+    return (node);
+}
+
+/* Give a binary search tree and 
+   a number, inserts a new node with    
+    the given number in the correct 
+    place in the tree. Returns the new
+    root pointer which the caller should
+    then use (the standard trick to 
+    avoid using reference parameters). */
+struct node* insert(struct node* node,
+                    int data)
+{
+    /* 1. If the tree is empty, return a new,
+      single node */
+    if (node == NULL)
+        return (newNode(data));
+    else {
+        struct node* temp;
+
+        /* 2. Otherwise, recur down the tree */
+        if (data <= node->data) {
+            temp = insert(node->left, data);
+            node->left = temp;
+            temp->parent = node;
+        }
+        else {
+            temp = insert(node->right, data);
+            node->right = temp;
+            temp->parent = node;
+        }
+
+        /* return the (unchanged) node pointer */
+        return node;
+    }
+}
+
+/* Driver program to test above functions*/
+int main()
+{
+    struct node *root = NULL, *temp, *succ, *min;
+
+    // creating the tree given in the above diagram
+    root = insert(root, 20);
+    root = insert(root, 8);
+    root = insert(root, 22);
+    root = insert(root, 4);
+    root = insert(root, 12);
+    root = insert(root, 10);
+    root = insert(root, 14);
+    temp = root->left->right->right;
+
+    succ = inOrderSuccessor(root, temp);
+    if (succ != NULL)
+        printf(
+            "\n Inorder Successor of %d is %d ",
+            temp->data, succ->data);
+    else
+        printf("\n Inorder Successor doesn't exit");
+
+    getchar();
+    return 0;
+}
+
+
+Tc:O(height)
+SC:O(1)
+
+
+Method 2: without using the parent pointer 
+
+
+class Solution{
+  public:
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+    Node* minValue(Node* root){
+        while(root->left)
+        root=root->left;
+        return root;
+    }
+    Node * inOrderSuccessor(Node *root, Node *x)
+    {
+        //Your code here
+        //case 1
+        if(x->right)//if right subtree 
+        return minValue(x->right);
+        //case 2
+        //start from the root 
+        Node* start=root;Node* succ=x;
+        while(start!=NULL){
+        if(start->data>x->data){
+            succ=start;
+            start=start->left;
+        }
+        else
+        start=start->right;
+        }
+        return succ==x?NULL:succ;//if the rightmost node itself 
+        
+    }
+};
+
+TC:O(height)
+SC:O(1)
