@@ -36,6 +36,11 @@ public:
         return check(root,NULL,NULL);
     }
 };
+
+TC:O(n)
+SC:O(height)
+
+
 Method 2: using the fact that the inorder traversal of the tree is in increasing order if its a BST
 class Solution {
     TreeNode prev = null;
@@ -54,6 +59,10 @@ class Solution {
         return fromLeft  && fromRight;
     }
 }
+
+
+
+
 Method 3:Iterative approach
 class Solution {
 public:
@@ -78,3 +87,6 @@ public:
         return true;
     }
 };
+
+tC:O(n)
+sC:O(height)
