@@ -4,48 +4,50 @@ public:
     //second step delete
     //deletion has three cases - no child,one child, two children
     //inorder successor is the min value in right subtree i.e the leftmost 
-    TreeNode* inSuccess(TreeNode* found)
-    {
-        TreeNode* curr=found;
-        while(curr->left!=NULL)
-            curr=curr->left;
-        return curr;
-    }
-    TreeNode* deleteNode(TreeNode* root, int key) {
-       if(root==NULL)
-           return root;
-        if(key>root->val)
-            root->right=deleteNode(root->right,key);
-        else if(key<root->val)
-            root->left=deleteNode(root->left,key);
-        else 
-        {
-            if(root->left==NULL && root->right==NULL)
-            {
-                delete root;
-                return NULL;
-            }
-            else if(root->left==NULL)
-            {
-                TreeNode* temp=root->right;
-                delete root;
-                return temp;
-            }
-            else if(root->right==NULL)
-            {
-               TreeNode* temp=root->left;
-                delete root;
-                return temp; 
-            }
-            else
-            {
-              TreeNode* succ=inSuccess(root->right);
-                root->val=succ->val;
-                root->right=deleteNode(root->right,succ->val);
-            }
+    
+delete method 1:
+
+Node* inSucc(Node* root){
+    while(root->left!=NULL)
+    root=root->left;
+    return root;
+}
+Node *deleteNode(Node *root,  int X)
+{
+    // your code goes here
+    if(root==NULL)
+    return NULL;
+    if(root->data<X)
+    root->right=deleteNode(root->right,X);
+    else if(root->data>X)
+    root->left=deleteNode(root->left,X);
+    else{//we reached the node to be deleted 
+        if(root->left==NULL && root->right==NULL){//if leaf node 
+            root=NULL;
             return root;
         }
-       return root; 
+        else if(!root->left || !root->right){//has one child 
+            if(root->left){
+                Node* temp=root->left;
+                root->data=temp->data;
+                temp=NULL;
+                return root;
+            }
+            else if(root->right){
+                Node* temp=root->right;
+                root->data=temp->data;
+                temp=NULL;
+                return root;
+            }
+        }
+        else{//if two nodes are there as children 
+            Node* succ=inSucc(root->right);//find its inorder successor 
+            root->data=succ->data;
+            root->right=deleteNode(root->right,succ->data);
+            return root;
+        }
     }
-};
+    
+}
+
 
