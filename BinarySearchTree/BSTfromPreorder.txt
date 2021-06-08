@@ -79,7 +79,7 @@ public:
 TC:O(n*n) worst case in case of decreasing order of array 
 
 
-Method :Iterative solution based on basic BST property TC:O(n*h) where h is the height of the tree
+Method :solution based on basic BST property TC:O(n*h) where h is the height of the tree
 class Solution {
 public:
      TreeNode* bstFromPreorder(vector<int>& preorder) {
@@ -102,6 +102,12 @@ public:
         return root;
     }
 };
+
+TC:O(n*h)
+
+
+Optimised approach:
+
 Method 2:recursive solution TC:O(n)
 
 class Solution {
@@ -122,3 +128,6 @@ public:
         
     }
 };
+
+TC:O(n)
+sc:O(h)
