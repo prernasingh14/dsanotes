@@ -47,6 +47,36 @@ TC:O(n*n)
 
 
 
+Keep in mind when no number greater than root is present 
+
+class Solution {
+public:
+    int findGreater(vector<int>&pre,int start,int end){
+        for(int i=start;i<=end;i++){
+            if(pre[i]>pre[start])
+                return i; 
+        }
+        return start;
+    }
+    TreeNode* construct(vector<int>&pre,int start,int end){
+        if(start>end)
+            return NULL;
+        if(start==end)
+            return new TreeNode(pre[start]);
+        TreeNode* root=new TreeNode(pre[start]);
+        //now find the index of the node that is greater than it 
+        //that would be its right subtree
+        int index=findGreater(pre,start,end);
+        root->left=index==start?construct(pre,start+1,end):construct(pre,start+1,index-1);
+        root->right=index==start?NULL:construct(pre,index,end);
+        return root;
+    }
+    TreeNode* bstFromPreorder(vector<int>& pre) {
+        return construct(pre,0,pre.size()-1);
+    }
+};
+
+TC:O(n*n) worst case in case of decreasing order of array 
 
 
 Method :Iterative solution based on basic BST property TC:O(n*h) where h is the height of the tree
