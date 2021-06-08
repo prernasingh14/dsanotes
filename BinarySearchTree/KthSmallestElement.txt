@@ -76,4 +76,32 @@ public:
 TC:O(h+k)
 The code first traverses down to the leftmost node which takes O(h) time, 
 then traverses k elements in O(k) time. 
-Therefore overall time complexity is O(h + k).
+Therefore overall time complexity is O(h + (h-k)).
+
+
+
+
+///optimised iterative approach:
+
+class Solution {
+  public int kthSmallest(TreeNode root, int k) {
+    LinkedList<TreeNode> stack = new LinkedList<TreeNode>();
+
+    while (true) {
+      while (root != null) {
+        stack.add(root);
+        root = root.left;
+      }
+      root = stack.removeLast();
+      if (--k == 0) return root.val;
+      root = root.right;
+    }
+  }
+}
+
+TC:O(height+k)
+
+which contains at least H+k elements, since before starting to pop out one has to go down to a leaf.
+This results in 
+O(logN+k) for the balanced tree and 
+O(N+k) for completely unbalanced tree with all the nodes in the left subtree.
