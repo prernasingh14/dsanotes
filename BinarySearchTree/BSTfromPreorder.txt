@@ -105,10 +105,46 @@ public:
 
 TC:O(n*h)
 
+//////////////////////////////////////////////////////////////
+
+
 
 Optimised approach:
 
 Method 2:recursive solution TC:O(n)
+
+based on BST property of lower and uper bound for every node 
+construct bst from preorder 
+
+
+Node* construct(int pre[],int& start,int size,int minn,int maxx){
+    if(start>=size)
+    return NULL;
+    if(pre[start]>=minn && pre[start]<=maxx){
+       Node* root=newNode(pre[start]);
+       start++;
+    root->left=construct(pre,start,size,minn,root->data-1);
+    root->right=construct(pre,start,size,root->data+1,maxx);
+    return root;
+    }
+    else
+    return NULL;
+}
+Node* constructTree(int pre[], int size)
+{
+    //code here
+    int start=0;
+    Node* root=construct(pre,start,size,INT_MIN,INT_MAX);
+    return root;
+    
+}
+
+TC:O(n)
+sc:O(h)
+///////////////////////////////////////////////////////////////////////////////////////////
+
+using only upper bound 
+
 
 class Solution {
 public:
