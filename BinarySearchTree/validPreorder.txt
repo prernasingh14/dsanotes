@@ -68,15 +68,15 @@ class Node{
     }
 };
 Node* construct(vector<int>&arr,int& index,int minn,int maxx){
-    if(index==arr.size())
+    if(index>=arr.size())
     return NULL;
       int val=arr[index];
-    index++;
+       index++;
     Node* root=new Node(val);
     if(val<minn || val>maxx)
     return NULL;
-    root->left=construct(arr,index,minn,root->data-1);
-    root->right=construct(arr,index,root->data+1,maxx);
+    root->left=construct(arr,index,minn,val);
+    root->right=construct(arr,index,val,maxx);
     return root;
     
 }
@@ -85,7 +85,6 @@ int Solution::solve(vector<int> &arr) {
    Node* root=construct(arr,index,minn,maxx);
    return index==arr.size();
 }
-
 TC:O(n)
 SC:O(height)
 
