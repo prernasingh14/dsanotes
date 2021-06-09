@@ -22,6 +22,33 @@ Output:
 
 
 
+
+using extra space to store inorder traversal :
+
+void inorder(Node* root,vector<Node*>&in){
+    if(root==NULL)
+    return ;
+    inorder(root->left,in);
+    in.push_back(root);
+    inorder(root->right,in);
+}
+    void populateNext(Node *root)
+    {
+        //code here
+        vector<Node*>in;
+        inorder(root,in);
+        Node* prev=in[0];
+        for(int i=1;i<in.size();i++){
+            prev->next=in[i];
+            prev=prev->next;
+        }
+    }
+
+TC:O(n)
+sc:O(n) using extra space 
+
+///////////////////////////////////////
+
 we need to do inorder traversal and have a prev node to attach the current  node to it
 
 
@@ -41,3 +68,5 @@ populateNext(root->right);
 
 }
 
+TC:O(n)
+sc:no extra space required 
