@@ -1,0 +1,194 @@
+GFG Link:
+https://practice.geeksforgeeks.org/problems/brothers-from-different-root/1#
+
+
+Given two BSTs containing N1 and N2 distinct nodes respectively and given a value x. Your task is to complete the function countPairs(), that returns the count of all pairs from both the BSTs whose sum is equal to x.
+
+Examples:
+
+Input : BST 1:    5        
+                /   \      
+               3     7      
+              / \   / \    
+             2  4  6   8   
+
+        BST 2:    10        
+                /   \      
+               6     15      
+              / \   /  \    
+             3  8  11  18
+        x = 16
+    
+Output : 3
+The pairs are:
+(5, 11), (6, 10) and (8, 8)
+Input:
+The function takes three arguments as input, first the reference pointer to the root(root1) of the BST1, then reference pointer to the root(root2) of the BST2 and last the element X.
+There will be T test cases and for each test case the function will be called separately.
+
+Output:
+For each test cases print the required number of pairs on new line.
+
+Constraints:
+1<=T<=100
+1<=N<=103
+
+Example:
+Input:
+2
+7
+5 3 7 2 4 6 8
+7
+10 6 15 3 8 11 18
+16
+6
+10 20 30 40 5 1
+5
+25 35 10 15 5
+30
+Output:
+3
+2
+
+
+
+two sum approach :
+
+void inorder(Node* root,unordered_map<int,int>&m){
+    if(root==NULL)
+    return ;
+    inorder(root->left,m);
+    m[root->data]+=1;
+    inorder(root->right,m);
+}
+void inorder2(Node* root,unordered_map<int,int>&m,int& count,int x){
+    if(root==NULL)
+    return ;
+    inorder2(root->left,m,count,x);
+    if(m.find(x-root->data)!=m.end() && m[x-root->data]>0)
+    {
+        count++;
+    m[x-root->data]-=1;
+}
+    inorder2(root->right,m,count,x);
+}
+int countPairs(Node* root1, Node* root2, int x)
+{
+    // Code here
+    unordered_map<int,int>m;
+    inorder(root1,m);
+    int count=0;
+    inorder2(root2,m,count,x);
+    return count;
+    
+}
+
+
+tC:O(n1+n2)
+SC:O(n1+n2)
+
+
+another recursive approach is to :
+ For each node value a in BST 1, search the value (x – a) in BST 2. If value found then increment the count. 
+
+int findPairs(Node* root,int data){
+    if(root==NULL)
+    return 0;
+    if(root->data==data)
+    return 1;
+    if(root->data>data)
+    return findPairs(root->left,data);
+    else 
+    return findPairs(root->right,data);
+}
+void traverseTrees(Node* root1,Node* root2,int x,int& pairs){
+    if(root1==NULL || root2==NULL)
+    return ;
+    traverseTrees(root1->left,root2,x,pairs);
+    traverseTrees(root1->right,root2,x,pairs);
+    //now check what we got 
+    int data=x-root1->data;//find it in binary tree 2 
+    pairs+=findPairs(root2,data);
+}
+
+int countPairs(Node* root1, Node* root2, int x)
+{
+    // Code here
+    //lets traverse in a two pointer fashion 
+    int pairs=0;
+     traverseTrees(root1,root2,x,pairs);
+    return pairs;
+    
+}
+
+TC:O(n1*h2)
+SC:O(1+h2)
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+Optimised approach :
+
+TC:O(n1+n2)
+Traverse BST 1 from smallest value to node to largest. 
+This can be achieved with the help of iterative inorder traversal. 
+Traverse BST 2 from largest value node to smallest. This can be achieved with the help of reverse inorder traversal. 
+Perform these two traversals simultaneously. Sum up the corresponding node’s value from both the BSTs at a particular instance of traversals. 
+If sum == x, then increment count. If x > sum, then move to the inorder successor of the current node of BST 1, else move to the inorder predecessor of the current node of BST 2.
+ Perform these operations until either of the two traversals gets completed.
+
+
+int countPairs(Node* root1, Node* root2, int x)
+{
+    // Code here
+    //lets traverse in a two pointer fashion 
+    if(root1==NULL || root2==NULL)
+    return 0;
+    int pairs=0;
+    stack<Node*>st1,st2;
+    Node* top1,*top2;
+    while(1){
+        //go to leftmost node
+    while (root1 != NULL) {
+            st1.push(root1);
+            root1 = root1->left;
+        }
+ 
+        // to find next node in reverse
+        // inorder traversal of BST 2
+        while (root2 != NULL) {
+            st2.push(root2);
+            root2 = root2->right;
+        }
+        if (st1.empty() || st2.empty())
+            break;
+ 
+        top1 = st1.top();
+        top2 = st2.top();
+ 
+        // if the sum of the node's is equal to 'x'
+        if ((top1->data + top2->data) == x) {
+            // increment count
+            pairs++;
+            st1.pop();
+            st2.pop();
+            root1 = top1->right;
+            root2 = top2->left;
+        }
+        else if(top1->data + top2->data> x){
+            st2.pop();
+            root2 = top2->left;
+        }
+        else{
+            st1.pop();
+            root1 = top1->right;
+        }
+ 
+        }
+        return pairs;
+ 
+        
+    }
+
