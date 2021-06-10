@@ -1,3 +1,6 @@
+gfg link :
+ https://practice.geeksforgeeks.org/problems/median-of-bst/1#
+ 
 Given a Binary Search Tree of size N, find the Median of its Node values.
 
 Example 1:
@@ -63,5 +66,38 @@ sc:O(n)
 but we need to find a way to do in O(1) space
 
 
+count the number of nodes and find median 
 
-it is very trivial
+
+int count(Node* root){
+    if(root==NULL)
+    return 0;
+    return 1+count(root->left)+count(root->right);
+}
+void inorder(Node *root,bool even,int& sum,int count,int& nodes){
+    if(root==NULL)
+    return ;
+    inorder(root->left,even,sum,count,nodes);
+    nodes++;
+    if(!even && nodes==count/2+1)
+    sum+=root->data;
+    if(even && (nodes==count/2 || nodes==count/2+1))
+    sum+=root->data;
+    inorder(root->right,even,sum,count,nodes);
+}
+float findMedian(struct Node *root)
+{
+      //Code here
+      if(root==NULL)
+      return 0.0;
+      bool even=false;
+      int c=count(root);
+      if(c%2==0)
+      even=true;
+      int nodes=0;int sum=0;
+      inorder(root,even,sum,c,nodes);
+      return even?sum/2.0:sum;
+      
+}
+TC:O(n)
+sc:O(height)
