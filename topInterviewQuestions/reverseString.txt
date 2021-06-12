@@ -1,0 +1,39 @@
+Leetcode 344:
+
+First approach that comes to my mind is :
+using an extra space to reverse the string 
+
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        vector<char>str;
+        for(int i=s.size()-1;i>=0;i--)
+            str.push_back(s[i]);
+        for(int i=0;i<str.size();i++)
+            s[i]=str[i];
+        
+    }
+};
+
+tC:O(n+n)
+SC:O(n)
+where n is the number of characters in the string 
+
+
+Optimised approach: without using any extra space 
+
+class Solution {
+public:
+    void reverseString(vector<char>& s) {
+        int n=s.size();
+        for(int i=0;i<n/2;i++){
+            char ch=s[i];
+            s[i]=s[n-1-i];
+            s[n-1-i]=ch;
+        }
+        
+    }
+};
+
+TC:O(n)
+SC:O(1)
