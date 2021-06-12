@@ -1,0 +1,92 @@
+Given two binary search trees with root nodes as tree1 and tree2 of size n and m, write a program to return an array of integers that contains all the elements of tree1 and tree2 in non-decreasing order.
+
+Example 1
+
+Input:      3            4        
+           / \          / \
+          2   5        1   6
+Output: [1, 2, 3, 4, 5, 6]
+Explanation: The resultant binary tree contains all the elements of bst1 and bst2 in non-decreasing order.
+Example 2
+
+Input:      3            6        
+             \          / \
+              4        2  10
+Output:[2, 3, 4, 6, 10]
+Explanation: Both bst1 and bst2 are combined to return the BST having all the elements of bst1 and bst2 in non-decreasing order.
+
+
+Problem Note:
+
+The expected time complexity is O(m+n).
+
+Naive Solution:
+ Traverse on both the trees separately while storing them in respective arrays and then store each element in the 3rd array and return it after sorting.
+ TC:O(m+n+(m+n)log(m+n))
+
+
+
+
+better approach:
+
+Sorted merge:
+
+A very important property of BST is that, when we do in-order traversal on BST, we get a sorted array.
+
+In this problem, we can use the above property as the problem demands us to return a sorted array. So, we can perform in-order traversal of both the BSTs and we will get two sorted arrays. Each of the arrays will contain all the node’s values of the respective BST.
+
+Now, we have two sorted arrays, all we have to do is to merge them. If you have read about merge sort, then you would have known that during the “Combine” step, we merge two sorted arrays in linear time, Read here or Read here. Eventually, we will have the sorted result array and we could simply return it.
+
+Solution Steps
+
+Perform inorder traversal of tree1 and store each node’s value in arr1.
+Perform inorder traversal of tree2 and store each node’s value in arr2.
+Combine arr1 and arr2 using merge function of merge sort to create result array.
+Return result array.
+
+Pseudo Code
+
+int[] getAllElements(TreeNode root1,TreeNode root2){
+    int[] arr1
+    int[] arr2
+    inorder(root1, arr1)
+    inorder(root2, arr2)
+    int[] result
+    merge(arr1, arr2, result)
+    return result       
+}
+// utility Functions
+void inorder(TreeNode root, int[] arr){
+    if(root){
+        inorder(root.left)
+        arr.push_back(root.val)
+        inorder(root.right)
+    }
+}
+void merge(int[] X, int[] Y, int[] result){
+    int i = 0, j = 0
+    while(i < X.size() and j < Y.size()){
+        if(X[i] > Y[j]){
+            result.push_back(Y[j])
+            j = j + 1
+        } else {
+            result.push_back(X[i])
+            i = i + 1
+        }
+    }
+    while(i < X.size()){
+        result.push_back(X[i])
+        i = i + 1
+    }
+    while(j < Y.size()){
+        result.push_back(Y[j])
+        j = j + 1
+    }
+}
+Complexity Analysis
+
+Time Complexity: O(n), where n is the total number of nodes of tree1 and tree2.
+
+Space Complexity: O(n) 
+
+
