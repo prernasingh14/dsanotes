@@ -1,0 +1,76 @@
+Leetcode 283:
+
+Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
+
+Note that you must do this in-place without making a copy of the array.
+
+ 
+
+Example 1:
+
+Input: nums = [0,1,0,3,12]
+Output: [1,3,12,0,0]
+Example 2:
+
+Input: nums = [0]
+Output: [0]
+ 
+
+Constraints:
+
+1 <= nums.length <= 104
+-231 <= nums[i] <= 231 - 1
+ 
+
+Follow up: Could you minimize the total number of operations done?
+
+
+Brute force approach that comes to my mind is :
+take an vector whoch stores all the elements which are nonzero in the order in whoch they get traversed 
+then replace the vector nums with elements of the storage vector 
+if we didn't get to traverse all of nums vector then put zeroes there 
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+       vector<int>allPos;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]!=0)
+            allPos.push_back(nums[i]);
+        }
+        for(int i=0;i<nums.size();i++){
+        if(i<allPos.size())
+            nums[i]=allPos[i];
+            else
+                nums[i]=0;
+        }
+    }
+};
+
+TC:O(n)
+sc:(n)
+
+
+
+
+optimised approach : without using any extra space 
+
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+       int start=0;
+        for(int i=0;i<nums.size();i++){
+            if(nums[i]!=0)
+            nums[start++]=nums[i];
+        }
+        //ab fill rest of the indices with zero
+        for(int i=start;i<nums.size();i++){
+            nums[i]=0;
+        }
+        
+    }
+};
+tc:O(n)
+sc:O(1)
+
