@@ -1,0 +1,145 @@
+Leetcode 122:
+You are given an array prices where prices[i] is the price of a given stock on the ith day.
+
+Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times).
+
+Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+
+ 
+
+Example 1:
+
+Input: prices = [7,1,5,3,6,4]
+Output: 7
+Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+Example 2:
+
+Input: prices = [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are engaging multiple transactions at the same time. You must sell before buying again.
+Example 3:
+
+Input: prices = [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e., max profit = 0.
+ 
+
+Constraints:
+
+1 <= prices.length <= 3 * 104
+0 <= prices[i] <= 104
+
+
+Method 1: 
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int profit=0;
+        //buy at every low and sell at every peak 
+        for(int i=1;i<n;i++){
+            if(prices[i]>prices[i-1])
+                profit+=(prices[i]-prices[i-1]);
+        }
+        return profit;
+    }
+};
+
+
+TC:O(n)
+sC:O(1)
+
+
+
+Recursive approach :
+
+class Solution {
+public:
+    //we have choices to either buy on some day 
+    //or sell if we have bought 
+    int recur(vector<int>&prices,int i,bool buy){
+        if(i==prices.size())
+            return 0;
+        if(buy){//if can buy then buy or don't buy
+            //if bought then negative profit 
+            return max(recur(prices,i+1,!buy)-prices[i],recur(prices,i+1,buy));
+        }
+        else{
+            //if can sell or don't sell
+            //if bought then add into profit 
+          return max(recur(prices,i+1,!buy)+prices[i],recur(prices,i+1,buy));
+        }
+    }
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int profit=0;
+        //there are choices available on every day thus recursive approach
+        //futhur dynamic programming comes into play 
+       return recur(prices,0,true);
+    }
+};
+
+
+Recursion with memoization
+
+store results so that it doesn't need to be done again
+
+class Solution {
+public:
+    //we have choices to either buy on some day 
+    //or sell if we have bought 
+    int recur(vector<int>&prices,int i,bool buy,vector<vector<int>>&dp){
+        if(i==prices.size())
+            return 0;
+        if(dp[i][buy]!=-1)
+            return dp[i][buy];
+        if(buy){//if can buy then buy or don't buy
+            //if bought then negative profit 
+            return dp[i][buy]=max(recur(prices,i+1,!buy,dp)-prices[i],recur(prices,i+1,buy,dp));
+        }
+        else{
+            //if can sell or don't sell
+            //if bought then add into profit 
+          return dp[i][buy]=max(recur(prices,i+1,!buy,dp)+prices[i],recur(prices,i+1,buy,dp));
+        }
+    }
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int profit=0;
+        vector<vector<int>>dp(n,vector<int>(2,-1));
+        //there are choices available on every day thus recursive approach
+        //futhur dynamic programming comes into play 
+       return recur(prices,0,true,dp);
+    }
+};
+
+
+
+bottom up dp:
+
+
+class Solution {
+public:
+    //we have choices to either buy on some day 
+    //or sell if we have bought 
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int profit=0;
+        vector<vector<int>>dp(n,vector<int>(2,0));
+        //there are choices available on every day thus recursive approach
+        //futhur dynamic programming comes into play 
+        dp[0][0]=0;
+        dp[0][1]=-prices[0];
+        for(int i=1;i<n;i++){
+        dp[i][0]=max(dp[i-1][1]+prices[i],dp[i-1][0]);
+        dp[i][1]=max(dp[i-1][0]-prices[i],dp[i-1][1]);
+        }
+       return max(dp[n-1][0],dp[n-1][1]);
+    }
+};
+
+TC:O(n)
+sc:O(n)
