@@ -1,0 +1,98 @@
+Leetcode 169:
+
+
+Given an array nums of size n, return the majority element.
+
+The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
+
+ 
+
+Example 1:
+
+Input: nums = [3,2,3]
+Output: 3
+Example 2:
+
+Input: nums = [2,2,1,1,1,2,2]
+Output: 2
+ 
+
+Constraints:
+
+n == nums.length
+1 <= n <= 5 * 104
+-231 <= nums[i] <= 231 - 1
+ 
+
+Follow-up: Could you solve the problem in linear time and in O(1) space?
+
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        return  nums[nums.size()/2];
+    }
+};
+
+TC:O(nlogn)
+SC:O(1)
+
+
+
+better time complexity:
+
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        unordered_map<int,int>mp;
+        for(int i=0;i<nums.size();i++){
+            mp[nums[i]]++;
+        }
+        int freq=nums.size()/2;
+        for(auto i:mp){
+            if(i.second>freq)
+                return i.first;
+        }
+        return 0;
+    }
+};
+
+TC:O(n)
+SC:O(distinct elements)
+
+
+
+
+optimised approach:
+ linear time complexity and O(1) space
+
+
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        //the count of majority element will always be the highest 
+        //thus we can have a count variable 
+        //lets take element at index 0 to bre majority 
+        //then as we traverse through the array , if we find same ele increase the count
+        //else decrease the count
+        ///if count reaches zero ,means it wasn't the majority till then make the new element as majority and follow the above process 
+        int first=nums[0];int i=1;int k=0;
+        while(i<nums.size()){
+            if(nums[i]==first){
+                count++;
+            }
+            else{
+                if(count==0)
+                first=nums[i];
+                else
+                    count--;
+            }
+            i++;
+        }
+        return first;
+    }
+};
+
