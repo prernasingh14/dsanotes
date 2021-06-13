@@ -1,0 +1,102 @@
+
+Leetcode 242:
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+ 
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+Output: true
+Example 2:
+
+Input: s = "rat", t = "car"
+Output: false
+ 
+
+Constraints:
+
+1 <= s.length, t.length <= 5 * 104
+s and t consist of lowercase English letters.
+ 
+
+Follow up: What if the inputs contain Unicode characters? How would you adapt your solution to such a case?
+
+
+
+anagrams are words having same freq of characters and having the same length 
+
+Method 1 : that comes to my mind is to sort them and compare whether they are equal 
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!=t.size())
+            return false;
+        sort(s.begin(),s.end());
+         sort(t.begin(),t.end());
+        return s==t;
+    }
+};
+
+TC:O(nlogn)
+sc:O(1)
+
+
+improving the time complexity :
+
+we can use hashmap to store the frequency of charcaters in string s 
+then we 'll traverse string t and decrease freq of charcaters that are matching , 
+if any charcater comes that is not present in s then definitely they can't be anagrams 
+
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!=t.size())
+            return false;
+        unordered_map<char,int>mp;
+        for(int i=0;i<s.size();i++){
+            mp[s[i]]++;
+        }
+        for(int i=0;i<t.size();i++){
+            if(mp[t[i]]>0)
+                mp[t[i]]--;
+            else
+                return false;
+        }
+        return true;
+    }
+};
+TC:O(n)
+SC:O(n)
+
+
+
+//////////////////////////////////////////////////////
+
+
+since all are lowercase charcaters , we can do it in O(1) space
+
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        if(s.size()!=t.size())
+            return false;
+        //doing it 
+        vector<int>mp(26,0);
+        for(int i=0;i<s.size();i++){
+            mp[s[i]-'a']++;
+        }
+        for(int i=0;i<t.size();i++){
+            if(mp[t[i]-'a']>0)
+                mp[t[i]-'a']--;
+            else
+                return false;
+        }
+        return true;
+    }
+};
+
+TC:O(n)
+sC:O(1)
