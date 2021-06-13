@@ -1,0 +1,85 @@
+Leetcode 206:
+
+Given the head of a singly linked list, reverse the list, and return the reversed list.
+
+ 
+
+Example 1:
+
+
+Input: head = [1,2,3,4,5]
+Output: [5,4,3,2,1]
+Example 2:
+
+
+Input: head = [1,2]
+Output: [2,1]
+Example 3:
+
+Input: head = []
+Output: []
+ 
+
+Constraints:
+
+The number of nodes in the list is the range [0, 5000].
+-5000 <= Node.val <= 5000
+ 
+
+Follow up: A linked list can be reversed either iteratively or recursively. Could you implement both?
+
+
+recursive approach :
+
+class Solution {
+public:
+     ListNode* reverse(ListNode* prev,ListNode* head)
+    {
+        if(head==NULL)
+            return prev;
+        ListNode* curr=head->next;
+        head->next=prev;
+       return reverse(head,curr);
+    }
+    ListNode* reverseList(ListNode* head) {
+        //start from the head 
+        //i need two pointers to reverse their directions 
+        //and one pointer to move forward
+        if(head==NULL || head->next==NULL)
+            return head;
+        ListNode *prev=NULL;
+       return reverse(prev,head);
+    }
+};
+
+TC:O(number of nodes in linked list)
+SC:O(1)
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+iterative approach:
+
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        //start from the head 
+        //i need two pointers to reverse their directions 
+        //and one pointer to move forward
+        ListNode* prev=NULL;
+        ListNode* curr=head;//points to the current node 
+        while(curr!=NULL){
+            curr=curr->next;
+            head->next=prev;
+            prev=head;
+            head=curr;
+        }
+        return prev;
+    }
+};
+
+TC:O(number of nodes in linked list)
+SC:O(1)
+
+
