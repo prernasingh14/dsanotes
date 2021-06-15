@@ -1,0 +1,49 @@
+GFG LINK:
+https://practice.geeksforgeeks.org/problems/excel-sheet5448/1#
+
+
+
+Given a positive integer N, return its corresponding column title as it would appear in an Excel sheet.
+For N =1 we have column A, for 27 we have AA and so on.
+
+Note: The alphabets are all in uppercase.
+
+Example 1:
+
+Input:
+N = 51
+Output: AY
+N=705
+Output:AAC
+
+Your Task:
+Complete the function ExcelColumn() which takes N as input and returns output string.
+
+Expected Time Complexity: O(Log(N))
+Expected Auxiliary Space: O(Log(N))
+
+Constraints:
+1 ≤ N ≤ 107
+
+
+string ExcelColumn(int N)
+    {
+        // Your code goes here
+        
+          string str="";string r="";
+            int quo=N;
+          while(quo){
+            if(quo%26==0)//if remainder is zero then its 'Z'
+            {
+                str='Z'+str;
+                quo=quo-1;
+            }
+            else
+            {
+                str=char((quo%26-1)+'A')+str;
+            }
+            quo=(quo/26);//as 'A' begins from 0
+        }
+        return str;
+        
+    }
