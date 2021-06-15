@@ -1,0 +1,96 @@
+Leetcode 101:
+
+Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
+
+ 
+
+Example 1:
+
+
+Input: root = [1,2,2,3,4,4,3]
+Output: true
+Example 2:
+
+
+Input: root = [1,2,2,null,3,null,3]
+Output: false
+ 
+
+Constraints:
+
+The number of nodes in the tree is in the range [1, 1000].
+-100 <= Node.val <= 100
+ 
+
+Follow up: Could you solve it both recursively and iteratively?
+
+
+Recursive approach :
+
+
+class Solution {
+public:
+    bool ismirror(TreeNode* root1,TreeNode* root2){
+        if(root1==NULL && root2==NULL)
+            return true;
+        if(!root1 || !root2)//either of them is present 
+            return false;
+        if(root1->val==root2->val)
+            return ismirror(root1->left,root2->right)&&ismirror(root1->right,root2->left);
+        else
+            return false;
+        
+    }
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL)
+            return true;
+        return ismirror(root->left,root->right);
+    }
+};
+
+
+TC:O(n)
+sc:O(h)
+
+
+
+Iterative approach:
+
+
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root==NULL || (root->left==NULL && root->right==NULL))
+            return true;
+        queue<TreeNode*>q;
+        if(root->left==NULL || root->right==NULL)
+            return false;
+        q.push(root->left);//as root->left should be equal to root->right too
+        q.push(root->right);//thus push in root->right
+        while(!q.empty()){
+            TreeNode* t1=q.front();
+            q.pop();
+            TreeNode* t2=q.front();
+            q.pop();
+            if(t1==NULL && t2==NULL)
+                continue;
+            if((t1==NULL && t2) || (t1 && t2==NULL))
+                return false;
+            if(t1 && t2 && t1->val!=t2->val)//can never be mirror then 
+                return false;
+            //now we need to compare 
+            //t1->left with t2->right
+            //t1->right with t2-->left
+            q.push(t1->left);
+            q.push(t2->right);
+            q.push(t1->right);
+            q.push(t2->left);
+        }
+        return true;
+    }
+};
+
+
+TC:O(n)
+sc:O(n)
+
