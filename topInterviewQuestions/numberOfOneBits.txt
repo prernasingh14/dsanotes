@@ -49,7 +49,7 @@ public:
     }
 };
 
-TC:O(number of bits in n)
+TC:O(logn)
 SC:O(1)
 
 
