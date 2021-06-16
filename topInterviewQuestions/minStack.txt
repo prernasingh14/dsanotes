@@ -1,0 +1,194 @@
+Leetcode 155:
+
+
+Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+
+Implement the MinStack class:
+
+MinStack() initializes the stack object.
+void push(val) pushes the element val onto the stack.
+void pop() removes the element on the top of the stack.
+int top() gets the top element of the stack.
+int getMin() retrieves the minimum element in the stack.
+ 
+
+Example 1:
+
+Input
+["MinStack","push","push","push","getMin","pop","top","getMin"]
+[[],[-2],[0],[-3],[],[],[],[]]
+
+Output
+[null,null,null,null,-3,null,0,-2]
+
+Explanation
+MinStack minStack = new MinStack();
+minStack.push(-2);
+minStack.push(0);
+minStack.push(-3);
+minStack.getMin(); // return -3
+minStack.pop();
+minStack.top();    // return 0
+minStack.getMin(); // return -2
+ 
+
+Constraints:
+
+-231 <= val <= 231 - 1
+Methods pop, top and getMin operations will always be called on non-empty stacks.
+At most 3 * 104 calls will be made to push, pop, top, and getMin.
+
+
+Using an extra space :
+
+we use another stack that will store the minimum element so far (with every operation)
+
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    stack<int>s2;//stores the currently minimum element 
+    stack<int>st;
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        st.push(val);
+        if(s2.empty() || val<=getMin())
+            s2.push(val);
+            
+    }
+    
+    void pop() {
+        if(!st.empty())
+        {
+            int val=st.top();
+         if(val==getMin())
+            s2.pop();
+            st.pop();
+        }
+}
+    
+    int top() {
+        return st.top();
+    }
+    
+    int getMin() {
+        return st.empty()?INT_MAX:s2.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+
+ TC:O(1) of push,pop,getMin
+ SC:O(n)
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+Method 2: by modifying the single stack 
+
+
+ class MinStack {
+public:
+    /** initialize your data structure here. */
+   //using a singke stack
+    stack<pair<int,int>>st;
+    MinStack() {
+        
+    }
+    void push(int val) {
+        int minEleSoFar=INT_MAX;
+       if(st.empty())
+           minEleSoFar=val;
+        else
+                minEleSoFar=min(val,st.top().second);
+        st.push({val,minEleSoFar});
+    }
+    
+    void pop() {
+       st.pop();
+}
+    
+    int top() {
+        return st.top().first;
+    }
+    
+    int getMin() {
+        return st.top().second;
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+
+ TC:O(1) push ,pop,getMin
+
+
+
+Without using any extra space:
+designing a stack ourselves 
+
+ class Node {
+     public:
+         int val;
+         int min;
+         Node* next;
+         Node(int v, int m) {
+            val=v;
+             min=m;
+             next=NULL;
+        }
+        
+        Node(int val, int min, Node* next) {
+            this->val = val;
+            this->min = min;
+            this->next = next;
+        }
+    };
+class MinStack {
+    private:
+    Node* head;
+
+    
+public:
+    /** initialize your data structure here. */
+   //using a singke stack
+   void push(int x) {
+        if(head == NULL) 
+            head = new Node(x, x);
+        else 
+            head = new Node(x, min(x, head->min), head);
+    }
+
+     void pop() {
+        head = head->next;
+    }
+
+   int top() {
+        return head->val;
+    }
+
+     int getMin() {
+        return head->min;
+    }
+    
+
+};
+
+
+O(1) space solution using some math 
+

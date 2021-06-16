@@ -137,6 +137,55 @@ using O(1)
 
 space :
 
+but can give overflow
 
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    int min=0;
+    stack<int>st;
+    MinStack() {
+        
+    }
+    void push(int val) {
+        if(st.empty())
+        {
+            st.push(val);
+            min=val;
+        }
+        else if(val>=min)
+        {
+            st.push(val);
+        }
+        else{
+            //update our min
+            st.push(2*val-min);
+             min=val;
+        }
+    }
+    
+    void pop() {
+        if(st.top()>=min)
+            st.pop();
+        else{
+            min=2*min-st.top();//top is going to be removed so get our previous min 
+            st.pop();
+        }
+    }
+    int top() {
+        return st.top();
+    }
+    
+    int getMin() {
+        return min;
+    }
+};
 
-
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
