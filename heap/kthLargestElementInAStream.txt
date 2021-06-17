@@ -37,7 +37,7 @@ It is guaranteed that there will be at least k elements in the array when you se
 using min-heap:  
 why we using a min-heap is that we need to keep an account of the largest elements -using min-heap we will always pop out our smaller ones and we'll make sure we still have larger ones 
 
-TC:O(nlogn)
+TC:O(nlogk)
 
 class KthLargest {
 public:
