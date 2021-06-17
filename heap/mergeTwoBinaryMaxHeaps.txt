@@ -1,0 +1,67 @@
+GFG :
+
+Given two binary max heaps as arrays, merge the given heaps to form a new max heap.
+
+ 
+
+Example 1:
+
+Input  : 
+n = 4 m = 3
+a[] = {10, 5, 6, 2}, 
+b[] = {12, 7, 9}
+Output : 
+{12, 10, 9, 2, 5, 7, 6}
+Explanation :
+
+Submit
+Submit
+Submit
+ 
+
+ 
+
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function mergeHeaps() which takes the array a[], b[], its size n and m, as inputs and return the merged max heap.
+
+ 
+
+Expected Time Complexity: O(n.Logn)
+Expected Auxiliary Space: O(1)
+
+ 
+
+Constraints:
+1 <= n, m <= 105
+1 <= a[i], b[i] <= 2*105
+
+
+
+The idea is simple. We create an array to store result. 
+We copy both given arrays one by one to result. 
+Once we have copied all elements, we call standard build heap to construct full merged max heap.
+
+
+other way is to use :
+max priority_queue and push in all the elemnets of both the heaps into it 
+it will result in a max heap 
+
+ vector<int> mergeHeaps(vector<int> &a, vector<int> &b, int n, int m) {
+        // your code here
+        vector<int>ans;
+        priority_queue<int>pq;
+        for(int i=0;i<a.size();i++){
+            pq.push(a[i]);
+        }
+         for(int i=0;i<b.size();i++){
+            pq.push(b[i]);
+        }
+        while(!pq.empty()){
+            ans.push_back(pq.top());
+            pq.pop();
+        }
+        return ans;
+}
+
+TC:O(nlogn+mlog(n+m)+(m+n)log(m+n)))  if we assume that building heap takes (n) instead of nlogn time then TC:O(m+n)
+SC:O(n+m)
