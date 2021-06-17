@@ -86,3 +86,48 @@ best in O(n) time complexity:
 
 
 some modification in quick sort needs to be done
+
+
+ int partition(int arr[],int l,int r){
+        int pivot=l;
+        int i=l+1;
+        int j=r;
+        while(i<=j){
+            if(arr[i]>arr[pivot] && arr[j]<arr[pivot]){
+                swap(arr[i],arr[j]);
+                i++;
+                j--;
+            }
+            else if(arr[i]<=arr[pivot])
+            i++;
+            else if(arr[j]>=arr[pivot])
+            j--;
+        }
+        swap(arr[j],arr[pivot]);
+        return j;
+    }
+    int kthSmallest(int arr[], int l, int r, int k) {
+        //code here
+        while(l<=r){
+            int index=partition(arr,l,r);
+            if(index==k-1)
+            {
+                return arr[index];
+            }
+            else if(index>k-1)
+            r=index-1;
+            else
+            l=index+1;
+        }
+        return -1;
+        
+        
+    }
+
+
+    TC:in average case is O(n) as it is reducing our serach space 
+    but can go O(n*n) if pivot is chosen either the largest or the smallest 
+
+    thus we'll choose a random pivot 
+
+    
