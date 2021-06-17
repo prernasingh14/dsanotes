@@ -69,3 +69,87 @@ class Solution {
 };
 TC:O(n)
 SC:O(1) as no explicit usage
+
+
+
+
+Iterative approach :
+
+
+1. for completeness check that no emoty node is encountered till all the nodes are traversed once an empty child is seen 
+2. as we traverse for evrey node check that its value >=(both the children 's value )
+
+
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+ 
+// Data structure to store a binary tree node
+struct Node
+{
+    int data;
+    Node *left, *right;
+ 
+    Node(int data)
+    {
+        this->data = data;
+        this->left = this->right = nullptr;
+    }
+};
+ 
+// Function to check if a given binary tree is a max-heap or not
+bool isHeap(Node* root)
+{
+    // create an empty queue and enqueue the root node
+    queue<Node*> queue;
+    queue.push(root);
+ 
+    // take a boolean flag, which becomes true when an empty left
+    // or right child is seen for a node
+    bool isNullSeen = false;
+ 
+    // loop till queue is empty
+    while (queue.size())
+    {
+        // process front node in the queue
+        Node* curr = queue.front();
+        queue.pop();
+ 
+        // left child is non-empty
+        if (curr->left)
+        {
+            // if either heap property is violated
+            if (isNullSeen || curr->left->data>= curr->data) {
+                return false;
+            }
+ 
+            // enqueue left child
+            queue.push(curr->left);
+        }
+        // left child is empty
+        else {
+            isNullSeen = true;
+        }
+ 
+        // right child is non-empty
+        if (curr->right)
+        {
+            // if either heap property is violated
+            if (isNullSeen || curr->right->data>= curr->data) {
+                return false;
+            }
+ 
+            // enqueue left child
+            queue.push(curr->right);
+        }
+        // right child is empty
+        else {
+            isNullSeen = true;
+        }
+    }
+ 
+    // we reach here only when the given binary tree is a max-heap
+    return true;
+}
+TC:O(n)
