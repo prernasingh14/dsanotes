@@ -1,6 +1,8 @@
-You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
+You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle.
+ That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
 
-Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+Given an integer array nums representing the amount of money of each house,
+ return the maximum amount of money you can rob tonight without alerting the police.
 
  
 
@@ -25,3 +27,76 @@ Constraints:
 
 1 <= nums.length <= 100
 0 <= nums[i] <= 1000
+
+
+
+since houses are circular , thus 
+if we rob first house then we can't rob last house 
+if we rob second house then we can rob last house
+so based on these choices ,we'll calculate our maximum profit
+
+
+class Solution {
+public:
+   
+    int houserob(vector<int>&nums,int i,int n,bool firstrobbed, vector<vector<int>>&mp){
+        if(i>=n)
+            return 0;
+        if(i==n-1 && firstrobbed)
+            return 0;
+        if(i==n-1 && !firstrobbed)
+            return nums[i];
+        if(mp[i][firstrobbed]!=-1)
+            return mp[i][firstrobbed];
+        int inc=nums[i]+houserob(nums,i+2,n,firstrobbed,mp);
+        int exc=houserob(nums,i+1,n,firstrobbed,mp);
+        return mp[i][firstrobbed]=max(inc,exc);
+    }
+    int rob(vector<int>& nums) {
+        int n=nums.size();
+        if(n==1)
+            return nums[0];
+         vector<vector<int>>mp(n,vector<int>(2,-1));
+        return max(houserob(nums,0,n,true,mp),houserob(nums,1,n,false,mp));
+        
+        
+    }
+};
+
+TC:O(n*2)
+
+
+
+
+class Solution {
+public:
+    //if we go on house robber1 approach 
+    //we need two vectors to store two choices 
+//     since houses are circular , thus 
+// if we rob first house then we can't rob last house 
+// if we rob second house then we can rob last house
+// so based on these choices ,we'll calculate our maximum profit
+   int houseRobber(vector<int>& nums) {
+        // dynamic programming - decide each problem by its sub-problems:
+        int dp[nums.size()+1];
+        dp[0] = nums[0];
+        dp[1] = max(nums[0], nums[1]);
+        for (int i=2; i<nums.size(); i++)
+            dp[i] = max(dp[i-1], nums[i]+dp[i-2]);
+        return dp[nums.size()-1];
+    }
+    int rob(vector<int>& nums) {
+        // edge cases:
+        if (nums.size() == 0) return 0;
+        if (nums.size() == 1) return nums[0];
+        if (nums.size() == 2) return max(nums[0], nums[1]);
+        
+        // either use first house and can't use last or last and not first:
+        vector<int> v1(nums.begin(), nums.end()-1);
+        vector<int> v2(nums.begin()+1, nums.end());
+        return max(houseRobber(v1), houseRobber(v2));
+    }
+};
+
+tc:O(n)
+sc:O(n)
