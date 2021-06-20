@@ -1,0 +1,175 @@
+Leetcode 53:
+
+Given an integer array nums, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+
+
+Example 1:
+
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+Explanation: [4,-1,2,1] has the largest sum = 6.
+Example 2:
+
+Input: nums = [1]
+Output: 1
+Example 3:
+
+Input: nums = [5,4,-1,7,8]
+Output: 23
+ 
+
+Constraints:
+
+1 <= nums.length <= 3 * 104
+-105 <= nums[i] <= 105
+ 
+
+Follow up: If you have figured out the O(n) solution,
+ try coding another solution using the divide and conquer approach, which is more subtle.
+
+
+Approach 1:
+
+Find all subarray sum and compare for maxsum 
+
+TC:O(n*n)
+
+class Solution {
+public:
+    //find sum of possible subarrays and get maxsum
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        int maxSum=-1;
+        for(int i=0;i<n;i++){
+            int sum=0;
+            for(int j=i;j<n;j++){
+                sum+=nums[j];
+                maxSum=max(maxSum,sum);
+            }
+        }
+        return maxSum;
+    }
+};
+//TC:O(n*n)
+SC:O(1)
+
+
+
+optimised solution :
+based on choices for every element 
+class Solution {
+public:
+//     To calculate sum(0,i), you have 2 choices: either adding sum(0,i-1) to a[i], or not. If sum(0,i-1) is negative, adding it to a[i] will only make a smaller sum, so we add only if it's non-negative.
+
+// sum(0,i) = a[i] + (sum(0,i-1) < 0 ? 0 : sum(0,i-1))
+// We can then use O(1) space to keep track of the max sum(0, i) so far.
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        int sum=nums[0];
+        int maxsum=nums[0];
+        for(int i=1;i<n;i++){
+          if(sum<0)
+              sum=nums[i];
+            else
+                sum+=nums[i];
+            maxsum=max(maxsum,sum);
+        }
+        return maxsum;
+    }
+};
+TC:O(n)
+SC:O(1)
+
+
+another intuitive approach :
+
+[1,2,3,-10,5]
+maxsum is 6
+any prefix sum if becomes negative then it is going to decrease out maxsum thus we need to exclude it ans start afresh 
+class Solution {
+public:
+    //this approach is what is intuitive to me 
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0) return 0;
+        int sum = 0, smax = INT_MIN;
+        for (int num : nums) {
+            sum += num;
+            if (sum > smax) smax = sum;
+            if (sum < 0) sum = 0;//if we get negative sum then reset it 
+        }
+        return smax;
+    }
+};
+
+TC:O(n)
+SC:O(1)
+
+
+
+
+
+Kadane's algorithm :
+
+class Solution {
+public:
+    
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        int sum=0;
+        int maxlocal=nums[0];
+        int maxglobal=nums[0];
+        for(int i=1;i<n;i++){
+            maxlocal=max(nums[i],maxlocal+nums[i]);
+            maxglobal=max(maxglobal,maxlocal);
+        }
+        return maxglobal;
+    }
+};
+//TC:O(n)
+
+
+
+Divide and conquer based approach :
+
+class Solution {
+public:
+//     Step1. Select the middle element of the array.
+// So the maximum subarray may contain that middle element or not.
+
+// Step 2.1 If the maximum subarray does not contain the middle element, then we can apply the same algorithm to the the subarray to the left of the middle element and the subarray to the right of the middle element.
+
+// Step 2.2 If the maximum subarray does contain the middle element, then the result will be simply the maximum suffix subarray of the left subarray plus the maximum prefix subarray of the right subarray
+
+// Step 3 return the maximum of those three answer.
+
+// Here is a sample code for divide and conquer solution. Please try to understand the algorithm before look at the code
+
+    int maxSubArrayHelperFunction(vector<int>A, int left, int right) {
+        if(right == left) return A[left];
+        int middle = (left+right)/2;
+        int leftans = maxSubArrayHelperFunction(A, left, middle);
+        int rightans = maxSubArrayHelperFunction(A, middle+1, right);
+        int leftmax = A[middle];
+        int rightmax = A[middle+1];
+        int temp = 0;
+        for(int i=middle;i>=left;i--) {
+            temp += A[i];
+            if(temp > leftmax) leftmax = temp;
+        }
+        temp = 0;
+        for(int i=middle+1;i<=right;i++) {
+            temp += A[i];
+            if(temp > rightmax) rightmax = temp;
+        }
+        return max(max(leftans, rightans),leftmax+rightmax);
+    }
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0) return 0;
+        return maxSubArrayHelperFunction(nums,0,n-1);
+    }
+};
+
+TC:O(nlogn)
+
