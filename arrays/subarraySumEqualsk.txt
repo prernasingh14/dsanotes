@@ -1,3 +1,5 @@
+Leetcode 560:
+
 Given an array of integers nums and an integer k, return the total number of continuous subarrays whose sum equals to k.
 
  
@@ -17,6 +19,7 @@ Constraints:
 1 <= nums.length <= 2 * 104
 -1000 <= nums[i] <= 1000
 -107 <= k <= 107
+
 
 
 
@@ -77,37 +80,40 @@ TC:O(n*n)
 
 which again causes TLE for higher values
 
+
+
+
 efficient approach :
 
 
-
-sliding window technique-
-
+using a hashmap to store sum 
 
 
- vector<int> subarraySum(int arr[], int n, int s){
-        
-        // Your code here
-        int left=0;int right=0;int sum=0;
-        while(left<n && right<=n){
-            if(sum==s)
-            return {left+1,right};
-            else if(sum>s)
-            {
-                sum-=arr[left++];
-            }
-            else
-            {
-                sum+=arr[right++];
-            }
-        }
-        return {-1};
-        
-    }
+//Link- https://www.youtube.com/watch?v=20v8zSo2v18
 
+if we know sum[0,j] and sum[0,i] then sum of subarray sum[i,j]=sum[0,j]-sum[0,i]
+k=prefix_sum-sum[0,i]
+therefore check for every prefix sum whether 
+m[prefix_sum-k] exists 
 
-
-
-    TC:O(n)
-    SC:O(1)
+class Solution {
+public:
     
+    int subarraySum(vector<int>& arr, int sum) { 
+        unordered_map<int,int>mp;
+    	int pre_sum=0;
+    	int count=0;
+        mp[0]++;//when we have nothing then we have 0 sum
+    	for(int i=0;i<arr.size();i++){
+    	    pre_sum+=arr[i];
+    	    if(mp.find(pre_sum-sum)!=mp.end())
+    	    count+=mp[pre_sum-sum];
+    	    mp[pre_sum]++;
+    	}
+    	return count;
+    }
+};
+TC:O(n)
+SC:O(n)
+
+
