@@ -81,6 +81,33 @@ TC:O(n)
 SC:O(1)
 
 
+another intuitive approach :
+
+[1,2,3,-10,5]
+maxsum is 6
+any prefix sum if becomes negative then it is going to decrease out maxsum thus we need to exclude it ans start afresh 
+class Solution {
+public:
+    //this approach is what is intuitive to me 
+    int maxSubArray(vector<int>& nums) {
+        int n=nums.size();
+        if(n==0) return 0;
+        int sum = 0, smax = INT_MIN;
+        for (int num : nums) {
+            sum += num;
+            if (sum > smax) smax = sum;
+            if (sum < 0) sum = 0;//if we get negative sum then reset it 
+        }
+        return smax;
+    }
+};
+
+TC:O(n)
+SC:O(1)
+
+
+
+
 
 Kadane's algorithm :
 
