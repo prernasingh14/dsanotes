@@ -1,0 +1,109 @@
+gfg link :
+
+
+Given an array of size N containing only 0s, 1s, and 2s; sort the array in ascending order.
+
+
+Example 1:
+
+Input: 
+N = 5
+arr[]= {0 2 1 2 0}
+Output:
+0 0 1 2 2
+Explanation:
+0s 1s and 2s are segregated 
+into ascending order.
+Example 2:
+
+Input: 
+N = 3
+arr[] = {0 1 0}
+Output:
+0 0 1
+Explanation:
+0s 1s and 2s are segregated 
+into ascending order.
+
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function sort012() that takes an array arr and N as input parameters and sorts the array in-place.
+
+
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+
+
+Constraints:
+1 <= N <= 10^6
+0 <= A[i] <= 2
+
+
+
+
+
+brute force :
+just sort the array 
+tc:O(nlogn)
+
+
+better :
+
+take a vector of size 3 and store count of 0, 1, 2 
+then fill the original array likewise 
+
+void sort012(int arr[], int n)
+{
+    
+    int count[3]={0,0,0};
+    for(int i=0;i<n;i++)
+    count[arr[i]]++;
+    int start=0;
+    for(int i=0;i<n;i++){
+        while(count[i]>0)
+        {
+            arr[start++]=i;
+            count[i]--;
+            
+        }
+    }
+    
+}
+
+TC:O(n)
+sc:O(1) as constant space 
+
+
+
+One pass algorithm using constant space :
+we need to separate 0's 1's 2's 
+0.......wall1......wall2....n
+if we can somehow ensure that index 0 se wall1 tak are 0s and wall2 se n tak are 2 then beech ka 1 will apne aap get arranged .
+lets take two pointers for walls
+low=wall1
+high=wall2
+mid for traversing the array 
+
+Based on dutch national flag algorithm -
+
+void sort012(int arr[], int n)
+    {
+        // coode here 
+         int low=0;int high=n-1;int mid=0;
+       while(mid<=high){
+        if(arr[mid]==0)//we want 0 to be at starting thus swap it with low 
+         {
+             swap(arr[mid],arr[low]);
+             low++;mid++;
+         }
+        else if(arr[mid]==2)//we want 2 to be at end thus swap it with mid 
+        {
+            swap(arr[mid],arr[high]);//but don't move mid because  0 or 2 comes at its place then again you need to swap 
+            high--;
+        }
+        else 
+        mid++;//if arr[i]==1
+    }
+    }
+
+    tc:O(n)
+    sc:O(1)
