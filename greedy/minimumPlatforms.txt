@@ -13,26 +13,37 @@ safely arrive and depart all trains.
 
 
 
+
+best explanation: https://youtu.be/dxVcMDI7vyI
+
+
 TC:O(nlogn) 
 
-int findPlatform(int arr[], int dep[], int n)
-{
-	// Your code here
-	sort(arr,arr+n);sort(dep,dep+n);
-	int i=1;int j=0;int plat=1;int maxplat=0;
-	///jis train ka sabse kam arrival time hai woh toh arrive karegi hi on the 
-	//first platform
-	while(i<n && j<n)
-	{
-	  if(arr[i]<=dep[j])/////if arrives until the train has departured then obviously we need extra platform 
-	  {
-	      plat++;i++;
-	  }
-	  else
-	  {
-	      plat--;j++;
-	  }
-	  maxplat=max(maxplat,plat);
-	}
-	return maxplat;
-}
+ int findPlatform(int arr[], int dep[], int n)
+    {
+    
+    	sort(arr,arr+n);
+    	sort(dep,dep+n);
+    	int i=0;//first train ka dep
+    	int j=1;//second train arrival
+    	int plat=0;int minPlat=0;
+    	plat++;
+    	while(j<n && i<n){
+    	    if(arr[j]<=dep[i]){//then needs obe platform more 
+    	        plat++;
+    	        j++;
+    	    }
+    	    else if(dep[i]<arr[j]){//if departure time is less then it's going  thus leaves the platform empty 
+    	        plat--;
+    	        i++;
+    	    }
+    	    minPlat=max(minPlat,plat);
+    	}
+    	return minPlat;
+    	
+    }
+
+	TC:O(nlogn)
+	sc:O(1)
+
+	
