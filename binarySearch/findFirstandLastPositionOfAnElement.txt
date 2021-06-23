@@ -54,10 +54,10 @@ public:
             int mid=low+(high-low)/2;
             if(nums[mid]==target)
             {
-                ans=mid;//we found one match but we need to find first occurence thus move left 
+                ans=mid;
                 high=mid-1;
             }
-            if(nums[mid]<target)
+            else if(nums[mid]<target)
                 low=mid+1;
             else
                 high=mid-1;
@@ -71,10 +71,10 @@ public:
             int mid=low+(high-low)/2;
             if(nums[mid]==target)
             {
-                ans=mid;//we found one match but we need to find last occurence thus move right
-                low=mid+1;
+                ans=mid;
+               low=mid+1;
             }
-            if(nums[mid]<=target)
+            else if(nums[mid]<target)
                 low=mid+1;
             else
                 high=mid-1;
