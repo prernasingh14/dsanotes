@@ -79,20 +79,29 @@ public:
         //then as we traverse through the array , if we find same ele increase the count
         //else decrease the count
         ///if count reaches zero ,means it wasn't the majority till then make the new element as majority and follow the above process 
-        int first=nums[0];int i=1;int k=0;
-        while(i<nums.size()){
-            if(nums[i]==first){
-                count++;
-            }
-            else{
-                if(count==0)
-                first=nums[i];
-                else
-                    count--;
-            }
-            i++;
+    int maj=arr[0];
+    int count=1;
+    for(int i=1;i<size;i++){
+        if(arr[i]==maj)
+        {
+            count++;
         }
-        return first;
+        else
+        count--;
+        if(count==0){
+            maj=arr[i];
+            count=1;
+        }
+        
     }
+    count=0;
+//check whether the candidate we found was really the majority element 
+for(int i=0;i<size;i++){
+    if(arr[i]==maj)
+    count++;
+}
+    return count<=size/2?-1:maj;
+        
+}
 };
 
