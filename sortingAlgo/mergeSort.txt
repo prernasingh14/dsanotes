@@ -1,0 +1,65 @@
+
+
+It divides the input array into two halves, calls itself for the two halves, and then merges the two sorted halves. The merge() function is used for merging two halves. The merge(arr, l, m, r) is a key process that assumes that arr[l..m] and arr[m+1..r] are sorted and merges the two sorted sub-arrays into one. See the following C implementation for details.
+
+MergeSort(arr[], l,  r)
+If r > l
+     1. Find the middle point to divide the array into two halves:  
+             middle m = l+ (r-l)/2
+     2. Call mergeSort for first half:   
+             Call mergeSort(arr, l, m)
+     3. Call mergeSort for second half:
+             Call mergeSort(arr, m+1, r)
+     4. Merge the two halves sorted in step 2 and 3:
+             Call merge(arr, l, m, r)
+
+
+void merge(int arr[], int l, int m, int r)
+    {
+         int i=m+1;int j=l;
+         int b[r-l+1];int k=0;
+         while(j<=m && i<=r){
+             if(arr[j]<=arr[i]){
+                 b[k]=arr[j];
+                 j++;
+             }
+             else{
+                 b[k]=arr[i];
+                 i++;
+             }
+             k++;
+         }
+             while(j<=m){
+                 b[k++]=arr[j];
+                 j++;
+             }
+             while(i<=r){
+                 b[k++]=arr[i];
+                 i++;
+             }
+             for(int i=l;i<=r;i++)
+             arr[i]=b[i-l];
+    }
+    void mergeSort(int arr[], int l, int r)
+    {
+        //code here
+        if(l>=r)
+        return ;
+        int mid=l+(r-l)/2;
+        mergeSort(arr,l,mid);
+        mergeSort(arr,mid+1,r);
+        merge(arr,l,mid,r);
+        
+    }
+
+Time complexity of Merge Sort is  θ(nLogn) in all 3 cases (worst, average and best) as merge sort always divides the array into two halves and takes linear time to merge two halves.
+Auxiliary Space: O(n)
+Algorithmic Paradigm: Divide and Conquer
+Sorting In Place: No in a typical implementation
+Stable: Yes
+
+Drawbacks:
+
+Slower comparative to the other sort algorithms for smaller tasks.
+Merge sort algorithm requires an additional memory space of 0(n) for the temporary array.
+It goes through the whole process even if the array is sorted.
