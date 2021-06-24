@@ -1,0 +1,152 @@
+Leetcode 645:
+
+
+You have a set of integers s, which originally contains all the numbers from 1 to n. Unfortunately, due to some error, one of the numbers in s got duplicated to another number in the set, which results in repetition of one number and loss of another number.
+
+You are given an integer array nums representing the data status of this set after the error.
+
+Find the number that occurs twice and the number that is missing and return them in the form of an array.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,2,4]
+Output: [2,3]
+Example 2:
+
+Input: nums = [1,1]
+Output: [1,2]
+ 
+
+Constraints:
+
+2 <= nums.length <= 104
+1 <= nums[i] <= 104
+
+
+Brute force :
+
+ vector<int> findErrorNums(vector<int>&arr) {
+        int n=arr.size();
+        sort(arr.begin(),arr.end());int repeat=0;int missing=0;
+        int start=1;
+        for(int i=0;i<n-1;i++){
+            if(i+1<n && arr[i]==arr[i+1])
+                repeat=arr[i];
+        }
+        if(arr[0]!=1)
+            missing=1;
+        else if(arr[n-1]!=n)
+            missing=n;
+        else {
+             for(int i=0;i<n-1;i++){
+                if(i+1<n && arr[i+1]-arr[i]>1)
+                    missing=arr[i]+1;
+        }
+        }
+        return {repeat,missing};
+    }
+TC:O(nlogn)
+SC:O(1)
+
+
+Better time complexity :
+
+
+take a hashmap to store frequencies of each element .
+if freq=0 then missing .
+if freq=2 then repeating 
+
+class Solution {
+public:
+    //find missing and repeating 
+    vector<int> findErrorNums(vector<int>& nums) {
+        int n=nums.size();
+        vector<int>mp(n+1,0);
+        int missing=0;int repeat=0;
+        for(int i=0;i<n;i++){
+            mp[nums[i]]+=1;
+        }
+        for(int i=1;i<=nums.size();i++){
+            if(mp[i]==0)
+                missing=i;
+            if(mp[i]==2)
+                repeat=i;
+        }
+        return {repeat,missing};
+    }
+};
+
+TC:O(n)
+sc:O(n)
+
+
+
+using the visited approach :
+
+
+class Solution {
+public:
+    //find missing and repeating 
+    vector<int> findErrorNums(vector<int>&arr) {
+        int n=arr.size();int repeat=0;int missing=0;
+       for(int i=0;i<n;i++){
+           if(arr[abs(arr[i])-1]>0)
+               arr[abs(arr[i])-1]=-arr[abs(arr[i])-1];
+                   else
+                   repeat=abs(arr[i]);
+       }
+           for (int i = 0; i < n; i++) {
+              if (arr[i]>0)
+                missing = i + 1;
+        }        
+        return {repeat,missing};
+    }
+};
+TC:O(n)
+sc:O(1)
+
+
+
+
+using xor approach:
+
+class Solution {
+public:
+    //find missing and repeating 
+    vector<int> findErrorNums(vector<int>&nums) {
+        int n=nums.size();
+        int bucket1=0;int bucket2=0;
+        int xorr=0;
+        for(int i=0;i<n;i++){
+            xorr=xorr^nums[i];
+        }
+        for(int i=1;i<=n;i++)
+            xorr=xorr^i;
+        //get setbit 
+        //means it will ne either set in x or y
+        int setbit=xorr&~(xorr-1);
+        for(int i=0;i<n;i++){
+            if((nums[i]&setbit)!=0)
+                bucket1=bucket1^nums[i];
+            else 
+                bucket2=bucket2^nums[i];   
+        }
+        for (int i = 1; i <= n; i++) {
+            if ((i&setbit) != 0)
+                bucket1 ^= i;
+            else
+                bucket2^= i;
+        }
+        for(int i=0;i<n;i++){
+            if(nums[i]==bucket1)//repeating
+                return {bucket1,bucket2};
+        }
+        return {bucket2,bucket1};
+        
+    }
+};
+
+TC:O(n)
+SC:O(1)
