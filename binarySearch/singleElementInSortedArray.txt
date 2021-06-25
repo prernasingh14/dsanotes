@@ -1,0 +1,71 @@
+Leetcode 540:
+
+
+You are given a sorted array consisting of only integers where every element appears exactly twice, except for one element which appears exactly once. Find this single element that appears only once.
+
+Follow up: Your solution should run in O(log n) time and O(1) space.
+
+ 
+
+Example 1:
+
+Input: nums = [1,1,2,3,3,4,4,8,8]
+Output: 2
+Example 2:
+
+Input: nums = [3,3,7,7,10,11,11]
+Output: 10
+ 
+
+Constraints:
+
+1 <= nums.length <= 10^5
+
+
+Brute force : linear search 
+TC:O(n)
+SC:O(1)
+
+
+
+optimise it using binary search :
+
+
+
+class Solution {
+public:
+    int singleNonDuplicate(vector<int>& nums) {
+        int n=nums.size();
+        int l=0;int h=n-1;
+        while(l<=h){
+            int mid=(l+h)/2;
+            if(mid-1>=0 && nums[mid-1]==nums[mid]){//if it matches with element on left
+                int count=mid-1-l;//count elements remaining on left
+                //for it to have single ele on left side , the count should be odd 
+                //as it wouldn't have a pair 
+                if(count%2==0){//if count is even then pairs are there thus go right
+                    l=mid+1;
+                }
+                
+                else
+                    h=mid-2;
+            }
+            else if(mid+1<n && nums[mid+1]==nums[mid]){//if it matches with element on right
+                 int count=h-mid-1;
+                if(count%2==0){
+                  h=mid-1;
+                }
+                
+                else
+                   l=mid+2;
+            }
+            else //if it doesn't match with left and right then return that 
+                return nums[mid];
+        }
+        return 0;
+    }
+};
+
+TC:O(logn)
+SC:O(1)
+
