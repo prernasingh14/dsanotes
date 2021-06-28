@@ -60,6 +60,11 @@ SC:O(1)
 using fast and slow pointer :
 
 
+basically fast!=null checks for even cases like[1,2,3,4]
+while fast.next.next checks for odd cases like [1,2,3,4,5]
+
+
+
 class Solution {
 public:
     ListNode* middleNode(ListNode* head) {
