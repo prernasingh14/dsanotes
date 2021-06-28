@@ -84,7 +84,7 @@ public:
          ListNode* slow=head;
         while(fast!=slow)
         {
-            if(fast==NULL || fast->next==NULL || fast->next->next==NULL)
+            if(fast==NULL || fast->next==NULL)
                 return false;
             fast=fast->next->next;
             slow=slow->next;
