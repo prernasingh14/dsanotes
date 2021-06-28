@@ -1,3 +1,6 @@
+Leetcode 785:
+
+
 Given an undirected graph, return true if and only if it is bipartite.
 
 Recall that a graph is bipartite if we can split its set of nodes into two independent subsets A and B, such that every edge in the graph has one node in A and another node in B.
@@ -39,43 +42,38 @@ The graph is guaranteed to be undirected.
 
 class Solution {
 public:
-    
-    bool isBipartite(vector<vector<int>>& graph) {
-        //we use graph coloring approach to see whether we can group them in two sets so as to avoid any conflicts 
-        //we try to color the graph using two colors in such a way that no adjacent nodes have the same color because that would mean those nodes containing that edge can't be put into different sets because of common edge 
-        //we'll do bfs 
-        int n=graph.size();
-        int color[n];
-        for(int i=0;i<n;i++)
-        color[i]=0;//uncolored
+    //graph coloring bipartite DFS
+   bool bfs(vector<vector<int>>& graph, vector<int>& color, int node, int clr){
         queue<int>q;
-        for(int j=0;j<n;j++)//this is for when graph  can be disconenected too 
-        {
-            if(color[j]==0)
-            { 
-                q.push(j);
-                color[j]=1;
-                 while(!q.empty())
-                 {
-                  int curr=q.front();q.pop();
-                  for(int i=0;i<graph[curr].size();i++)
-                  {
-                       if(color[graph[curr][i]]==0)//uncolored
-                       {
-                          color[graph[curr][i]]=-color[curr];
-                          q.push(graph[curr][i]);
-                         }
-                      else if(color[graph[curr][i]]==color[curr])//same colored neighbours 
-                      return false;
-                   }
-                 }
+        q.push(node);
+       color[node]=clr;
+       while(!q.empty()){
+           int src=q.front();
+           q.pop();
+           //now color its adjacent nodes
+           for(int i=0;i<graph[src].size();i++){
+               if(color[graph[src][i]]==-1){
+                   color[graph[src][i]]=1-color[src];
+                   q.push(graph[src][i]);
+               }else if(color[graph[src][i]]==color[src])
+                   return false;
+           }
+       }
+       return true;
+    }
+    bool isBipartite(vector<vector<int>>& graph) {
+        vector<int> color(graph.size(),-1); //unvisited
+        int clr=0;
+        for(int i=0;i<graph.size();i++){    // for loop since some nodes in graph can be disconnected
+            if(color[i]==-1){
+                if(!bfs(graph,color,i,clr))
+                    return false;
             }
+            
         }
         return true;
-        
     }
 };
-
 
 TC:O(v+e)
 
@@ -89,24 +87,21 @@ class Solution {
 public:
     //graph coloring bipartite DFS
    bool dfs(vector<vector<int>>& graph, vector<int>& color, int node, int clr)     {
-            color[node] = clr;   
-            for(int v: graph[node]){           
-                if(color[v]==-1){                
-                    if(!dfs(graph,color,v,1-clr))
-                        return false;
-                }
-                 else if(color[v]==clr){
-                    return false;
-                }
-            }
-        return true;
+           color[node]=clr;
+       for(int i=0;i<graph[node].size();i++){
+           if(color[graph[node][i]]==-1){//unvisited
+               if(!dfs(graph,color,graph[node][i],1-clr))
+                   return false;//not bipartite
+           }else if(color[graph[node][i]]==color[node])
+               return false;//not bipartite
+       }
+       return true;//bipartite
     }
     bool isBipartite(vector<vector<int>>& graph) {
         vector<int> color(graph.size(),-1); //unvisited
         for(int i=0;i<graph.size();i++){    // for loop since some nodes in graph can be disconnected
-            if(color[i]==-1){      
-                color[i]=0;
-                if(!dfs(graph,color,i,0)){
+            if(color[i]==-1){//uncolored      
+                if(!dfs(graph,color,i,0)){//means cycle 
                     return false;
                 }
             }
@@ -114,6 +109,7 @@ public:
         return true;
     }
 };
+
 
 TC:O(v+e)
 
