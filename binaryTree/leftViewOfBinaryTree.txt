@@ -1,0 +1,108 @@
+Left view 
+
+gfg link -
+https://practice.geeksforgeeks.org/problems/left-view-of-binary-tree/1#
+
+Given a Binary Tree, print Left view of it. Left view of a Binary Tree is set of nodes visible when tree is visited from Left side. The task is to complete the function leftView(), which accepts root of the tree as argument.
+
+Left view of following tree is 1 2 4 8.
+
+          1
+       /     \
+     2        3
+   /     \    /    \
+  4     5   6    7
+   \
+     8   
+
+Example 1:
+
+Input:
+   1
+ /  \
+3    2
+Output: 1 3
+
+Example 2:
+
+Input:
+
+Output: 10 20 40
+Your Task:
+You just have to complete the function leftView() that prints the left view. The newline is automatically appended by the driver code.
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(Height of the Tree).
+
+Constraints:
+0 <= Number of nodes <= 100
+1 <= Data of a node <= 1000
+
+Company Tags
+ Accolite  Amazon  Flipkart  Knowlarity  MakeMyTrip  Ola Cabs  Open Solutions  OYO Rooms  Paytm  Qualcomm  Samsung  Snapdeal  Twitter
+
+
+
+void left(Node* root,int lev,vector<int>&level){
+    if(root==NULL)
+    return ;
+    if(level.size()<lev)
+    level.push_back(root->data);
+    left(root->left,lev+1,level);
+    left(root->right,lev+1,level);
+}
+vector<int> leftView(Node *root)
+{
+   // Your code here
+   vector<int>level;
+   if(root==NULL)
+   return level;
+   left(root,1,level);
+   return level;
+}
+
+
+TC:O(n)
+SC:O(h)
+
+
+
+iterative approach is to return first node at every level:
+
+
+
+vector<int> leftView(Node *root)
+{
+   // Your code here
+   vector<int>level;
+   if(root==NULL)
+   return level;
+  queue <Node*> q;
+  q.push(root);
+   Node* temp;
+   int f=0,count=0;
+
+while(q.empty()!=true)
+{ 
+count=q.size();
+while(count--)
+{
+temp=q.front();
+q.pop();
+if(f==0)
+{
+level.push_back(temp->data);
+
+}
+f++;
+if(temp->left)
+q.push(temp->left);
+if(temp->right)
+q.push(temp->right);
+
+}
+f=0;
+}
+return level;
+}
+
+TC:O(n)
