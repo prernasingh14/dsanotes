@@ -1,0 +1,184 @@
+Leetcode 20:
+
+Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+ 
+
+Example 1:
+
+Input: s = "()"
+Output: true
+Example 2:
+
+Input: s = "()[]{}"
+Output: true
+Example 3:
+
+Input: s = "(]"
+Output: false
+Example 4:
+
+Input: s = "([)]"
+Output: false
+Example 5:
+
+Input: s = "{[]}"
+Output: true
+ 
+
+Constraints:
+
+1 <= s.length <= 104
+s consists of parentheses only '()[]{}'.
+
+
+
+class Solution {
+public:
+    bool isValid(string s) {
+        
+       stack<char>st;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]=='(' || s[i]=='[' || s[i]=='{')
+                st.push(s[i]);
+            else if(s[i]==')')
+            {
+              if(st.empty() || st.top()!='(')
+              {
+                  return false;
+              }
+                st.pop();
+                
+            }
+            else if(s[i]==']')
+            {
+              if(st.empty() || st.top()!='[')
+              {
+                  return false;
+              }
+                st.pop();
+                
+            }
+            else if(s[i]=='}')
+            {
+              if(st.empty() || st.top()!='{')
+              {
+                  return false;
+              }
+                st.pop();
+                
+            }
+        }
+      if(st.empty())
+            return true;
+        return false;
+            
+    }
+};
+
+
+we can write a modular code by pushing the corresponding closed bracket for every open bracket that we encounter :
+
+
+class Solution {
+public:
+    //generalized code 
+    bool isValid(string s) {
+        
+       stack<char>st;
+        for(int i=0;i<s.size();i++)
+        {
+            if(s[i]=='(')
+                st.push(')');
+                else if(s[i]=='{')
+                    st.push('}');
+            else if(s[i]=='[')
+                st.push(']');
+            else if(st.empty() || st.top()!=s[i])//because any closing bracket must be equal to the topmost bracket
+            { return false;
+            }
+            else
+            st.pop();
+                
+        }
+      if(st.empty())
+            return true;
+        return false;
+            
+    }
+};
+
+TC:O(n)
+SC:O(n)
+
+///////////////////
+
+designing stack from scratch:
+
+class stackk{
+    vector<char>arr;
+    int topp=-1;//no element 
+    public:
+    void push(char x){
+        arr.push_back(x);
+        topp++;
+    }
+    void pop(){
+        if(!empty())
+        {
+            arr.pop_back();
+            topp--;
+        }else
+            cout<<"stack is empty";
+            
+    }
+    char top(){
+        if(topp>=0)
+        {
+            char s=arr[topp];
+            return s;
+        }
+        return 'f';
+            
+    }
+    bool empty(){
+        return topp==-1;
+    }
+};
+class Solution {
+public:
+    //generalized code 
+    bool isValid(string s) {
+        
+       stackk st;
+        for(int i=0;i<s.size();i++)
+        {
+           
+            if(s[i]=='(')
+                st.push(')');
+                else if(s[i]=='{')
+                    st.push('}');
+            else if(s[i]=='[')
+                st.push(']');
+            else if(st.empty() || st.top()!=s[i])//because any closing bracket must be equal to the topmost bracket
+            { return false;
+            }
+            else
+            st.pop();
+                 
+        }
+      if(st.empty())
+            return true;
+        return false;
+            
+    }
+};
+
+
+TC:O(n)
+sc:O(n)
