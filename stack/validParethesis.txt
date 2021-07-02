@@ -182,3 +182,103 @@ public:
 
 TC:O(n)
 sc:O(n)
+
+
+
+
+designing stack using linked list :
+
+
+class node
+{
+    public:
+	char data;
+	node *next;
+};
+class Stack{
+	node *front;  // points to the head of list
+	public:
+	Stack()
+	{
+		front = NULL;
+	}
+	// push method to add data element
+	void push(char);
+	// pop method to remove data element
+	void pop();
+	// top method to return top data element
+	char top();
+    bool empty();
+};
+void Stack :: push(char d)
+{
+	// creating a new node
+	node *temp;
+	temp = new node();
+	// setting data to it
+	temp->data = d;
+
+	// add the node in front of list
+	if(front == NULL)
+	{
+		temp->next = NULL;
+	}
+	else
+	{
+		temp->next = front;
+	}
+	front = temp;
+}
+void Stack :: pop()
+{
+	// if empty
+	if(front == NULL)
+		cout << "UNDERFLOW\n";
+	
+	// delete the first element
+	else
+	{
+		node *temp = front;
+		front = front->next;
+		delete(temp);
+	}
+}
+char Stack :: top()
+{
+	return front->data;
+}
+bool Stack :: empty(){
+    return front==NULL;
+}
+class Solution {
+public:
+    //generalized code 
+    bool isValid(string s) {
+        
+       Stack st;
+        for(int i=0;i<s.size();i++)
+        {
+           
+            if(s[i]=='(')
+                st.push(')');
+                else if(s[i]=='{')
+                    st.push('}');
+            else if(s[i]=='[')
+                st.push(']');
+            else if(st.empty() || st.top()!=s[i])//because any closing bracket must be equal to the topmost bracket
+            { return false;
+            }
+            else
+            st.pop();
+                 
+        }
+      if(st.empty())
+            return true;
+        return false;
+            
+    }
+};
+
+TC:O(n)
+SC:O(1)
+
