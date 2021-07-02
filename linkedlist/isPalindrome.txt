@@ -67,7 +67,8 @@ public:
             fast=fast->next->next;
             slow=slow->next;   
         }
-        slow=reverse(slow);cout<<slow->val;
+        slow=reverse(slow);
+        cout<<slow->val;
         ListNode* temp=head;ListNode* tempp=slow;
         while(tempp!=NULL)
         {
