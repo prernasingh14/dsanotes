@@ -1,0 +1,38 @@
+InterviewBit:
+https://www.interviewbit.com/old/problems/majority-element/
+
+sort the array :
+and return the element at index n/2 
+TC:O(nlogn)
+SC:O(1)
+
+but this approach won't work if there is no majority element
+we will need to check it by again traversing whether it is majority  
+
+
+
+Best approach :
+
+
+int Solution::majorityElement(const vector<int>& A) {
+   int maj=A[0];//assume the majority element is the first one 
+   int n=A.size();
+   int i=1;int count=1;
+   while(i<n){
+       if(A[i]==maj){
+           count++;
+       }
+       else 
+       count--;
+       if(count==0){
+           maj=A[i];
+           count=1;
+       }
+       i++;
+   }
+   return maj;
+}
+
+
+TC:O(n)
+SC:O(1)
