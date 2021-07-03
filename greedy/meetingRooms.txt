@@ -1,0 +1,71 @@
+InterviewBit:
+
+When a room is taken, the room can not be used for another meeting until the current meeting is over. 
+As soon as the current meeting is finished, the room can be used for another meeting.
+We can sort the meetings by start timestamps and sequentially assign each meeting to a room.
+Each time when we assign a room for a meeting, we check if any meeting is finished so that the room can be reused. 
+In order to efficiently track the earliest ending meeting, we can use a min heap.
+Whenever an old meeting ends before a new meeting starts,
+we reuse the room (i.e., do not add more room). Otherwise, we need an extra room (i.e., add a room).
+
+static bool cmp(vector<int>&a,vector<int>&b){
+return a[0]<b[0];
+}
+int Solution::solve(vector<vector<int> > &arr) {
+    sort(arr.begin(),arr.end(),cmp);
+    int n=arr.size();int room=0;
+     priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>pq;
+     for(int i=0;i<n;i++){
+       if(pq.empty()){
+           //means all rooms are empty 
+           room++;
+           pq.push({arr[i][1],arr[i][0]});
+       }else{
+           if(arr[i][0]<pq.top().first){
+               room++;
+           }
+           else
+           pq.pop();
+            pq.push({arr[i][1],arr[i][0]});
+       }
+     }
+    return room;
+
+}
+
+
+
+by comparing starting and ending times :
+
+
+static bool cmp(vector<int>&a,vector<int>&b){
+return a[0]<b[0];
+}
+int Solution::solve(vector<vector<int> > &arr) {
+    int n=arr.size();int room=0;int minRoom=INT_MIN;
+     int start[n];
+     int end[n];
+     for(int i=0;i<n;i++){
+       start[i]=arr[i][0];
+       end[i]=arr[i][1];
+     }
+     sort(start,start+n);
+     sort(end,end+n);
+     int i=0;int j=0;
+     while(i<n && j<n){
+         if(start[i]<end[j]){//the meeting  is starting while the previous meeting  has not ended thus new room
+room++;
+i++;}
+else{//if ending early then room emptied 
+room--;
+j++;
+}
+minRoom=max(room,minRoom);
+         }
+    return minRoom;
+
+}
+
+TC:O(nlogn)
+SC:O(n)
+
