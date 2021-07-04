@@ -1,0 +1,104 @@
+
+Leetcode 658:
+
+Given a sorted integer array arr, two integers k and x, return the k closest integers to x in the array. The result should also be sorted in ascending order.
+
+An integer a is closer to x than an integer b if:
+
+|a - x| < |b - x|, or
+|a - x| == |b - x| and a < b
+ 
+
+Example 1:
+
+Input: arr = [1,2,3,4,5], k = 4, x = 3
+Output: [1,2,3,4]
+Example 2:
+
+Input: arr = [1,2,3,4,5], k = 4, x = -1
+Output: [1,2,3,4]
+ 
+
+Constraints:
+
+1 <= k <= arr.length
+1 <= arr.length <= 104
+arr is sorted in ascending order.
+-104 <= arr[i], x <= 104
+
+
+
+
+priority queue based approach :
+
+push in the differences into the priority queue 
+
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        priority_queue<pair<int,int>,vector<pair<int,int>>>pq;//max heap
+        int n=arr.size();
+        for(int i=0;i<n;i++){
+            if(pq.size()<k){
+                pq.push({abs(x-arr[i]),arr[i]});
+            }
+            else{
+                if(pq.top().first>abs(arr[i]-x))
+                {
+                     pq.pop();
+                     pq.push({abs(arr[i]-x),arr[i]});
+                }
+                else if(pq.top().first==abs(arr[i]-x)){
+                    if(pq.top().second>arr[i])
+                    {
+                        pq.pop();
+                        pq.push({abs(arr[i]-x),arr[i]});
+                    }
+                }
+            }
+        }
+        vector<int>ans;
+        while(!pq.empty()){
+            ans.push_back(pq.top().second);
+            pq.pop();
+        }
+        sort(ans.begin(),ans.end());
+        return ans;
+    }
+};
+
+
+
+TC:O(n+klogk)
+Sc:O(k)
+
+
+
+two pointer approach :
+
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        int n=arr.size();
+        vector<int>close;
+        for(int i=0;i<n;i++){
+            close.push_back(abs(arr[i]-x));
+        }
+        int l=0;int h=n-1;
+        //remove the n-k elements
+        int ele=n-k;
+        while(ele--){
+            if(close[h]>=close[l]){
+                h--;
+            }
+            else
+                l++;
+        }
+        vector<int>ans;
+        while(l<=h){
+            ans.push_back(arr[l]);
+            l++;
+        }
+        return ans;
+    }
+};
