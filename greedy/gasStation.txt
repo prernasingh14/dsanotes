@@ -58,7 +58,7 @@ public:
     }
 };
 
-tc:O(n*n)worst case 
+tc:O(n)
 
 
 
