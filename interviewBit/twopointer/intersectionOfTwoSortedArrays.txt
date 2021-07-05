@@ -45,3 +45,30 @@ vector<int> Solution::intersect(const vector<int> &arr, const vector<int> &brr) 
 
 TC:O(n)
 SC:O(n)
+
+
+
+
+without using any extra space:
+
+using two pointer approach-
+
+vector<int> Solution::intersect(const vector<int> &arr, const vector<int> &brr) {
+    int n=arr.size();
+    int m=brr.size();
+    vector<int>ans;
+    int i=0;int j=0;
+    while(i<n && j<m){
+        if(arr[i]==brr[j]){
+            ans.push_back(arr[i]);
+            i++;
+            j++;
+        }
+        else if(arr[i]<brr[j]){ if first is smaller move it forward 
+            i++;
+        }
+        else
+        j++;
+    }
+    return ans;
+}
