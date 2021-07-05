@@ -50,6 +50,7 @@ Output 2:
 brute force :
 
 run two loops and for every i, see whether a j exists such that arr[i]-arr[j]==diff
+TC:O(n*n)
 
 
 
