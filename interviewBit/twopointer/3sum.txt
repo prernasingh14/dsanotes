@@ -1,0 +1,77 @@
+Given an array S of n integers, find three integers in S such that the sum is closest to a given number, target. 
+
+Return the sum of the three integers.
+
+Assume that there will only be one solution
+
+Example: 
+
+given array S = {-1 2 1 -4}, 
+
+and target = 1.
+
+The sum that is closest to the target is 2. (-1 + 2 + 1 = 2)
+
+
+
+brute force :
+
+Run three loops to generate every triplet 
+
+int Solution::threeSumClosest(vector<int> &arr, int target) {
+    int n=arr.size();
+    int minn=INT_MAX;int sum=0;
+   for(int i=0;i<n-2;i++){
+       for(int j=i+1;j<n;j++){
+           for(int k=j+1;k<n;k++){
+               if(arr[i]+arr[j]+arr[k]==target)
+               return target;
+               else {
+                   int diff=abs(target-(arr[i]+arr[j]+arr[k]));
+                   if(diff<minn){
+                       minn=diff;
+                       sum=arr[i]+arr[j]+arr[k];
+                   }
+               }
+           }
+       }
+   }
+   return sum;
+ 
+}
+ 
+
+
+TC:O(n*n*n)
+SC:O(1)
+
+int Solution::threeSumClosest(vector<int> &arr, int target) {
+    int n=arr.size();int diif=0;
+    sort(arr.begin(),arr.end());
+    int minn=INT_MAX;int sum=0;
+   for(int i=0;i<n-2;i++){
+       int j=i+1;int k=n-1;
+       while(k>j){
+           int temp=arr[i]+arr[j]+arr[k];
+           int diff=abs(target-temp);
+           if(diff<minn){
+            minn=diff;
+            sum=temp;
+        }
+           if(arr[j]+arr[k]==target-arr[i])
+               return target;
+        if(arr[i]+arr[j]+arr[k]<target){
+            j++;
+        }
+        else
+        k--;
+       }    
+       }
+   return sum;
+
+}
+
+
+
+TC:O(n*n)
+SC:O(1)
