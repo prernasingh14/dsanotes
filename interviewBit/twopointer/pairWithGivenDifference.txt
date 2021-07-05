@@ -1,0 +1,89 @@
+Problem Description
+
+Given an one-dimensional unsorted array A containing N integers.
+
+You are also given an integer B, find if there exists a pair of elements in the array whose difference is B.
+
+Return 1 if any such pair exists else return 0.
+
+
+
+Problem Constraints
+1 <= N <= 105
+-103 <= A[i] <= 103
+-105 <= B <= 105
+
+
+Input Format
+First argument is an integer array A of size N.
+
+Second argument is an integer B.
+
+
+
+Output Format
+Return 1 if any such pair exists else return 0.
+
+
+
+Example Input
+Input 1:
+
+ A = [5, 10, 3, 2, 50, 80]
+ B = 78
+Input 2:
+
+ A = [-10, 20]
+ B = 30
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 1
+
+
+
+brute force :
+
+run two loops and for every i, see whether a j exists such that arr[i]-arr[j]==diff
+
+
+
+using hashmap :
+
+
+Solution::solve(vector<int> &arr, int diff) {
+    unordered_map<int,int>mp;
+    int n=arr.size();
+    for(int i=0;i<n;i++){
+      if(mp.find(arr[i]+diff)!=mp.end() || mp.find(-(diff-arr[i]))!=mp.end())
+      return true;
+      mp[arr[i]]=i;
+    }
+    return false;
+}
+
+
+TC:O(n)
+SC:O(n)
+
+using two pointer based approach :
+
+ int Solution::solve(vector<int> &arr, int diff) {
+    sort(arr.begin(),arr.end());
+    int i=0;int j=1;int n=arr.size();
+    while(i<n && j<n){
+        if(i!=j && (arr[j]-arr[i])==diff)
+        return true;
+        else if((arr[j]-arr[i])>diff){//i need to have smaller diffrence so move smaller number 
+        i++;
+        }
+        else 
+        j++;
+    }
+    return false;
+}
