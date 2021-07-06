@@ -1,0 +1,94 @@
+Interviewbit asked in FACEBOOK
+
+Problem Description
+
+Given a string A consisting of lowercase characters.
+
+We need to tell minimum characters to be appended (insertion at end) to make the string A a palindrome.
+
+
+
+Problem Constraints
+1 <= |A| <= 105
+
+A consists only of lower-case characters.
+
+
+
+Input Format
+First argument is an string A.
+
+
+
+Output Format
+Return a integer denoting the minimum characters to be appended (insertion at end) to make the string A a palindrome.
+
+
+
+Example Input
+Input 1:
+
+ A = "abede"
+Input 2:
+
+ A = "aabb"
+
+
+Example Output
+Output 1:
+
+ 2
+Output 2:
+
+ 2
+
+
+Example Explanation
+Explanation 1:
+
+ We can make string palindrome as "abedeba" by adding ba at the end of the string.
+Explanation 2:
+
+
+'using the KMP matching algorithm 
+ We can make string palindrome as "aabbaa" by adding aa at the end of the string.
+
+
+ vector<int> computeLPSArray(string s){
+    int n = s.length();
+    vector<int> LPS(n);
+ 
+    int j = 0;
+    LPS[0] = 0; 
+ 
+    
+    int i = 1;
+    while (i < n){
+        if (s[i] == s[j]){
+            j++;
+            LPS[i] = j;
+            i++;
+        }
+        else{
+            if (j != 0){
+                j = LPS[j-1];
+            }
+            else{
+                LPS[i] = 0;
+                i++;
+            }
+        }
+    }
+    return LPS;
+}
+int Solution::solve(string s) {
+     string rs = s;
+    reverse(rs.begin(), rs.end());
+    string c = rs + "$" + s;
+    vector<int> LPS = computeLPSArray(c);
+    return (s.length() - LPS.back());
+    }
+
+
+TC:O(n)
+SC:O(n)
