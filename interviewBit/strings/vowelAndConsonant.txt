@@ -104,37 +104,27 @@ sc:O(n)
 Optimised approach :
 
 
+bool isVowel(char ch){
+    return ch=='a' || ch=='e'||ch=='i'|| ch=='o' ||ch=='u';
+}
+int Solution::solve(string str) {
+    int mod=pow(10,9)+7;
+    int n=str.size();
+    int vowel=0;int consonant=0;int ans=0;
+    for(int i=0;i<str.size();i++){
+        if(isVowel(str[i])){
+            ans=(ans+consonant)%mod;
+            vowel++;
+        }else{
+            ans=(ans+vowel)%mod;
+            consonant++;
+        }
+    }
+    return ans%mod;
 
-int mod=1e9+7;
-bool isVowel(char s){
-    if(s=='a' || s=='e' || s=='i' || s=='o' || s=='u')
-    return true;
-    return false;
 }
-    int Solution::solve(string A)
-{
-int cnt1 = 0, cnt2 = 0, ans = 0;
-for(int j=0;j<A.length();j++)
-{
-if(isVowel(A[j]))
-cnt1++;
-else cnt2++;
-}
-for(int j=0;j<A.length();j++)
-{
-if(isVowel(A[j]))
-{
-cnt1 --;
-ans += cnt2;
-}
-else
-{
-cnt2 --;
-ans += cnt1;
-}
-}
-return ans%1000000007;
-}
+
+
 
 TC:O(n)
 sC:O(1)

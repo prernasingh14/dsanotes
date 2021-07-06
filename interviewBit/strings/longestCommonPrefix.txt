@@ -1,0 +1,93 @@
+
+asked in google:
+
+Given the array of strings A, 
+
+you need to find the longest string S which is the prefix of ALL the strings in the array.
+
+Longest common prefix for a pair of strings S1 and S2 is the longest string S which is the prefix of both S1 
+
+and S2.
+
+For Example, longest common prefix of "abcdefgh" and "abcefgh" is "abc".
+
+
+
+
+Input Format
+
+The only argument given is an array of strings A.
+Output Format
+
+Return longest common prefix of all strings in A.
+For Example
+
+Input 1:
+    A = ["abcdefgh", "aefghijk", "abcefgh"]
+Output 1:
+    "a"
+    Explanation 1:
+        Longest common prefix of all the strings is "a".
+
+Input 2:
+    A = ["abab", "ab", "abcd"];
+Output 2:
+    "ab"
+    Explanation 2:
+        Longest common prefix of all the strings is "ab".
+
+
+
+
+brute force approach: 
+we know that the common characters can only be the length of smallest string 
+so we find the length of smallest string 
+
+string Solution::longestCommonPrefix(vector<string> &strs) {
+    int minLength=INT_MAX,len=0;
+        for(int i=0;i<strs.size();i++)
+        {
+            minLength=min(minLength,int(strs[i].length()));
+        }
+        for(int j=0;j<minLength;j++)
+        {
+            bool found=false;
+            for(int i=0;i<strs.size()-1;i++)
+            {
+                if(strs[i][j]!=strs[i+1][j])
+                {
+                    found=true;
+                    break;
+                }
+            }
+            if(!found)//pne character matching in all 
+                len++;
+            else
+                break;
+        }
+        return strs[0].substr(0,len);
+}
+TC:O(n*n)
+SC:O(1)
+
+
+
+
+string longestCommonPrefix(vector<string>& strs) {
+        int n=strs.size();
+        if(n==0)
+            return "";
+        sort(strs.begin(),strs.end());
+        string str="";
+        for(int i=0;i<strs[0].size();i++)
+        {
+            if(strs[0][i]==strs[n-1][i])
+                str+=strs[0][i];
+            else
+                break;
+        } 
+        return str;
+    }
+
+TC:O(nlogn)
+SC:O(1)

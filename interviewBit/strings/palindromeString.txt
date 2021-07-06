@@ -1,0 +1,43 @@
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+
+Example:
+
+"A man, a plan, a canal: Panama" is a palindrome.
+
+"race a car" is not a palindrome.
+
+Return 0 / 1 ( 0 for false, 1 for true ) for this problem
+
+
+bool ispalin(string s){
+    int n=s.size();
+    for(int i=0;i<s.size()/2;i++){
+        if(s[i]!=s[n-i-1])
+        return false;
+    }
+    return true;
+}
+bool lower(char ch){
+return ch>='a' && ch<='z';
+}
+bool upper(char ch){
+return ch>='A' && ch<='Z';
+}
+bool digit(char ch){
+    return ch>='0' && ch<='9';
+}
+int Solution::isPalindrome(string str) {
+    int n=str.size();string ans="";
+     for(int i=0;i<n;i++){
+         if(lower(str[i]) || digit(str[i])){
+             ans+=str[i];
+         }else if(upper(str[i])){
+             ans+=(str[i]+32);
+         }
+     }
+     return ispalin(ans);
+}
+
+
+TC:O(n)
+SC:O(1)
