@@ -1,0 +1,220 @@
+Asked in PHONEPE
+
+
+Problem Description
+
+Given a bitonic sequence A of N distinct elements, write a program to find a given element B in the bitonic sequence in O(logN) time.
+
+NOTE:
+
+A Bitonic Sequence is a sequence of numbers which is first strictly increasing then after a point strictly decreasing.
+
+
+Problem Constraints
+3 <= N <= 105
+
+1 <= A[i], B <= 108
+
+Given array always contain a bitonic point.
+
+Array A always contain distinct elements.
+
+
+
+Input Format
+First argument is an integer array A denoting the bitonic sequence.
+
+Second argument is an integer B.
+
+
+
+Output Format
+Return a single integer denoting the position (0 index based) of the element B in the array A if B doesn't exist in A return -1.
+
+
+
+Example Input
+Input 1:
+
+ A = [3, 9, 10, 20, 17, 5, 1]
+ B = 20
+Input 2:
+
+ A = [5, 6, 7, 8, 9, 10, 3, 2, 1]
+ B = 30
+
+
+Example Output
+Output 1:
+
+ 3
+Output 2:
+
+ -1
+
+
+Example Explanation
+Explanation 1:
+
+ B = 20 present in A at index 3
+Explanation 2:
+
+ B = 30 is not present in A
+
+
+
+ brute force approach :
+ is to do linear search 
+ TC:O(n)
+
+
+
+if the array would have been sorted then simply used binary search and done in O(logn)
+ int Solution::solve(vector<int> &arr, int key) {
+    int n=arr.size();
+    int low=0;int high=n-1;
+    unordered_map<int,int>mp;
+    for(int i=0;i<n;i++)
+    mp[arr[i]]=i;
+     sort(arr.begin(),arr.end());
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key)
+        return mp[arr[mid]];
+        else if(arr[mid]<key)
+        low=mid+1;
+        else
+        high=mid-1;
+    }
+    return -1;
+
+}
+TC:O(nlogn)
+Sc:O(n)
+
+
+
+
+but i have to do it in O(logn)
+
+
+
+find the peak index - 
+we know that the value on both sides of the peak index are in sorted order so we can use binary search on both sides 
+
+
+int binarysearchLeft(vector<int>arr,int low,int high,int key){
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key)
+        return mid;
+        else if(arr[mid]<key)
+        low=mid+1;
+        else
+        high=mid-1;
+    }
+    return -1;
+}
+int binarysearchRight(vector<int>arr,int low,int high,int key){
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key)
+        return mid;
+        else if(arr[mid]<key)
+        high=mid-1;
+        else
+       low=mid+1;
+    }
+    return -1;
+}
+int Solution::solve(vector<int> &arr, int key) {
+    int n=arr.size();
+   //find the index of maximum number
+   int max=INT_MIN;
+   int maxIndex=0; 
+   for(int i=0;i<n;i++){
+       if(arr[i]>max){
+           max=arr[i];
+           maxIndex=i;
+       }
+   }
+   int left=binarysearchLeft(arr,0,maxIndex-1,key);
+   if(left==-1){
+       int right=binarysearchRight(arr,maxIndex+1,n-1,key);
+       if(right==-1)
+       return -1;
+       else
+       return right;
+   }
+   return left;
+
+
+}
+
+
+but we are finding the peak point in O(n) time which again makes our time complexity as O(n)
+so no point in doing that 
+
+
+
+
+we can furthur optimise our approach by finding peak element in O(logn) time :
+
+
+
+
+int binarysearchLeft(vector<int>arr,int low,int high,int key){
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key)
+        return mid;
+        else if(arr[mid]<key)
+        low=mid+1;
+        else
+        high=mid-1;
+    }
+    return -1;
+}
+int binarysearchRight(vector<int>arr,int low,int high,int key){
+    while(low<=high){
+        int mid=low+(high-low)/2;
+        if(arr[mid]==key)
+        return mid;
+        else if(arr[mid]<key)
+        high=mid-1;
+        else
+       low=mid+1;
+    }
+    return -1;
+}
+int Solution::solve(vector<int> &arr, int key) {
+    int n=arr.size();
+   //find the index of maximum number
+   int maxIndex=0; 
+   int low=0;int high=n-1;
+   while(low<=high){
+       int mid=low+(high-low)/2;
+       if(arr[mid]>arr[mid-1] && arr[mid]>arr[mid+1])
+       {
+           maxIndex=mid;
+           break;
+       }
+       else if(arr[mid]>arr[mid-1])
+       low=mid+1;
+       else
+       high=mid-1;
+   }
+   int left=binarysearchLeft(arr,0,maxIndex-1,key);
+   if(left==-1){
+       int right=binarysearchRight(arr,maxIndex+1,n-1,key);
+       if(right==-1)
+       return -1;
+       else
+       return right;
+   }
+   return left;
+
+
+}
+TC:O(logn)
+SC:O(1)
