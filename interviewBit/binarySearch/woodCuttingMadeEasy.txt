@@ -1,0 +1,69 @@
+
+
+i just thought of begging with the largest height possible and then cut each tree with it 
+find the wood that we can get with this height , if wood>=b then this would be our maximum hieght as then all smaller would also give wood more than this 
+
+
+
+int Solution::solve(vector<int> &arr, int b) {
+    int n=arr.size();
+    int maxx=INT_MIN;
+   for(int i=0;i<n;i++){//find the maximum height
+       maxx=max(arr[i],maxx);
+   }
+    if(b==0)
+    return arr[n-1];
+    int height=maxx;
+    int wood=0;
+    int maxH=INT_MIN;
+    while(height>=arr[0]){
+        wood=0;
+        for(int i=0;i<n;i++){
+            if(arr[i]>height){
+                wood+=arr[i]-height;
+            }
+        }
+        if(wood>=b){
+          maxH=height;
+          break;
+        }
+        height--;
+    }
+    return maxH;
+}
+TC:O(n*k)
+sc:O(1)
+
+
+
+better approach using binary search :
+
+
+int Solution::solve(vector<int> &arr, int b) {
+    int n=arr.size();
+    if(b==0)
+    return arr[n-1];
+    int maxH=0;
+    int low=0;
+    int high=1e6;
+    int ans=0;
+    while(low<=high){
+        int wood=0;
+        int mid=low+(high-low)/2;
+        for(int i=0;i<n;i++){
+            if(arr[i]>mid){
+                wood+=arr[i]-mid;
+            }
+        }
+        if(wood>=b){
+            ans=mid;
+            low=mid+1;
+          }else 
+        high=mid-1;
+    }
+    return ans;
+}
+
+TC:O(n*logk)
+n is no of elements and k is maximum height possible
+
