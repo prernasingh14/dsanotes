@@ -1,0 +1,113 @@
+
+Problem Description
+
+Given a Binary Tree A containing N nodes.
+
+You need to find the path from Root to a given node B.
+
+NOTE:
+
+No two nodes in the tree have same data values.
+You can assume that B is present in the tree A and a path always exists.
+
+
+Problem Constraints
+ 1 <= N <= 105 
+
+ 1 <= Data Values of Each Node <= N
+
+ 1 <= B <= N
+
+
+
+Input Format
+First Argument represents pointer to the root of binary tree A.
+
+Second Argument is an integer B denoting the node number.
+
+
+
+Output Format
+Return an one-dimensional array denoting the path from Root to the node B in order.
+
+
+
+Example Input
+Input 1:
+
+ A =
+
+           1
+         /   \
+        2     3
+       / \   / \
+      4   5 6   7 
+
+
+B = 5
+
+Input 2:
+
+ A = 
+            1
+          /   \
+         2     3
+        / \ .   \
+       4   5 .   6
+
+
+B = 1
+
+
+
+
+Example Output
+Output 1:
+
+ [1, 2, 5]
+Output 2:
+
+ [1]
+
+
+Example Explanation
+Explanation 1:
+
+ We need to find the path from root node to node with data value 5.
+ So the path is 1 -> 2 -> 5 so we will return [1, 2, 5]
+Explanation 2:
+
+ We need to find the path from root node to node with data value 1.
+ As node with data value 1 is the root so there is only one node in the path.
+ So we will return [1]
+
+
+
+
+void path(TreeNode* root,int key,vector<int>paths,vector<int>&nodepath){
+     if(root==NULL)
+         return ;
+    if(nodepath.size()>0)//means we have gotten our path 
+         return ;
+     if(root->val==key){
+         paths.push_back(root->val);
+         nodepath=paths;
+         return ;
+     }
+     paths.push_back(root->val);
+     path(root->left,key,paths,nodepath);
+     path(root->right,key,paths,nodepath);
+     
+ }
+vector<int> Solution::solve(TreeNode* root, int key) {
+    vector<int>paths;
+    if(root==NULL)
+        return paths;
+    if(root->val==key)
+        return {root->val};
+    vector<int>nodepath;
+    path(root,key,paths,nodepath);
+     return nodepath;
+}
+TC:O(n)
+SC:O(height)
