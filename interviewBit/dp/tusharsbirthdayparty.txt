@@ -1,0 +1,100 @@
+As it is Tushar’s Birthday on March 1st, he decided to throw a party to all his friends at TGI Fridays in Pune.
+
+ Given are the eating capacity of each friend, filling capacity of each dish and cost of each dish. A friend is satisfied if the sum of the filling capacity of dishes he ate is equal to his capacity. Find the minimum cost such that all of Tushar’s friends are satisfied (reached their eating capacity).
+
+NOTE:
+
+Each dish is supposed to be eaten by only one person. Sharing is not allowed.
+Each friend can take any dish unlimited number of times.
+There always exists a dish with filling capacity 1 so that a solution always exists.
+Input Format
+
+Friends : List of integers denoting eating capacity of friends separated by space.
+Capacity: List of integers denoting filling capacity of each type of dish.
+Cost :    List of integers denoting cost of each type of dish.
+Constraints:
+
+ 1 <= Capacity of friend <= 1000
+
+1 <= No. of friends <= 1000
+
+1 <= No. of dishes <= 1000
+
+Example:
+
+Input:
+    2 4 6
+    2 1 3
+    2 5 3
+
+Output:
+    14
+
+Explanation: 
+    First friend will take 1st and 2nd dish, second friend will take 2nd dish twice.  Thus, total cost = (5+3)+(3*2)= 14
+
+
+
+recursive with memo:
+
+long long dp[1001][1001];
+long long  tsum(int target,vector<int>filling,vector<int>cost,int i,int n){
+    if(target==0)
+    return 0;
+    if(i>=n)
+    return INT_MAX-1;
+    if(dp[i][target]!=-1)
+    return dp[i][target];
+    int inc=INT_MAX-1;int exc=INT_MAX-1;
+    if(filling[i]<=target){
+        inc=cost[i]+tsum(target-filling[i],filling,cost,i,n);
+    }
+    exc=tsum(target,filling,cost,i+1,n);
+    return dp[i][target]=min(inc,exc);
+}
+int Solution::solve(const vector<int> &eating, const vector<int> &filling, const vector<int> &cost) {
+    int e=eating.size();
+    int f=filling.size();
+    int c=cost.size();
+    int mincost=0;
+   for(int i=0;i<e;i++){
+        memset(dp,-1,sizeof(dp));
+       mincost+=(int)tsum(eating[i],filling,cost,0,f);
+   }
+   return mincost;
+}
+
+
+
+
+bottom up dp:
+
+int Solution::solve(const vector<int> &eating, const vector<int> &filling, const vector<int> &cost) {
+    int n=eating.size();
+    int m=filling.size();
+    int mx= *max_element(eating.begin(),eating.end());
+    int dp[m+1][mx+1];
+    for(int i=0;i<=m;i++)
+    dp[i][0]=0;
+    for(int i=1;i<=mx;i++)
+    dp[0][i]=100000001;
+    for(int i=1;i<=m;i++)
+    {
+        for(int j=1;j<=mx;j++)
+        {
+        if(j>=filling[i-1])
+        dp[i][j]=min(cost[i-1]+dp[i][j-filling[i-1]],dp[i-1][j]);
+        else
+        dp[i][j]=dp[i-1][j];
+        }
+    }
+    int total=0;
+    for(int i=0;i<n;i++)
+    {
+    total+=dp[m][eating[i]];
+    }
+return total;
+}
+
+TC:O(m*mx)
+SC:O(m*mx)
