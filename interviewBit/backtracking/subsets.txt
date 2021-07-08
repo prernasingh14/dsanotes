@@ -1,0 +1,114 @@
+asked in Amazon , Microsoft 
+
+Given a set of distinct integers, S, return all possible subsets.
+
+Note:
+
+Elements in a subset must be in non-descending order.
+The solution set must not contain duplicate subsets.
+Also, the subsets should be sorted in ascending ( lexicographic ) order.
+The list is not necessarily sorted.
+Example :
+
+If S = [1,2,3], a solution is:
+
+[
+  [],
+  [1],
+  [1, 2],
+  [1, 2, 3],
+  [1, 3],
+  [2],
+  [2, 3],
+  [3],
+]
+
+
+Thought Process 1:
+
+
+ void bk(vector<int>&temp,vector<vector<int>>&ans,vector<int>&nums,int start,int n){
+    if(start==n){//reached the end of our possiblity 
+    ans.push_back(temp);
+    return ;
+    }
+    //i need to either choose the current element or don't choose 
+         temp.push_back(nums[start]);
+         bk(temp,ans,nums,start+1,n);
+         //don't choose 
+         temp.pop_back();
+         bk(temp,ans,nums,start+1,n);
+    }
+vector<vector<int> > Solution::subsets(vector<int> &nums) {
+    int n=nums.size();
+    vector<vector<int>>ans;
+    sort(nums.begin(),nums.end());
+    vector<int>temp;
+    bk(temp,ans,nums,0,n);
+    sort(ans.begin(),ans.end());
+    return ans;
+}
+
+
+
+
+
+for each number put it in current set and ask recursion to work the remaining set from i+1
+and then backtrack by popping the current number we put in the set 
+
+
+Thought Process 2:
+
+void bk(vector<int>&temp,vector<vector<int>>&ans,vector<int>&nums,int start,int n){
+     ans.push_back(temp);
+    if(start==n){//reached the end of our possiblity 
+    return ;
+    }
+    //i need to either choose the current element or don't choose 
+    for(int i=start;i<n;i++){
+         temp.push_back(nums[i]);//select
+         bk(temp,ans,nums,i+1,n);
+         temp.pop_back();//undo change 
+    }
+    }
+vector<vector<int> > Solution::subsets(vector<int> &nums) {
+    int n=nums.size();
+    vector<vector<int>>ans;
+    sort(nums.begin(),nums.end());
+    vector<int>temp;
+    bk(temp,ans,nums,0,n);
+    sort(ans.begin(),ans.end());
+    return ans;
+}
+
+
+
+FOLLOW UP: what if the input contains duplicate numbers too 
+
+if our input set contains duliacte numbers then we needn't call our backtarcking function again for it as then it would give the same results :
+
+
+class Solution
+{
+public:
+   vector<vector<int>> ans;
+  void helper(vector<int> &nums, vector<int> &currans, int start)
+  {
+    ans.push_back(currans);
+for (int i = start; i < nums.size(); i++)
+    {
+      if (i > start && nums[i] == nums[i - 1])
+        continue;
+        currans.push_back(nums[i]);
+        helper(nums,currans,i+1);
+        currans.pop_back();
+    }
+  }
+vector<vector<int>> subsetsWithDup(vector<int> &nums)
+  {
+    sort(nums.begin(), nums.end());
+    vector<int> currans = {};
+    helper(nums, currans, 0);
+    return ans;
+  }
+};
