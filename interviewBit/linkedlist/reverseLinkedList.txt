@@ -1,0 +1,50 @@
+ Reverse a linked list using recursion.
+
+Example :
+
+Given 1->2->3->4->5->NULL,
+
+return 5->4->3->2->1->NULL.
+
+
+
+ListNode* reverse(ListNode* curr,ListNode* prev){
+     if(curr==NULL)
+     return prev;
+     ListNode* temp=curr->next;
+     curr->next=prev;
+     prev=curr;
+     return reverse(temp,prev);
+ }
+ListNode* Solution::reverseList(ListNode* head) {
+    if(head==NULL)
+    return NULL;
+    ListNode* curr=head;
+    ListNode* prev=NULL;
+   return reverse(curr,prev);
+
+}
+
+TC:O(n) n is the number of nodes 
+
+
+iterative solution :
+
+ListNode* Solution::reverseList(ListNode* head) {
+    if(head==NULL)
+    return NULL;
+    ListNode* curr=head;
+    ListNode* prev=NULL;
+    while(curr!=NULL){
+        ListNode* temp=curr->next;
+        curr->next=prev;
+        prev=curr;
+        curr=temp;
+    }
+   return prev;
+
+}
+
+
+TC:O(n)
+SC:O(1)
