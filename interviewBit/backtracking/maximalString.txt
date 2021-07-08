@@ -1,0 +1,93 @@
+asked in Apple,Intuit 
+
+Problem Description
+
+Given a string A and integer B, what is maximal lexicographical stringthat can be made from A if you do atmost B swaps.
+
+
+
+Problem Constraints
+1 <= |A| <= 9
+
+A contains only digits from 0 to 9.
+
+1 <= B <= 5
+
+
+
+Input Format
+First argument is string A.
+
+Second argument is integer B.
+
+
+
+Output Format
+Return a string, the naswer to the problem.
+
+
+
+Example Input
+Input 1:
+
+A = "254"
+B = 1
+Input 2:
+
+A = "254'
+B = 2
+
+
+Example Output
+Output 1:
+
+ 524
+Output 2:
+
+ 542
+
+
+Example Explanation
+Explanation 1:
+
+ Swap 2 and 5.
+Explanation 2:
+
+Swap 2 and 5 then swap 4 and 2.
+
+The idea is to consider every digit and swap it with digits following it one at a time and see if it leads to the maximum number.
+ The process is repeated K times
+ and then backtarck if we exceed our swaps 
+
+void swaps(string str,int k,string &maxRes){
+    if(k==0){//no more swaps 
+        return ;
+    }
+    for (int i = 0; i <str.size() - 1; i++) {
+        // Compare it with all digits after it
+        for (int j = i + 1; j <str.size(); j++) {
+            if (str[i] < str[j]) {
+                // swap str[i] with str[j]
+                swap(str[i], str[j]);
+                // If current num is more
+                // than maximum so far
+                if (str.compare(maxRes) > 0)
+                    maxRes = str;
+                // recurse of the other k - 1 swaps
+                swaps(str, k - 1, maxRes);
+                // Backtrack
+                swap(str[i], str[j]);
+              }
+        }
+    }
+}
+string Solution::solve(string str, int k) {
+        string maxRes="";
+        swaps(str,k,maxRes);
+        return maxRes;
+}
+
+
+n*n different number possible and each answer we get after k swaps 
+(n*n)^k
+
