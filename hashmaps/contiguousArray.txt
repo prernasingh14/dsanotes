@@ -1,0 +1,58 @@
+leetcode 525:
+
+
+Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
+
+ 
+
+Example 1:
+
+Input: nums = [0,1]
+Output: 2
+Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
+Example 2:
+
+Input: nums = [0,1,0]
+Output: 2
+Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+ 
+
+Constraints:
+
+1 <= nums.length <= 105
+nums[i] is either 0 or 1.
+
+
+
+we can use a hashmap to store the prefix sum till that index 
+The map reflect the index of first time sum have that certain value.
+At beginning sum value is 0 and it's on index -1 (before the first number at index 0), that's why we need to put key 0 -> -1
+The logic used here is when we encounter 1 we add 1 to the prefix sum and when we encounter 0 we add -1 to the prefix sum.
+ We store all the prefix sum in a map and if we encounter a prefix sum which was discovered earlier that means between last occurence of that sum and this occurance we have equal number of '+1s' and '-1s' which is the problem statement that we need equal number of 1s and 0s. 
+ We take the maximum of all.
+
+
+class Solution {
+public:
+    int findMaxLength(vector<int>&arr) {
+         int n=arr.size();
+         int i=0;
+         unordered_map<int,int>mp;
+        int sum=0;
+        int maxlen=0;
+        mp[0]=-1;
+        while(i<n){
+            sum+=arr[i]==1?1:-1;
+            if(mp.find(sum)!=mp.end()){
+            maxlen=max(maxlen,i-mp[sum]);
+            }
+            else
+            mp[sum]=i;
+           i++;
+    }
+    return maxlen;
+    }
+};
+
+TC:O(n)
+SC:O(n)
