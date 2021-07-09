@@ -25,6 +25,9 @@ Start from first char of s and match with every char of t, do this for all chars
 If char of S[i] matches with char of T[j] then we have found a common char that can contribute to our ans, so just copy the previous answers from both strings without the current char (if strings are abcde and abcdlkjlk and you are at 'd' so we check what was the previous answer before coming to d, and we add 1 to the previous ans). The max val till now is the ans.
 If chars dont match, put dp[i][j]=0;
 
+
+dp[i][j] is the length of longest common subarray ending with nums[i-1] and nums[j-1]
+
 class Solution {
 public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
