@@ -19,71 +19,34 @@ Constraints:
 0 <= nums1[i], nums2[i] <= 100
 
 
-brute force is to get subarrays of same length in both and check whether they match or not 
-
-
-recursive approach :
-
-
-
-similar to Longest common substring
+ Make dp MxN matrix. (M,N are lengths of both strings)
+Mark first row and first column as 0 for all.
+Start from first char of s and match with every char of t, do this for all chars of S.
+If char of S[i] matches with char of T[j] then we have found a common char that can contribute to our ans, so just copy the previous answers from both strings without the current char (if strings are abcde and abcdlkjlk and you are at 'd' so we check what was the previous answer before coming to d, and we add 1 to the previous ans). The max val till now is the ans.
+If chars dont match, put dp[i][j]=0;
 
 class Solution {
-public://subarray means substring 
-    int maxlen=0;int len=0;
-    int lcs(vector<int>& nums1, vector<int>& nums2,int i,int j){
-        if(i<0 || j<0)
-        {
-            len=0;
-            return 0;
-        }
-        if(nums1[i]==nums2[j])
-        {
-            len++;
-            maxlen=max(len,maxlen);
-            return lcs(nums1,nums2,i-1,j-1);
-        }
-            else
-            {
-                len=0;
-                return max(lcs(nums1,nums2,i-1,j),lcs(nums1,nums2,i,j-1));
-            }
-        
-    }
+public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
         int n1=nums1.size();int n2=nums2.size();
-        lcs(nums1,nums2,n1-1,n2-1);
-        return maxlen;
-    }
-};
-
-
-TC:O(2^n)  so causes TLE
-
-
-
-
-Bottom up dp:
-
-
-class Solution {
-public://subarray means substring 
-   
-    int findLength(vector<int>& nums1, vector<int>& nums2) {
-        int n1=nums1.size();int n2=nums2.size();int maxlen=0;
-       vector<vector<int>>dp(n1+1,vector<int>(n2+1,0));
-        for(int i=1;i<=n1;i++)
-        {
+        vector<vector<int>>dp(n1+1,vector<int>(n2+1,0));
+        int maxlen=0;
+        //if its include either include it or don't include it 
+        for(int i=1;i<=n1;i++){
             for(int j=1;j<=n2;j++){
                 if(nums1[i-1]==nums2[j-1]){
-                        dp[i][j]=1+dp[i-1][j-1];
-                        maxlen=max(maxlen,dp[i][j]);
-                     } 
+                    dp[i][j]=1+dp[i-1][j-1];
+                    maxlen=max(maxlen,dp[i][j]);
+                }
                 else
                     dp[i][j]=0;
             }
         }
-        
         return maxlen;
     }
 };
+
+TC:O(n1*n2)
+SC:O(n1*n2)
+
+
