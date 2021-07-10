@@ -59,43 +59,78 @@ public:
     }
 };
 
-other way to write this is also
+
+TC:O(m*n)
+SC:O(n*m) used by dfs stack 
+
+
+
+
+if we don't want to modify the input :
 class Solution {
 public:
-    int dfs(int x,int y,vector<vector<int>>& grid,int n,int m)
-    {
-        if(x>=n || x<0 || y>=m || y<0 || grid[x][y]==0)
-        {
+    int dfs(vector<vector<int>>&grid,vector<vector<bool>>&vis,int i,int j,int m,int n){
+        if(i<0 || j<0 || i>=m || j>=n || grid[i][j]==0 || vis[i][j])
             return 0;
-        }
-        grid[x][y]=0;
-        
-        return 1+dfs(x+1,y,grid,n,m)+dfs(x-1,y,grid,n,m)+dfs(x,y+1,grid,n,m)+ dfs(x,y-1,grid,n,m);
-       
+        vis[i][j]=true;
+        return 1+dfs(grid,vis,i+1,j,m,n)+dfs(grid,vis,i-1,j,m,n)+dfs(grid,vis,i,j+1,m,n)+dfs(grid,vis,i,j-1,m,n);
     }
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-       
-        int n=grid.size();
-        int m=grid[0].size();
-       int maxarea=0;
-
-         for(int i=0;i<grid.size();i++)
-        {
-            for(int j=0;j<grid[i].size();j++)
-            {
-              if(grid[i][j]==1)
-              {
-                  
-                  
-                  maxarea=max(maxarea,dfs(i,j,grid,n,m));
-              }
+         int m=grid.size();
+        int n=grid[0].size();
+        int maxarea=0;
+        vector<vector<bool>>vis(m,vector<bool>(n,false));
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1 && !vis[i][j])
+                {
+                    int area=dfs(grid,vis,i,j,m,n);
+                    maxarea=max(maxarea,area);
+                    
+                }
             }
         }
         return maxarea;
+        
     }
 };
-TC:O(n*m)
+
+
+
 
 /////////////
 Method 2:BFS based solution
+
+
+class Solution {
+       public:
+    int areaBFS(vector<vector<int>>& grid, int row, int col) {
+        int m = grid.size(), n = grid[0].size(), area = 1;
+        queue<pair<int,int>> myq;
+        myq.push({row, col});
+        grid[row][col] = 2;
+        vector<int> dir({-1,0,1,0,-1});
+        while (!myq.empty()) {
+            int z = myq.front().first, x = myq.front().second;
+            myq.pop();
+            for (int i = 0; i < 4; i++) {
+                int r = z+dir[i], c = x+dir[i+1];
+                if (r >= 0 && r < m && c >= 0 && c < n && grid[r][c] == 1) {
+                    grid[r][c] = 2;
+                    area++;
+                    myq.push({r,c});
+                }
+            }
+        }
+        return area;
+    }
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size(), ans = 0;
+        for (int i = 0; i < m; i++) 
+            for (int j = 0; j < n; j++) 
+                if (grid[i][j] == 1) ans = max(ans, areaBFS(grid, i, j));
+        return ans;
+    }
+};
+
 
