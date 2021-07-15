@@ -64,4 +64,4 @@ vector<vector<string> > Solution::solveNQueens(int n) {
         return ret;
     }
 
-    
+TC:O()
