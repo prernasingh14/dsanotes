@@ -1,0 +1,134 @@
+Problem Description
+
+Given an array A of size N. You need to find the sum of Maximum and Minimum element in the given array.
+
+NOTE: You should make minimum number of comparisons.
+
+
+
+Problem Constraints
+1 <= N <= 105
+
+-109 <= A[i] <= 109
+
+
+
+Input Format
+First and only argument is an integer array A of size N.
+
+
+
+Output Format
+Return an integer denoting the sum Maximum and Minimum element in the given array.
+
+
+
+Example Input
+Input 1:
+
+ A = [-2, 1, -4, 5, 3]
+Input 2:
+
+ A = [1, 3, 4, 1]
+
+
+Example Output
+Output 1:
+
+ 1
+Output 2:
+
+ 5
+
+
+Example Explanation
+Explanation 1:
+
+ Maximum Element is 5 and Minimum element is -4. (5 + (-4)) = 1. 
+Explanation 2:
+
+ Maximum Element is 4 and Minimum element is 1. (4 + 1) = 5.
+
+
+
+brute force basic:
+
+int Solution::solve(vector<int> &arr) {
+    int minn=INT_MAX;
+    int maxx=INT_MIN;
+    for(int i=0;i<arr.size();i++){
+       if(arr[i]>maxx)
+       maxx=arr[i];
+       if(arr[i]<minn){
+        minn=arr[i];
+       }
+    }
+    return maxx+minn;
+}
+
+
+
+TC:O(n)
+SC:O(1)
+
+
+but we need to ensure minimum number of comparisons :
+
+ Divide and Conquer : Tournament Method
+Another way to do this could be by following the divide and conquer strategy.
+Just like the merge sort, we could divide the array into two equal parts and recursively find the maximum and minimum of those parts.
+After this, compare the maximum and minimum of those parts to get the maximum and minimum of the whole array.
+
+
+
+
+vector<int> findMinMax(vector<int>&A, int start, int end)
+{
+    int max;
+    int min;
+    if ( start == end )
+    {
+        max = A[start];
+        min = A[start];
+    }
+    else if ( start + 1 == end )
+    {
+        if ( A[start] < A[end] )
+        {
+            max = A[end];
+            min = A[start];
+        }
+        else
+        {
+            max = A[start];
+            min = A[end];
+        }
+    }
+    else
+    {
+        int mid = start + (end - start)/2;
+        vector<int>left= findMinMax(A, start, mid);
+        vector<int>right= findMinMax(A, mid+1, end);
+        if ( left[0] > right[0] )
+            max = left[0];
+        else
+            max = right[0];
+        if ( left[1] < right[1] )
+            min = left[1];
+        else
+            min = right[1];
+    }
+    // By convention, we assume ans[0] as max and ans[1] as min
+    
+   return {max,min};
+}
+int Solution::solve(vector<int> &arr) {
+    int n=arr.size();
+    vector<int>ans=findMinMax(arr,0,n-1);
+    return ans[0]+ans[1];
+}
+
+
+
+
+
