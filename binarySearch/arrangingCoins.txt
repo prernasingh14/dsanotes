@@ -1,0 +1,79 @@
+Leetcode 441 :
+
+
+You have n coins and you want to build a staircase with these coins. The staircase consists of k rows where the ith row has exactly i coins. The last row of the staircase may be incomplete.
+
+Given the integer n, return the number of complete rows of the staircase you will build.
+
+ 
+
+Example 1:
+
+
+Input: n = 5
+Output: 2
+Explanation: Because the 3rd row is incomplete, we return 2.
+Example 2:
+
+
+Input: n = 8
+Output: 3
+Explanation: Because the 4th row is incomplete, we return 3.
+ 
+
+Constraints:
+
+1 <= n <= 231 - 1
+
+
+
+brute force :
+
+
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        if(n==0 || n==1)
+            return n;
+        int step=0;
+        while(n>0){
+            step++;
+            if(n-step>=0)
+            n=n-step;
+            else
+                break;
+        }
+        return n>0?step-1:step;//if coins get left then that means ki that steps gets left incomplete
+    }
+};
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+binary search :
+
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        if(n==0 || n==1)
+            return n;
+        int lo = 1, hi = n, ans = -1;
+         while(lo <= hi){
+        long mid = lo + (hi - lo)/2;
+        long val = (mid*(mid+1)) / 2;
+		if(val == n)
+			return  mid;
+        else if(val < n){
+            ans = mid;
+            lo =  mid + 1;
+        }else
+            hi = mid - 1;
+    }
+    return ans;
+    }
+};
+
+TC:O(logn)
+SC:O(1)
