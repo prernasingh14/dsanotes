@@ -1,2 +1,3 @@
 # dsanotes
-DSA codes that I wrote while learning different topics
+DSA solutions of questions from Leetcode , GeeksforGeeks,Interviewbit .
+
